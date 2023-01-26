@@ -1,4 +1,4 @@
-#include "functions.hpp"
+#include "../Includes/Ircserv.hpp"
 
 int tcp_server(int port) {
 
@@ -20,7 +20,7 @@ int tcp_server(int port) {
         [ When a socket is in a timeout state, it is not able to communicate or send data.
         This can happen if a connection is closed or if there is a network error that causes the connection to be lost.]
     */
-    int reuse = setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR)
+    //int reuse = setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR);
     if (reuse == -1)
         std::cerr << "ERROR, setsockopt() failed!!" << std::endl;
     /*
@@ -37,13 +37,13 @@ int tcp_server(int port) {
 	addr.sin_family = AF_INET;
 	addr.sin_addr.s_addr = htonl(INADDR_ANY);
 	addr.sin_port = htons(port);
-	reuse = bind(socket_d, (struct sockaddr *)&addr, sizeof(addr));
+	reuse = bind(socket_fd, (struct sockaddr *)&addr, sizeof(addr));
 	if (reuse == -1)
         std::cerr << "ERROR, bind() failed!!" << std::endl;
 
-	reuse = listen(socket_d, BACKLOG);
+	//reuse = listen(socket_fd, );
 	if (reuse == -1)
         std::cerr << "ERROR, listen() failed!!" << std::endl;
 
-	return (socket_d);
+	return (socket_fd);
 }
