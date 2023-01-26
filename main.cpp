@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:24:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/26 22:26:28 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/27 00:03:17 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,5 @@ int main(int argc, char **argv) {
     std::cout << "server port is : " << PORT << std::endl;
     std::cout << "Server info done" << std::endl;
     // create a function to loop over requests
-    return (1);
+    return (0);
 }
