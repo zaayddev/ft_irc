@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:24:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/27 00:03:17 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/27 00:04:07 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ int main(int argc, char **argv) {
         std::cerr << "./ircserv <port> <password> format expected" << std::endl;
         return (1);
     }
-    //int socket_fd = tcp_server(PORT);
     int PORT = getPort(argv[1]);
+    int socket_fd = tcp_server(PORT);
     if (PORT < 1 || PORT > 65535) {
         std::cerr << "Invalid port number" << std::endl;
         return (1);
@@ -46,5 +46,5 @@ int main(int argc, char **argv) {
     std::cout << "server port is : " << PORT << std::endl;
     std::cout << "Server info done" << std::endl;
     // create a function to loop over requests
-    return (0);
+    return (1);
 }
