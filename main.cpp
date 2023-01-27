@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:24:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/27 00:04:07 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/27 22:32:35 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
         return (1);
     }
     int PORT = getPort(argv[1]);
-    int socket_fd = tcp_server(PORT);
+    // int socket_fd = tcp_server(PORT);
     if (PORT < 1 || PORT > 65535) {
         std::cerr << "Invalid port number" << std::endl;
         return (1);
@@ -45,6 +45,5 @@ int main(int argc, char **argv) {
     std::cout << "server password is : " << PASSWORD << std::endl;
     std::cout << "server port is : " << PORT << std::endl;
     std::cout << "Server info done" << std::endl;
-    // create a function to loop over requests
     return (1);
 }

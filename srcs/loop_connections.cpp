@@ -13,5 +13,6 @@ void	loop_connections(int socket_fd, std::string password)
     (void) password;
 	while (true) {
 		initialise_poll(clients, clients.size());
+		accept_call(clients, socket_fd);
 	}
 }
