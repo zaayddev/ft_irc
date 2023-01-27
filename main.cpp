@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:24:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/26 23:24:38 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/01/27 00:04:07 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,6 @@ int main(int argc, char **argv) {
     std::cout << "server password is : " << PASSWORD << std::endl;
     std::cout << "server port is : " << PORT << std::endl;
     std::cout << "Server info done" << std::endl;
-    loop_connections(socket_fd, PASSWORD);
-    return (EXIT_SUCCESS);
+    // create a function to loop over requests
+    return (1);
 }
