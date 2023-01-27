@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:34:23 by zchbani           #+#    #+#             */
-/*   Updated: 2023/01/26 23:24:49 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/01/27 00:02:32 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int tcp_server(int port) {
 	if (reuse == -1)
         std::cerr << "ERROR, bind() failed!!" << std::endl;
 
-	reuse = listen(socket_fd, BACKLOG);
+	reuse = listen(socket_fd, 0);
 	if (reuse == -1)
         std::cerr << "ERROR, listen() failed!!" << std::endl;
 	return (socket_fd);
