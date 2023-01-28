@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/28 11:38:10 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/01/28 12:09:01 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef std::map< std::string, std::vector<User> >		channel_type;
 
 /*<------> SET Functions Prototype <------>*/
 int             tcp_server(int port);
+void            user_authentification(client_type &clients, std::string input, std::string password, size_t i);
 void	        loop_connections(int socket_fd, std::string password);
 void	        initialise_poll(std::vector<client> &clients, int fd_size);
 void            accept_call(std::vector<client> &clients, int socket_fd);

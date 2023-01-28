@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 23:35:19 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/28 11:39:09 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/01/28 12:08:18 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ class User {
         std::string     _nick;
         std::string     _user;
         int             _fd;
-        //bool            _auth;
+        bool            _is_complete;
+        bool            _authentification;
         
     public:
     
@@ -30,9 +31,13 @@ class User {
         std::string     msg;
 
         std::string get_ip(void) const;
+        bool	    get_authentification(void) const;
+        bool        get_is_complete(void) const;
         int         get_fd(void) const;
 
         void        set_ip(const std::string ip);
+        void        set_authentification(const bool authentification);
+        void        set_is_complete(const bool is_complete);
         void        set_fd(int fd);     
 };
 
