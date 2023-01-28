@@ -16,6 +16,8 @@ void	cmds_parsing(client_type &clients, channel_type &channels, std::string &msg
         if (clients[i].second.get_is_complete() == false) {
             if (tmp.find("PASS ") == 0)
                 user_authentification(clients, tmp, password, i);
+            else if (clients[i].second.get_authentification() == true)
+				server_join(clients[i].second, clients, tmp, clients[i].first.fd);
         }
 	}
 }

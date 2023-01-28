@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/28 12:09:01 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/01/28 23:17:17 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ typedef std::map< std::string, std::vector<User> >		channel_type;
 
 /*<------> DEFINE Variables <------>*/
 # define BACKLOG 1
-# define TIMEOUT (3 * 60 * 1000)
+# define TIMEOUT (60 * 1000)
+# define BUFFER_SIZE 500
 
 # define RED			"\033[31m"
 # define RED_BOLD		"\033[1;31m"
@@ -58,5 +59,8 @@ void            accept_call(std::vector<client> &clients, int socket_fd);
 std::string	    rcv_msg(int client_fd, std::vector<client> &clients, size_t i, channel_type &channels);
 void	        cmds_parsing(client_type &clients, channel_type &channels, std::string &msg, int i, std::string password);
 void	        close_connection(client_type &clients, size_t i);
+void	        server_join(User &user, std::vector<client> &clients, std::string client_msg, int fd);
+bool	        check_nickname(std::string nick, client_type &clients);
+bool	        check_name(std::string input);
 
 #endif

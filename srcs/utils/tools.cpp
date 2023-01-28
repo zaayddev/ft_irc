@@ -21,3 +21,26 @@ void	close_connection(client_type &clients, size_t i)
 		std::cerr << "failed to close file descriptor" << std::endl;
 	clients.erase(clients.begin() + i);
 }
+
+bool	check_nickname(std::string nick, client_type &clients)
+{
+	for (client_type::iterator it = clients.begin(); it != clients.end(); it++)
+	{
+		if (nick == it->second.get_nickname())
+			return (true);
+	}
+	return (false);
+}
+
+bool	check_name(std::string input)
+{
+	for (int i = 0; input[i] != '\0'; i++)
+	{
+		if (isalnum(input[i]) == 0)
+		{
+			std::cout << "invalid chars!" << std::endl;
+			return (false);
+		}
+	}
+	return (true);
+}

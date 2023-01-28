@@ -6,7 +6,7 @@
 #    By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/26 16:33:22 by yelgharo          #+#    #+#              #
-#    Updated: 2023/01/28 11:38:58 by zchbani          ###   ########.fr        #
+#    Updated: 2023/01/28 23:20:25 by zchbani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,8 @@ SRC = 	main.cpp \
 	srcs/utils/poll.cpp \
 	srcs/utils/parsing.cpp \
 	srcs/utils/tools.cpp \
-	srcs/User.cpp
+	srcs/User.cpp \
+	srcs/server_join.cpp
 
 OFILES = $(SRC:.cpp=.o)
 

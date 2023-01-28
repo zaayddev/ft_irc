@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 01:48:48 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/28 11:45:11 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/01/28 21:56:04 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	initialise_poll(std::vector<client> &clients, int fd_size) {
 }
 
 std::string	rcv_msg(int client_fd, std::vector<client> &clients, size_t i, channel_type &channels) {
-    char    buffer[500];
+    char    buffer[BUFFER_SIZE];
     int     recv_data;
 
     (void) channels;
