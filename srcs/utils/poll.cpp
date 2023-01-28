@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   poll.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 01:48:48 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/28 02:31:46 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/28 05:10:44 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,18 +45,13 @@ void accept_call(std::vector<client> &clients, int socket_fd) {
             break;
         }
         pollfd	new_pollfd;
+        User	new_user;
         new_pollfd.fd = new_fd;
         new_pollfd.events = POLLIN;
         new_pollfd.revents = 0;
-        User	new_user;
-        std::cout << "the ----> : " << client_addr.sin_addr.s_addr << std::endl;
-        std::cout << "the ----> : " << ip_itostr(client_addr.sin_addr.s_addr) << std::endl;
+        std::cout << "client addr before ----> : " << client_addr.sin_addr.s_addr << std::endl;
+        std::cout << "client addr after  ----> : " << ip_itostr(client_addr.sin_addr.s_addr) << std::endl;
         new_user.set_ip(ip_itostr(client_addr.sin_addr.s_addr));
-        // TO DO : create a function (ip_itostr) appears to take an IP address in binary form (in_addr_t) and converts it
-        // to a string in the standard "dot-decimal" notation (e.g. "192.168.0.1").
-        // It uses a bit shift and bitwise AND operation to extract each of the four octets of the IP address,
-        // and then streams these octets
-        // into a stringstream object separated by periods. The final string representation of the IP address is returned by the function.
         new_user.set_fd(new_fd);
         clients.push_back(client(new_pollfd, new_user));
         std::cout << "new user is accepted" << std::endl;
@@ -73,4 +68,31 @@ void	initialise_poll(std::vector<client> &clients, int fd_size) {
         std::cout << "poll() in time out" << std::endl;
     for (size_t i = 0; i < clients.size(); i++)
         clients.begin()[i].first.revents = poll_fd[i].revents;
+}
+
+std::string	rcv_msg(int client_fd, std::vector<client> &clients, size_t i, channel_type &channels) {
+    char    buffer[500];
+    int     recv_data;
+
+    (void) clients;
+    (void) i;
+    (void) channels;
+
+    std::cout << "receive_msg called" << std::endl;
+    std::memset(buffer, 0, sizeof(buffer));
+    recv_data = recv(client_fd, buffer, sizeof(buffer), 0);
+    std::cout << buffer << std::endl;
+    // [ EWOULDBLOCK ]the error message is not logged because it is expected to happen when the function is called in non-blocking mode. 
+    // This can be used to prevent the program from getting stuck 
+    // in an infinite loop waiting for data to be received. Instead, 
+    // the function can continue execution and check for new data at a later time.
+    if (recv_data < 0 && errno != EWOULDBLOCK)
+        std::cout << "recv() failed" << std::endl;
+    // IMPORTANT to note that recv() returning 0 is not an error, 
+    // it is a normal condition, it is just indicating the end of the connection.
+    if (recv_data == 0) {
+        //kick_users_from_channels();
+        //close_connection();
+    }
+    return (buffer);
 }
