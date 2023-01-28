@@ -6,12 +6,12 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/28 05:11:21 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/01/28 09:40:22 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef Ircserv_HPP
-# define Ircserv_HPP
+#ifndef IRCSERV_HPP
+# define IRCSERV_HPP
 
 /*<------> INCLUDE Headers <------>*/
 #include <sys/socket.h>

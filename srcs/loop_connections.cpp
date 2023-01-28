@@ -4,7 +4,7 @@ void	loop_connections(int socket_fd, std::string password)
 {
 	std::vector<client>							clients;
 	pollfd										socket;
-	User										server("");
+	User										server(" ");
 	std::map<std::string, std::vector<User> > 	channels;
 	
 	socket.fd = socket_fd;

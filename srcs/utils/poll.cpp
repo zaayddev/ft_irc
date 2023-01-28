@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 01:48:48 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/28 05:10:44 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/01/28 09:46:00 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ std::string ip_itostr(in_addr_t ip)
     bytes[1] = (ip >> 8) & 0xFF;
     bytes[2] = (ip >> 16) & 0xFF;
     bytes[3] = (ip >> 24) & 0xFF;
-    return std::string(std::to_string(bytes[0])+"."+std::to_string(bytes[1])+"." \
-        +std::to_string(bytes[2])+"."+std::to_string(bytes[3]));
+    return std::string(std::to_string(bytes[0]) + "." + std::to_string(bytes[1]) + "." \
+        + std::to_string(bytes[2]) + "." + std::to_string(bytes[3]));
 }
 
 std::vector<pollfd> clients_fd(std::vector<client> &clients) {
@@ -32,7 +32,7 @@ std::vector<pollfd> clients_fd(std::vector<client> &clients) {
     return (clients_fd);
 }
 
-void accept_call(std::vector<client> &clients, int socket_fd) {
+void    accept_call(std::vector<client> &clients, int socket_fd) {
     struct sockaddr_in  client_addr;
     socklen_t           lenght;
 
