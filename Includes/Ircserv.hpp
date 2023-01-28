@@ -3,19 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Ircserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/27 22:56:33 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/01/28 02:46:56 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef Ircserv_HPP
 # define Ircserv_HPP
-
-/*<------> DEFINE Variables <------>*/
-# define BACKLOG 1
-# define TIMEOUT (60 * 1000)
 
 /*<------> INCLUDE Headers <------>*/
 #include <sys/socket.h>
@@ -29,6 +25,16 @@
 #include <unistd.h>
 #include <cstdlib>
 #include "User.hpp"
+
+class User;
+
+/*<------> Alternate names for our data types <------>*/
+typedef std::pair<pollfd, User>     client;
+
+/*<------> DEFINE Variables <------>*/
+# define BACKLOG 1
+# define TIMEOUT (60 * 1000)
+
 
 /*<------> SET Functions Prototype <------>*/
 int     tcp_server(int port);
