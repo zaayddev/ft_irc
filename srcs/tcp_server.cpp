@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:34:23 by zchbani           #+#    #+#             */
-/*   Updated: 2023/01/27 00:02:32 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/01/28 10:42:02 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 int tcp_server(int port) {
     int socket_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (socket_fd < 0)
-        std::cerr << "ERROR, socket() failed!!" << std::endl;
+        std::cerr << RED_BOLD << "error; socket() failed!!" << RESET << std::endl;
 
     int optval = 1;
     int reuse = setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, (char *)&optval, sizeof(optval));
     if (reuse == -1)
-        std::cerr << "ERROR, setsockopt() failed!!" << std::endl;
+        std::cerr << RED_BOLD << "error; setsockopt() failed!!" << RESET << std::endl;
 
     reuse = fcntl(socket_fd, F_SETFL, O_NONBLOCK);
 	if (reuse < 0)
-		std::cerr << "ERROR, fcntl() failed!!" << std::endl;
+		std::cerr << RED_BOLD << "error; fcntl() failed!!" << RESET << std::endl;
 
     struct sockaddr_in addr;
 
@@ -34,10 +34,10 @@ int tcp_server(int port) {
 	addr.sin_port = htons(port);
 	reuse = bind(socket_fd, (struct sockaddr *)&addr, sizeof(addr));
 	if (reuse == -1)
-        std::cerr << "ERROR, bind() failed!!" << std::endl;
+        std::cerr << RED_BOLD << "error; bind() failed!!" << RESET << std::endl;
 
 	reuse = listen(socket_fd, 0);
 	if (reuse == -1)
-        std::cerr << "ERROR, listen() failed!!" << std::endl;
+        std::cerr << RED_BOLD << "error; listen() failed!!" << RESET << std::endl;
 	return (socket_fd);
 }

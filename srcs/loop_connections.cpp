@@ -25,9 +25,11 @@ void	loop_connections(int socket_fd, std::string password)
 			if (clients[i].first.revents == 0)
 				continue;
 			if (!(clients[i].first.revents & POLLIN))
-				std::cerr << "error, revents problem!!" << std::endl;
+				std::cerr << "error; revents problem!!" << std::endl;
 			if (i != 0) {
 				clients[i].second.msg += rcv_msg(clients[i].first.fd, clients, i, channels);
+				if (i < clients.size() && clients[i].second.msg.find("\r\n") != std::string::npos)
+					cmds_parsing(clients, channels, clients[i].second.msg, i, password);
 			}
 		}
 	}

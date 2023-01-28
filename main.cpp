@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:24:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/28 09:44:40 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/01/28 10:56:05 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,22 @@ int getPort(char *s) {
 
 int main(int argc, char **argv) {
     if (argc != 3) {
-        std::cerr << "./ircserv <port> <password> format expected" << std::endl;
+        std::cerr << RED << "./ircserv <port> <password>" << RED_BOLD << " expected format!" << RESET << std::endl;
         return (1);
     }
     int PORT = getPort(argv[1]);
     int socket_fd = tcp_server(PORT);
     if (PORT < 1 || PORT > 65535) {
-        std::cerr << "Invalid port number" << std::endl;
+        std::cerr << RED_BOLD << "error; Invalid port number" << RESET << std::endl;
         return (1);
     }
     if(!strlen(argv[2])) {
-        std::cerr << "Invalid password" << std::endl;
+        std::cerr << RED_BOLD << "error; Invalid password" << RESET << std::endl;
         return (1);
     }
     std::string PASSWORD = getPassword(argv[2]);
-    std::cout << "server password is : " << PASSWORD << std::endl;
-    std::cout << "server port is : " << PORT << std::endl;
-    std::cout << "Server info done" << std::endl;
+    // std::cout << BLUE_BOLD << "server PASSWORD is : " << RESET << BLUE << PASSWORD << RESET << std::endl;
+    // std::cout << BLUE_BOLD << "server PORT is     : " << RESET << BLUE << PORT     << RESET << std::endl;
     loop_connections(socket_fd, PASSWORD);
     return (0);
 }

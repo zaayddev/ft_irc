@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 23:35:19 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/28 09:49:32 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/01/28 11:39:09 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ class User {
         std::string     _nick;
         std::string     _user;
         int             _fd;
+        //bool            _auth;
         
     public:
     
