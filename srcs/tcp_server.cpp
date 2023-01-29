@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:34:23 by zchbani           #+#    #+#             */
-/*   Updated: 2023/01/28 10:42:02 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/01/29 02:27:13 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,10 @@ int tcp_server(int port) {
 	addr.sin_addr.s_addr = htonl(INADDR_ANY);
 	addr.sin_port = htons(port);
 	reuse = bind(socket_fd, (struct sockaddr *)&addr, sizeof(addr));
-	if (reuse == -1)
+	if (reuse == -1) {
         std::cerr << RED_BOLD << "error; bind() failed!!" << RESET << std::endl;
-
+        exit(1);
+    }
 	reuse = listen(socket_fd, 0);
 	if (reuse == -1)
         std::cerr << RED_BOLD << "error; listen() failed!!" << RESET << std::endl;

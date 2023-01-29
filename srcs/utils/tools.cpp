@@ -44,3 +44,10 @@ bool	check_name(std::string input)
 	}
 	return (true);
 }
+
+std::string welcome_msg(User user) {
+	std::stringstream	ss;
+
+	ss << " Welcome to our ft_irc " << user.get_nickname() << user.get_user() << user.get_ip() << "\r\n";
+	return (ss.str());
+}

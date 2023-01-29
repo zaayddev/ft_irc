@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/28 23:17:17 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/01/29 06:00:36 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <netinet/in.h>
 #include <poll.h>
 #include <string>
+#include <sstream>
 #include <iostream> 
 #include <fcntl.h>
 #include <vector>
@@ -62,5 +63,6 @@ void	        close_connection(client_type &clients, size_t i);
 void	        server_join(User &user, std::vector<client> &clients, std::string client_msg, int fd);
 bool	        check_nickname(std::string nick, client_type &clients);
 bool	        check_name(std::string input);
+std::string     welcome_msg(User user);
 
 #endif
