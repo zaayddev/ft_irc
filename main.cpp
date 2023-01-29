@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:24:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/29 02:38:08 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/01/29 22:19:03 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int main(int argc, char **argv) {
     std::string PASSWORD = getPassword(argv[2]);
     // std::cout << BLUE_BOLD << "server PASSWORD is : " << RESET << BLUE << PASSWORD << RESET << std::endl;
     // std::cout << BLUE_BOLD << "server PORT is     : " << RESET << BLUE << PORT     << RESET << std::endl;
+    system("clear");
     loop_connections(socket_fd, PASSWORD);
     return (0);
 }

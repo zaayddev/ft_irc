@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 01:48:48 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/28 21:56:04 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/01/29 22:28:06 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	initialise_poll(std::vector<client> &clients, int fd_size) {
     if (error < 0)
         std::cout << RED_BOLD << "poll() is failed!!" << RESET << std::endl;
     else if (error == 0)
-        std::cout << "poll() in time out" << std::endl;
+        std::cout << BLUE << "poll() in time out" << RESET << std::endl;
     for (size_t i = 0; i < clients.size(); i++)
         clients.begin()[i].first.revents = poll_fd[i].revents;
 }
