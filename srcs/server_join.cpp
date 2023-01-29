@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   server_join.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 02:34:58 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/29 05:55:14 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/01/29 20:26:17 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Includes/Ircserv.hpp"
 
-std::string totrim(std::string toTrim) {
+std::string totrim(std::string toTrim, int i) {
 	std::string trimed = "";
-	int i = 5;
 
 	while (toTrim[i] && isspace(toTrim[i]))
 		i++;
@@ -35,26 +34,26 @@ void	server_join(User &user, std::vector<client> &clients, std::string client_ms
     (void) fd;
 	int		i;
 
+	i = client_msg.length();
 	if (!client_msg.find("NICK")) {
-		i = client_msg.length();
-		if (i > 5) {
-			std::string nick ;
-			nick = totrim(client_msg);
-			std::cout << "this is nick :"<< nick << std::endl;
-			if (check_name(nick) == false) {
-				std::cout << "forbidden character in nickname" << std::endl;
-				// send server response [ invalid nick charact ]
-			} else if (check_nickname(nick, clients) == true) {
-				std::cout << "nickname already in use" << std::endl;
-				// send server response [ nickname exist ]
-			} else
-				user.set_nickname(client_msg.substr(5, (client_msg.length() - 5)));
+		if (i > 5 && isspace(client_msg[4])) {
+			std::string nick = totrim(client_msg, 5);
+			if (check_input(nick, clients, fd))
+				user.set_nickname(nick);
 		} else {
-			std::cout << "please enter a nickname" << std::endl;
-				// send server response [ no nickname enterd ]
+			std::string reject = reject_msg("NICK", -1);
+			send(fd, reject.c_str(), reject.length(), 0);
 		}
-	} else if (client_msg.find("USER ") == 0)
-		user.set_user(client_msg.substr(5, client_msg.find(" ", 5) - 5));
+	} else if (!client_msg.find("USER")) {
+		if (i > 5 && isspace(client_msg[4])) {
+			std::string _user = totrim(client_msg, 5);
+			if (check_input(_user, clients, fd)) 
+				user.set_user(_user);
+		} else {
+			std::string reject = reject_msg("USER", -1);
+			send(fd, reject.c_str(), reject.length(), 0);
+		}
+	}
 	if (user.get_nickname().size() && user.get_user().size()) {
 		user.set_is_complete(true);
 		std::string	welcome = welcome_msg(user);
