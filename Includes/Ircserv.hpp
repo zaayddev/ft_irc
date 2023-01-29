@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/29 20:24:34 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/30 00:18:54 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,11 @@ void            accept_call(std::vector<client> &clients, int socket_fd);
 std::string	    rcv_msg(int client_fd, std::vector<client> &clients, size_t i, channel_type &channels);
 void	        cmds_parsing(client_type &clients, channel_type &channels, std::string &msg, int i, std::string password);
 void	        close_connection(client_type &clients, size_t i);
-void	        server_join(User &user, std::vector<client> &clients, std::string client_msg, int fd);
-bool	        check_input(std::string nick, client_type &clients, int fd);
+void	        server_join(std::vector<client> &clients, std::string client_msg, int i);
+bool	        check_input(std::string nick, client_type &clients, int fd, int index);
 bool	        check_name(std::string input);
 std::string     welcome_msg(User user);
 std::string     reject_msg(std::string user, int i);
+std::string     totrim(std::string toTrim, int i);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 02:34:58 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/29 20:26:17 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/30 00:33:36 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,49 +14,47 @@
 
 std::string totrim(std::string toTrim, int i) {
 	std::string trimed = "";
+	int j = toTrim.length() - 1;
 
+	while (j > i && isspace(toTrim[j]))
+		j--;
 	while (toTrim[i] && isspace(toTrim[i]))
 		i++;
-	while (toTrim[i] && !isspace(toTrim[i])) {
+	while (toTrim[i] && i <= j) {
 		trimed += toTrim[i];
 		i++;
 	}
-	while (toTrim[i] && isspace(toTrim[i]))
-		i++;
-	if (toTrim[i] && !isspace(toTrim[i])) {
-		trimed += ' ';
-	}
+	std::cout << trimed << std::endl;
 	return (trimed);
 }
 
-void	server_join(User &user, std::vector<client> &clients, std::string client_msg, int fd)
+void	server_join(std::vector<client> &clients, std::string client_msg, int i)
 {
-    (void) fd;
-	int		i;
+	int		index ;
 
-	i = client_msg.length();
+	index = client_msg.length();
 	if (!client_msg.find("NICK")) {
-		if (i > 5 && isspace(client_msg[4])) {
+		if (index > 5 && isspace(client_msg[4])) {
 			std::string nick = totrim(client_msg, 5);
-			if (check_input(nick, clients, fd))
-				user.set_nickname(nick);
+			if (check_input(nick, clients, i, 1))
+				clients[i].second.set_nickname(nick);
 		} else {
 			std::string reject = reject_msg("NICK", -1);
-			send(fd, reject.c_str(), reject.length(), 0);
+			send(clients[i].second.get_fd(), reject.c_str(), reject.length(), 0);
 		}
-	} else if (!client_msg.find("USER")) {
-		if (i > 5 && isspace(client_msg[4])) {
+	} else if (!client_msg.find("USER") && clients[i].second.get_nickname().size()) {
+		if (index > 5 && isspace(client_msg[4])) {
 			std::string _user = totrim(client_msg, 5);
-			if (check_input(_user, clients, fd)) 
-				user.set_user(_user);
+			if (check_input(_user, clients, i, 0)) 
+				clients[i].second.set_user(_user);
 		} else {
 			std::string reject = reject_msg("USER", -1);
-			send(fd, reject.c_str(), reject.length(), 0);
+			send(clients[i].second.get_fd(), reject.c_str(), reject.length(), 0);
 		}
 	}
-	if (user.get_nickname().size() && user.get_user().size()) {
-		user.set_is_complete(true);
-		std::string	welcome = welcome_msg(user);
-		send(fd, welcome.c_str(), welcome.length(), 0);
+	if (clients[i].second.get_nickname().size() && clients[i].second.get_user().size()) {
+		clients[i].second.set_is_complete(true);
+		std::string	welcome = welcome_msg(clients[i].second);
+		send(clients[i].second.get_fd(), welcome.c_str(), welcome.length(), 0);
 	}
 }
