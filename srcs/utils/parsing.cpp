@@ -3,12 +3,7 @@
 void	cmds_parsing(client_type &clients, channel_type &channels, std::string &msg, int i, std::string password) {
     std::string tmp;
     (void) channels;
-    (void) password;
-    (void) clients;
-    (void) i;
-    std::cout << "called handle_cmds with msg: " +  msg << std::endl;
-	for (std::string::size_type	pos = msg.find("\r\n"); pos != std::string::npos; pos = msg.find("\r\n"))
-	{
+	for (std::string::size_type	pos = msg.find("\r\n"); pos != std::string::npos; pos = msg.find("\r\n")) {
 		if (pos == 0)
 			std::cout << YELLOW << "WARNING" << RESET <<std::endl;
         tmp = msg.substr(0, pos);

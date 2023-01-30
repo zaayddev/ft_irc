@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 01:48:48 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/29 22:28:06 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/01/30 01:47:28 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void    accept_call(std::vector<client> &clients, int socket_fd) {
 
     while (true) {
         int new_fd = accept(socket_fd, (sockaddr*)&client_addr, &lenght);
-        //std::cout << PURPLE << "accept() is called" << RESET << std::endl; //TRACE [need to remove]
         if (new_fd == -1) {
             if (errno != EWOULDBLOCK)
                 std::cerr << "accept() failed" << std::endl;
@@ -49,8 +48,6 @@ void    accept_call(std::vector<client> &clients, int socket_fd) {
         new_pollfd.fd = new_fd;
         new_pollfd.events = POLLIN;
         new_pollfd.revents = 0;
-        // std::cout << "client addr before ----> : " << client_addr.sin_addr.s_addr << std::endl;
-        // std::cout << "client addr after  ----> : " << ip_itostr(client_addr.sin_addr.s_addr) << std::endl;
         new_user.set_ip(ip_itostr(client_addr.sin_addr.s_addr));
         new_user.set_fd(new_fd);
         clients.push_back(client(new_pollfd, new_user));
@@ -76,7 +73,7 @@ std::string	rcv_msg(int client_fd, std::vector<client> &clients, size_t i, chann
 
     (void) channels;
 
-    std::cout << "receive_msg called" << std::endl;
+    // std::cout << "receive_msg called" << std::endl;
     std::memset(buffer, 0, sizeof(buffer));
     recv_data = recv(client_fd, buffer, sizeof(buffer), 0);
     //std::cout << buffer << std::endl;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:46:44 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/30 01:09:38 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/30 01:43:17 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ std::string	reject_msg(std::string user, int i) {
 	else if (i == -1)
 		ss << "Add a parameter : " << "[" << user << "] <PARAMETRE>\r\n";
 	else if (i == -2)
-		ss << "Invalid password\r\n";
+		ss << RED << "[ 464 ] " << RESET << ": Password incorrect\r\n";
 	return (ss.str());
 }
 
@@ -106,7 +106,7 @@ void    user_authentification(client_type &clients, \
     if (check_password(input, password, clients[i].second.get_fd()))
         clients[i].second.set_authentification(true);
     else
-        std::cout << "Password invalide" << std::endl;
+        std::cout << RED << "[ " << clients[i].second.get_ip() << " ]" << RESET << " : Password incorrect" << std::endl;
 }
 
 void	close_connection(client_type &clients, size_t i)

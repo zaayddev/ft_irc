@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server_join.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 02:34:58 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/30 01:08:00 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/30 01:47:07 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ std::string trimPass(std::string toTrim, int i) {
 		trimed += toTrim[i];
 		i++;
 	}
-	std::cout << trimed << std::endl;
 	return (trimed);
 }
 
@@ -37,7 +36,6 @@ std::string totrim(std::string toTrim, int i) {
 		trimed += toTrim[i];
 		i++;
 	}
-	std::cout << trimed << std::endl;
 	return (trimed);
 }
 
