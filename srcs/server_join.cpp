@@ -6,13 +6,13 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 02:34:58 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/30 00:33:36 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/30 01:08:00 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Includes/Ircserv.hpp"
 
-std::string totrim(std::string toTrim, int i) {
+std::string trimPass(std::string toTrim, int i) {
 	std::string trimed = "";
 	int j = toTrim.length() - 1;
 
@@ -28,6 +28,20 @@ std::string totrim(std::string toTrim, int i) {
 	return (trimed);
 }
 
+std::string totrim(std::string toTrim, int i) {
+	std::string trimed = "";
+
+	while (toTrim[i] && isspace(toTrim[i]))
+		i++;
+	while (toTrim[i] && !isspace(toTrim[i])) {
+		trimed += toTrim[i];
+		i++;
+	}
+	std::cout << trimed << std::endl;
+	return (trimed);
+}
+
+
 void	server_join(std::vector<client> &clients, std::string client_msg, int i)
 {
 	int		index ;
@@ -38,6 +52,9 @@ void	server_join(std::vector<client> &clients, std::string client_msg, int i)
 			std::string nick = totrim(client_msg, 5);
 			if (check_input(nick, clients, i, 1))
 				clients[i].second.set_nickname(nick);
+		} else if (clients[i].second.get_nickname().size()) {
+			std::string reject = reject_msg(clients[i].second.get_nickname(), 2);
+			send(clients[i].second.get_fd(), reject.c_str(), reject.length(), 0);
 		} else {
 			std::string reject = reject_msg("NICK", -1);
 			send(clients[i].second.get_fd(), reject.c_str(), reject.length(), 0);

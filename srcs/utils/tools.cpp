@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:46:44 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/30 00:37:24 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/30 01:09:38 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static bool	check_password(std::string input, std::string pwd, int fd)
 {
-	std::string ps = totrim(input, 5);
+	std::string ps = trimPass(input, 5);
 	if (ps == "" || ! isspace(input[4])) {
 		std::string reject = reject_msg("PASS", -1);
 		send(fd, reject.c_str(), reject.length(), 0);
@@ -31,11 +31,12 @@ static bool	check_password(std::string input, std::string pwd, int fd)
 
 bool	check_input(std::string nick, client_type &clients, int i, int index)
 {
-	for (int i = 0; nick[i] != '\0'; i++)
+	for (int j = 0; nick[j]; j++)
 	{
-		if (!isalnum(nick[i]))
+		if (!isalnum(nick[j]))
 		{
 			std::string reject = reject_msg(nick, 1);
+			std::cout << reject << std::endl;
 			send(clients[i].second.get_fd(), reject.c_str(), reject.length(), 0);
 			return (false);
 		}
@@ -79,10 +80,12 @@ bool	check_input(std::string nick, client_type &clients, int i, int index)
 std::string	reject_msg(std::string user, int i) {
 	std::stringstream	ss;
 	
-	if (!i)
-		ss << "Check [" << user << "] already exist\r\n";
-	else if (i == 1)
+	if (i == 1)
 		ss << "Invalid character\r\n";
+	else if (i == 2)
+		ss << "You already knoen as " << user << "\r\n";
+	else if (!i)
+		ss << "Check [" << user << "] already exist\r\n";
 	else if (i == -1)
 		ss << "Add a parameter : " << "[" << user << "] <PARAMETRE>\r\n";
 	else if (i == -2)

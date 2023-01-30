@@ -14,7 +14,7 @@ void	cmds_parsing(client_type &clients, channel_type &channels, std::string &msg
         tmp = msg.substr(0, pos);
 		msg.erase(0, pos + 2);
         if (clients[i].second.get_is_complete() == false) {
-            if (tmp.find("PASS") == 0)
+            if (!tmp.find("PASS"))
                 user_authentification(clients, tmp, password, i);
             else if (clients[i].second.get_authentification() == true)
 				server_join(clients, tmp, i);

@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/30 00:18:54 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/30 01:02:13 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,6 @@ bool	        check_name(std::string input);
 std::string     welcome_msg(User user);
 std::string     reject_msg(std::string user, int i);
 std::string     totrim(std::string toTrim, int i);
+std::string     trimPass(std::string toTrim, int i);
 
 #endif
