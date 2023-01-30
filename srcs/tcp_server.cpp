@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   tcp_server.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:34:23 by zchbani           #+#    #+#             */
-/*   Updated: 2023/01/29 02:27:13 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/01/30 03:11:20 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Includes/Ircserv.hpp"
 
-int tcp_server(int port) {
+int tcp_server(int port)
+{
     int socket_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (socket_fd < 0)
         std::cerr << RED_BOLD << "error; socket() failed!!" << RESET << std::endl;
@@ -33,7 +34,8 @@ int tcp_server(int port) {
 	addr.sin_addr.s_addr = htonl(INADDR_ANY);
 	addr.sin_port = htons(port);
 	reuse = bind(socket_fd, (struct sockaddr *)&addr, sizeof(addr));
-	if (reuse == -1) {
+	if (reuse == -1)
+    {
         std::cerr << RED_BOLD << "error; bind() failed!!" << RESET << std::endl;
         exit(1);
     }

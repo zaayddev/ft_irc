@@ -17,16 +17,18 @@ void	loop_connections(int socket_fd, std::string password)
 	socket.events = POLLIN;
 	socket.revents = 0;
 	clients.push_back(client(socket, server));
-    (void) password;
-	while (true) {
+	while (true) 
+	{
 		initialise_poll(clients, clients.size());
 		accept_call(clients, socket_fd);
-		for (size_t i = 0; i < clients.size(); i++) {
+		for (size_t i = 0; i < clients.size(); i++)
+		{
 			if (clients[i].first.revents == 0)
 				continue;
 			if (!(clients[i].first.revents & POLLIN))
 				std::cerr << "error; revents problem!!" << std::endl;
-			if (i != 0) {
+			if (i != 0)
+			{
 				clients[i].second.msg += rcv_msg(clients[i].first.fd, clients, i, channels);
 				if (i < clients.size() && clients[i].second.msg.find("\r\n") != std::string::npos)
 					cmds_parsing(clients, channels, clients[i].second.msg, i, password);

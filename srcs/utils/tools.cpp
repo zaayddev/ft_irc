@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:46:44 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/30 01:43:17 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/01/30 05:04:19 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,43 +15,53 @@
 static bool	check_password(std::string input, std::string pwd, int fd)
 {
 	std::string ps = trimPass(input, 5);
-	if (ps == "" || ! isspace(input[4])) {
-		std::string reject = reject_msg("PASS", -1);
+	if (ps == "" || ! isspace(input[4]))
+	{
+		std::string reject = reject_msg("PASS", -1) + prompte();
 		send(fd, reject.c_str(), reject.length(), 0);
 		return (false);
 	}
 	if (ps == pwd)
 		return (true);
-	else {
-		std::string reject = reject_msg("PASS", -2);
+	else
+	{
+		std::string reject = reject_msg("PASS", -2) + prompte();
 		send(fd, reject.c_str(), reject.length(), 0);
 		return (false);
 	}
 }
 
+std::string getPassword(char *s)
+{
+    return std::string(s);
+}
+
+int getPort(char *s)
+{
+    if (strlen(s) > 5)
+        return 0;
+    for (int i = 0; s[i]; i++)
+    {
+        if(!isdigit(s[i]))
+            return (0);
+    }
+    return (atoi(s));
+}
+
 bool	check_input(std::string nick, client_type &clients, int i, int index)
 {
-	for (int j = 0; nick[j]; j++)
-	{
-		if (!isalnum(nick[j]))
-		{
-			std::string reject = reject_msg(nick, 1);
-			std::cout << reject << std::endl;
-			send(clients[i].second.get_fd(), reject.c_str(), reject.length(), 0);
-			return (false);
-		}
-	}
 	if (index)
 	{
-		if (nick == "") {
-			std::string reject = reject_msg("NICK", -1);
+		if (nick == "")
+		{
+			std::string reject = reject_msg("NICK", -1) + prompte();
 			send(clients[i].second.get_fd(), reject.c_str(), reject.length(), 0);
 			return (false);
 		}
 		for (client_type::iterator it = clients.begin(); it != clients.end(); it++)
 		{
 			if (nick == it->second.get_nickname()) {
-				std::string reject = reject_msg(nick, 0);
+				std::string reject = reject_msg(nick, 0) + prompte();
 				send(clients[i].second.get_fd(), reject.c_str(), reject.length(), 0);
 				return (false);
 			}
@@ -59,25 +69,36 @@ bool	check_input(std::string nick, client_type &clients, int i, int index)
 	}
 	if (!index)
 	{
-		if (nick == "") {
-			std::string reject = reject_msg("USER", -1);
+		int condition = 0;
+		int j = 0;
+		if (nick == "")
+		{
+			std::string reject = reject_msg("USER", -1) + prompte();
 			send(clients[i].second.get_fd(), reject.c_str(), reject.length(), 0);
 			return (false);
 		}
-		for (client_type::iterator it = clients.begin(); it != clients.end(); it++)
+		
+		while (nick[j])
 		{
-			if (nick == it->second.get_user()) {
-				std::string reject = reject_msg(nick, 0);
-				send(clients[i].second.get_fd(), reject.c_str(), reject.length(), 0);
-				return (false);
-			}
+			while(nick[j] && !isspace(nick[j]))
+				j++;
+			while(nick[j] && isspace(nick[j]))
+				j++;
+			condition++;
+		}
+		if (condition != 4)
+		{
+			std::string reject = reject_msg("USER", 461) + prompte();
+			send(clients[i].second.get_fd(), reject.c_str(), reject.length(), 0);
+			return (false);
 		}
 	}
 	return (true);
 }
 
 
-std::string	reject_msg(std::string user, int i) {
+std::string	reject_msg(std::string user, int i)
+{
 	std::stringstream	ss;
 	
 	if (i == 1)
@@ -90,19 +111,23 @@ std::string	reject_msg(std::string user, int i) {
 		ss << "Add a parameter : " << "[" << user << "] <PARAMETRE>\r\n";
 	else if (i == -2)
 		ss << RED << "[ 464 ] " << RESET << ": Password incorrect\r\n";
+	else if ( i == 461 )
+		ss << RED << "[461] " << RESET << user << " :Not enough parameters\r\n";
 	return (ss.str());
 }
 
-std::string	welcome_msg(User user) {
+std::string	welcome_msg(User user)
+{
 	std::stringstream	ss;
 
 	ss << "Welcome to our ft_irc " << user.get_nickname() \
-		<< " " << user.get_user() << " " << user.get_ip() << "\r\n";
+		<< "!" << user.get_user() << "@" << user.get_ip() << "\r\n";
 	return (ss.str());
 }
 
 void    user_authentification(client_type &clients, \
-	std::string input, std::string password, size_t i) {
+	std::string input, std::string password, size_t i)
+{
     if (check_password(input, password, clients[i].second.get_fd()))
         clients[i].second.set_authentification(true);
     else
@@ -114,4 +139,36 @@ void	close_connection(client_type &clients, size_t i)
 	if (close(clients[i].first.fd) == -1)
 		std::cerr << "failed to close file descriptor" << std::endl;
 	clients.erase(clients.begin() + i);
+}
+
+std::string	getTime()
+{
+	std::string	h, mi;
+    time_t now = time( 0 );
+	tm *ltm = localtime( &now );
+	h = std::to_string( ltm->tm_hour );
+	if ( 1 + ltm->tm_hour < 10 )
+		h = '0' + h;
+	mi = std::to_string( ltm->tm_min );
+	if ( 1 + ltm->tm_min < 10 )
+		mi = '0' + mi;
+	return (h + ":" + mi);
+}
+
+std::string prompte()
+{
+    std::stringstream   ss;
+    ss << BLUE << "[" << getTime() << "] " << RESET;
+    return (ss.str());
+}
+
+std::string ip_itostr(in_addr_t ip)
+{
+    unsigned char bytes[4];
+    bytes[0] = ip & 0xFF;
+    bytes[1] = (ip >> 8) & 0xFF;
+    bytes[2] = (ip >> 16) & 0xFF;
+    bytes[3] = (ip >> 24) & 0xFF;
+    return std::string(std::to_string(bytes[0]) + "." + std::to_string(bytes[1]) + "." \
+        + std::to_string(bytes[2]) + "." + std::to_string(bytes[3]));
 }
