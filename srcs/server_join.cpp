@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 02:34:58 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/30 04:50:21 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/30 21:36:16 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	server_join(std::vector<client> &clients, std::string client_msg, int i)
 		}
 		else
 		{
-			std::string reject = reject_msg("NICK", -1) + prompte();
+			std::string reject = reject_msg("NICK", 461) + prompte();
 			send(clients[i].second.get_fd(), reject.c_str(), reject.length(), 0);
 		}
 	}
@@ -78,7 +78,7 @@ void	server_join(std::vector<client> &clients, std::string client_msg, int i)
 		}
 		else
 		{
-			std::string reject = reject_msg("USER", -1) + prompte();
+			std::string reject = reject_msg("USER", 461) + prompte();
 			send(clients[i].second.get_fd(), reject.c_str(), reject.length(), 0);
 		}
 	}

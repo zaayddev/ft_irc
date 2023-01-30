@@ -1,0 +1,9 @@
+RFC 1459              Internet Relay Chat Protocol              May 1993
+
+The recommended order for a client to register is as follows:
+
+           1. Pass message
+           2. Nick message
+           3. User message
+
+Oikarinen & Reed                                               [Page 13]
