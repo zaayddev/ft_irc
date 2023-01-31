@@ -6,7 +6,7 @@
 #    By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/26 16:33:22 by yelgharo          #+#    #+#              #
-#    Updated: 2023/01/28 23:20:25 by zchbani          ###   ########.fr        #
+#    Updated: 2023/01/30 23:52:53 by zchbani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ SRC = 	main.cpp \
 	srcs/utils/poll.cpp \
 	srcs/utils/parsing.cpp \
 	srcs/utils/tools.cpp \
+	srcs/utils/operations.cpp \
 	srcs/User.cpp \
 	srcs/server_join.cpp
 

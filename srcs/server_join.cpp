@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server_join.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 02:34:58 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/30 21:36:16 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/30 23:56:11 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,12 @@ void	server_join(std::vector<client> &clients, std::string client_msg, int i)
 		}
 		else if (clients[i].second.get_nickname().size())
 		{
-			std::string reject = reject_msg(clients[i].second.get_nickname(), 2) + prompte();
+			std::string reject = reject_msg(clients[i].second.get_nickname(), 2);
 			send(clients[i].second.get_fd(), reject.c_str(), reject.length(), 0);
 		}
 		else
 		{
-			std::string reject = reject_msg("NICK", 461) + prompte();
+			std::string reject = reject_msg("NICK", 461);
 			send(clients[i].second.get_fd(), reject.c_str(), reject.length(), 0);
 		}
 	}
@@ -78,14 +78,14 @@ void	server_join(std::vector<client> &clients, std::string client_msg, int i)
 		}
 		else
 		{
-			std::string reject = reject_msg("USER", 461) + prompte();
+			std::string reject = reject_msg("USER", 461);
 			send(clients[i].second.get_fd(), reject.c_str(), reject.length(), 0);
 		}
 	}
 	if (clients[i].second.get_nickname().size() && clients[i].second.get_user().size())
 	{
 		clients[i].second.set_is_complete(true);
-		std::string	welcome = welcome_msg(clients[i].second) + prompte();
+		std::string	welcome = welcome_msg(clients[i].second);
 		send(clients[i].second.get_fd(), welcome.c_str(), welcome.length(), 0);
 	}
 }

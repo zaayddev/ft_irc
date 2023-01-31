@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   poll.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 01:48:48 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/30 03:55:24 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/30 23:58:17 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ void    accept_call(std::vector<client> &clients, int socket_fd)
         clients.push_back(client(new_pollfd, new_user));
         std::cout << YELLOW << "client " << RESET << "[ " << ip_itostr(client_addr.sin_addr.s_addr) \
             << " ]" << YELLOW << " is accepted" << std::endl;
-        std::string p = prompte();
-        send(new_user.get_fd(), p.c_str(), p.length(), 0);
     }
 }
 
@@ -74,12 +72,7 @@ std::string	rcv_msg(int client_fd, std::vector<client> &clients, size_t i, chann
 
     // std::cout << "receive_msg called" << std::endl;
     std::memset(buffer, 0, sizeof(buffer));
-    recv_data = recv(client_fd, buffer, sizeof(buffer), 0);
-    if (recv_data) {
-        std::string p = prompte();
-        send(client_fd, p.c_str(), p.length(), 0);
-    }
-    
+    recv_data = recv(client_fd, buffer, sizeof(buffer), 0);  
     //std::cout << buffer << std::endl;
     // [ EWOULDBLOCK ]the error message is not logged because it is expected to happen when the function is called in non-blocking mode. 
     // This can be used to prevent the program from getting stuck 

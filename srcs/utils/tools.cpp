@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:46:44 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/30 22:29:06 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/30 23:57:42 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,14 @@ static bool	check_password(std::string input, std::string pwd, int fd)
 	std::string ps = trimPass(input, 5);
 	if (ps == "" || ! isspace(input[4]))
 	{
-		std::string reject = reject_msg("PASS", 461) + prompte();
+		std::string reject = reject_msg("PASS", 461);
 		send(fd, reject.c_str(), reject.length(), 0);
 		return (false);
 	}
 	if (ps == pwd)
 		return (true);
+	else
+		return (false);
 }
 
 std::string getPassword(char *s)
@@ -48,14 +50,14 @@ bool	check_input(std::string nick, client_type &clients, int i, int index)
 	{
 		if (nick == "")
 		{
-			std::string reject = reject_msg("NICK", 461) + prompte();
+			std::string reject = reject_msg("NICK", 461);
 			send(clients[i].second.get_fd(), reject.c_str(), reject.length(), 0);
 			return (false);
 		}
 		for (client_type::iterator it = clients.begin(); it != clients.end(); it++)
 		{
 			if (nick == it->second.get_nickname()) {
-				std::string reject = reject_msg(nick, 0) + prompte();
+				std::string reject = reject_msg(nick, 0);
 				send(clients[i].second.get_fd(), reject.c_str(), reject.length(), 0);
 				return (false);
 			}
@@ -67,7 +69,7 @@ bool	check_input(std::string nick, client_type &clients, int i, int index)
 		int j = 0;
 		if (nick == "")
 		{
-			std::string reject = reject_msg("USER", 461) + prompte();
+			std::string reject = reject_msg("USER", 461);
 			send(clients[i].second.get_fd(), reject.c_str(), reject.length(), 0);
 			return (false);
 		}
@@ -82,7 +84,7 @@ bool	check_input(std::string nick, client_type &clients, int i, int index)
 		}
 		if (condition != 4)
 		{
-			std::string reject = reject_msg("USER", 461) + prompte();
+			std::string reject = reject_msg("USER", 461);
 			send(clients[i].second.get_fd(), reject.c_str(), reject.length(), 0);
 			return (false);
 		}
@@ -151,13 +153,6 @@ std::string	getTime()
 	if ( 1 + ltm->tm_min < 10 )
 		mi = '0' + mi;
 	return (h + ":" + mi);
-}
-
-std::string prompte()
-{
-    std::stringstream   ss;
-    ss << BLUE << "[" << getTime() << "] " << RESET;
-    return (ss.str());
 }
 
 std::string ip_itostr(in_addr_t ip)
