@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/31 03:10:27 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/31 03:54:02 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void    ping_message(client_t &clients, size_t i)
 {
-	std::string reply = "PONG" + (std::string)SERVER + "\r\n";
+	std::string reply = "PONG " + (std::string)SERVER + "\r\n" + prompte();
 	send(clients[i].second.get_fd(), reply.c_str(), reply.length(), 0);
 }
 

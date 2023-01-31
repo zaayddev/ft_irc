@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 02:34:58 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/31 02:57:07 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/31 03:50:27 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ void	server_join(std::vector<client> &clients, std::string client_msg, int i)
 		else
             senderr("USER", clients[i].second.get_fd(), 461);
 	}
-	if (clients[i].second.get_nickname().size() && clients[i].second.get_user().size())
+	if (clients[i].second.get_nickname().size() && clients[i].second.get_user().size()) {
+        clients[i].second.set_is_complete(true);
         welcome_msg(clients[i].second);
+    }
 }

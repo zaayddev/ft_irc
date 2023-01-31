@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 23:46:49 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/30 23:51:37 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/31 03:26:51 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,25 +28,25 @@ void	welcome_msg(User user)
     send(user.get_fd(), s.c_str(), s.length(), 0);
 }
 
-std::string	reject_msg(std::string cmd, int i)
+std::string	reject_msg(std::string cmd, int ern)
 {
 	std::stringstream	ss;
 	
-	if ( i == 461 )
+	if ( ern == 461 )
 		ss << RED << "461 " << RESET << cmd << " :Not enough parameters\r\n";
-    else if (i == 462)
+    else if (ern == 462)
         ss << RED << "462 " << RESET << " :You may not reregister\r\n";
-	else if (i == 464)
+	else if (ern == 464)
 		ss << RED << "464" << RESET << " :Password incorrect\r\n";
 
     
-	else if (i == 1)
+	else if (ern == 1)
 		ss << "Invalid character\r\n";
-	else if (i == 2)
+	else if (ern == 2)
 		ss << "You already knoen as " << cmd << "\r\n";
-	else if (!i)
+	else if (!ern)
 		ss << "Check [" << cmd << "] already exist\r\n";
-	else if (i == -1)
+	else if (ern == -1)
 		ss << "Add a parameter : " << "[" << cmd << "] <PARAMETRE>\r\n";
 	return (ss.str());
 }

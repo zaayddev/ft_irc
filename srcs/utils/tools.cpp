@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:46:44 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/31 02:56:09 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/31 03:39:24 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,16 +53,13 @@ void	close_connection(client_t &clients, size_t i)
 
 std::string	getTime()
 {
-	std::string	h, mi;
     time_t now = time( 0 );
 	tm *ltm = localtime( &now );
-	h = std::to_string( ltm->tm_hour );
-	if ( 1 + ltm->tm_hour < 10 )
-		h = '0' + h;
-	mi = std::to_string( ltm->tm_min );
-	if ( 1 + ltm->tm_min < 10 )
-		mi = '0' + mi;
-	return (h + ":" + mi);
+
+    return (std::string((1 + ltm->tm_hour) < 10 ? '0' \
+        + std::to_string(ltm->tm_hour) : std::to_string(ltm->tm_hour)) \
+        + ":" +std::string((1 + ltm->tm_min) < 10 ? '0' \
+        + std::to_string(ltm->tm_min) : std::to_string(ltm->tm_min)));
 }
 
 std::string ip_itostr(in_addr_t ip)
