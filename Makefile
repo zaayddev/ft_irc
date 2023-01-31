@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+         #
+#    By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/26 16:33:22 by yelgharo          #+#    #+#              #
-#    Updated: 2023/01/28 23:20:25 by zchbani          ###   ########.fr        #
+#    Updated: 2023/01/30 23:47:33 by yelgharo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ SRC = 	main.cpp \
 	srcs/utils/poll.cpp \
 	srcs/utils/parsing.cpp \
 	srcs/utils/tools.cpp \
+	srcs/utils/respons.cpp \
 	srcs/User.cpp \
 	srcs/server_join.cpp
 

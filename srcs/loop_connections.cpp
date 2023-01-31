@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   loop_connections.cpp                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/31 02:50:24 by yelgharo          #+#    #+#             */
+/*   Updated: 2023/01/31 02:50:25 by yelgharo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../Includes/Ircserv.hpp"
 
 void	loop_connections(int socket_fd, std::string password)
@@ -30,7 +42,7 @@ void	loop_connections(int socket_fd, std::string password)
 			if (i != 0)
 			{
 				clients[i].second.msg += rcv_msg(clients[i].first.fd, clients, i, channels);
-				if (i < clients.size() && clients[i].second.msg.find("\r\n") != std::string::npos)
+				if (i < clients.size() && clients[i].second.msg.find(END) != npos)
 					cmds_parsing(clients, channels, clients[i].second.msg, i, password);
 			}
 		}

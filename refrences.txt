@@ -7,3 +7,4 @@ The recommended order for a client to register is as follows:
            3. User message
 
 Oikarinen & Reed                                               [Page 13]
+

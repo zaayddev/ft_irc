@@ -6,18 +6,18 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 04:17:49 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/30 22:27:45 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/31 01:36:49 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Includes/Ircserv.hpp"
 
-void	cmds_parsing(client_type &clients, channel_type &channels, \
+void	cmds_parsing(client_t &clients, channel_t &channels, \
     std::string &msg, int i, std::string password)
 {
     std::string tmp;
     (void) channels;
-	for (std::string::size_type	pos = msg.find("\r\n"); pos != std::string::npos; pos = msg.find("\r\n"))
+	for (size_t	pos = msg.find(END); pos != npos; pos = msg.find(END))
     {
 		if (pos == 0)
 			std::cout << YELLOW << "WARNING" << RESET <<std::endl;
@@ -30,10 +30,8 @@ void	cmds_parsing(client_type &clients, channel_type &channels, \
             else if (clients[i].second.get_authentification())
 				server_join(clients, tmp, i);
         } else if (clients[i].second.get_is_complete()) {
-            if (!tmp.find("PASS")) {
-                std::string reject = reject_msg("PASS", 462) + prompte();
-                send(clients[i].second.get_fd(), reject.c_str(), reject.length(), 0);
-            }
+            if (!tmp.find("PASS"))
+                senderr("PASS", clients[i].second.get_fd(),462);
         }
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 01:48:48 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/30 03:55:24 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/31 02:44:50 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ void    accept_call(std::vector<client> &clients, int socket_fd)
         new_user.set_ip(ip_itostr(client_addr.sin_addr.s_addr));
         new_user.set_fd(new_fd);
         clients.push_back(client(new_pollfd, new_user));
-        std::cout << YELLOW << "client " << RESET << "[ " << ip_itostr(client_addr.sin_addr.s_addr) \
-            << " ]" << YELLOW << " is accepted" << std::endl;
+        std::cout << YELLOW << "client " << RESET << "[" << ip_itostr( \
+            client_addr.sin_addr.s_addr) << "]" << YELLOW << " is accepted" << std::endl;
         std::string p = prompte();
         send(new_user.get_fd(), p.c_str(), p.length(), 0);
     }
@@ -65,7 +65,7 @@ void	initialise_poll(std::vector<client> &clients, int fd_size)
         clients.begin()[i].first.revents = poll_fd[i].revents;
 }
 
-std::string	rcv_msg(int client_fd, std::vector<client> &clients, size_t i, channel_type &channels)
+std::string	rcv_msg(int client_fd, std::vector<client> &clients, size_t i, channel_t &channels)
 {
     char    buffer[BUFFER_SIZE];
     int     recv_data;
