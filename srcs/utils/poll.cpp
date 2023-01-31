@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 01:48:48 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/31 02:44:50 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/31 02:58:41 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,7 @@ std::string	rcv_msg(int client_fd, std::vector<client> &clients, size_t i, chann
 
     // std::cout << "receive_msg called" << std::endl;
     std::memset(buffer, 0, sizeof(buffer));
-    recv_data = recv(client_fd, buffer, sizeof(buffer), 0);
-    if (recv_data) {
-        std::string p = prompte();
-        send(client_fd, p.c_str(), p.length(), 0);
-    }
-    
+    recv_data = recv(client_fd, buffer, sizeof(buffer), 0);  
     //std::cout << buffer << std::endl;
     // [ EWOULDBLOCK ]the error message is not logged because it is expected to happen when the function is called in non-blocking mode. 
     // This can be used to prevent the program from getting stuck 

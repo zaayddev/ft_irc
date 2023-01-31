@@ -6,7 +6,7 @@
 #    By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/26 16:33:22 by yelgharo          #+#    #+#              #
-#    Updated: 2023/01/30 23:47:33 by yelgharo         ###   ########.fr        #
+#    Updated: 2023/01/31 03:04:54 by yelgharo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ SRC = 	main.cpp \
 	srcs/utils/parsing.cpp \
 	srcs/utils/tools.cpp \
 	srcs/utils/respons.cpp \
+	srcs/utils/operations.cpp \
 	srcs/User.cpp \
 	srcs/server_join.cpp
 
