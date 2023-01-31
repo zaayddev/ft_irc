@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/31 03:27:05 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/31 06:50:59 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,15 @@ void			server_join(std::vector<client> &clients, std::string client_msg, int i);
 bool			check_name(std::string input);
 void    		welcome_msg(User user);
 std::string		reject_msg(std::string cmd, int ern);
-std::string		trimFirst(std::string s, int i);
 std::string		trim(std::string s, int i);
+std::string		trimFront(std::string s, int i);
+std::string     trimBack(std::string s);
 std::string		getTime();
 std::string		ip_itostr(in_addr_t ip);
 std::string		prompte();
 int				getPort(std::string s);
 void            senderr(std::string cmd, int fd,int ern);
 bool            channel_operations(client_t &clients, channel_t &channels, std::string msg, int i);
+bool            validNick(std::string nick);
 
 #endif

@@ -6,11 +6,17 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 04:17:49 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/31 03:46:48 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/31 07:13:35 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Includes/Ircserv.hpp"
+
+
+void    changenick(client_t &clients, std::string &cmd, int i) {
+    if (clients[i].second.get_nickname() == trimFront(cmd, 0) && validNick(trimBack(cmd)))   
+        std::cout << clients[i].second.get_nickname() << " now " << trimBack(cmd);
+}
 
 void	cmds_parsing(client_t &clients, channel_t &channels, \
     std::string &msg, int i, std::string password)
@@ -29,12 +35,12 @@ void	cmds_parsing(client_t &clients, channel_t &channels, \
             else if (clients[i].second.get_authentification())
 				server_join(clients, tmp, i);
         } else if (clients[i].second.get_is_complete()) {
-            std::cout << "hello" << std::endl;
             if (!tmp.find("PASS"))
                 senderr("PASS", clients[i].second.get_fd(), 462);
-            else
-			    if (channel_operations(clients, channels, tmp, i))
-				    break;
+            else if (tmp.find("NICK") )
+                changenick(clients, tmp, i);
+            if (channel_operations(clients, channels, tmp, i))
+                break;
         }
 	}
 }

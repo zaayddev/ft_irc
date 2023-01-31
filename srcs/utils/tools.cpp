@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:46:44 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/31 03:39:24 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/31 07:03:19 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ std::string trim(std::string s, int i)
 	return (ret);
 }
 
-std::string trimFirst(std::string s, int i)
+std::string trimFront(std::string s, int i)
 {
 	std::string ret = "";
 
@@ -93,4 +93,32 @@ std::string trimFirst(std::string s, int i)
 	while (s[i] && !isspace(s[i]))
 		ret += s[i++];
 	return (ret);
+}
+
+std::string trimBack(std::string s)
+{
+	std::string ret = "";
+    int i = s.length() - 1;
+	while (i && isspace(s[i]))
+		i--;
+    while (i && !isspace(s[i]))
+        i--;
+    i++;
+	while (s[i] && !isspace(s[i]))
+		ret += s[i++];
+	return (ret);
+}
+
+bool    validNick(std::string nick)
+{
+    int i;
+    if (nick.find("NICK") != npos)
+        return (false);
+    for (i = 0; nick[i]; i++)
+        if (!isalnum(nick[i]) && nick[i] != '.' 
+            && nick[i] != '-' && nick[i] != '_')
+                return (false);
+    if (i > 30)
+        return (false);
+    return (true);
 }

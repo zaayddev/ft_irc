@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 02:34:58 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/31 03:50:27 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/31 06:43:56 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,12 @@ bool	check_input(std::string nick, client_t &clients, int i, int index)
 {
 	if (index) {
 		if (nick == "")
-            return (senderr("NICK", clients[i].second.get_fd(), 461), false);
-		for (client_t::iterator it = clients.begin(); it != clients.end(); it++)
-			if (nick == it->second.get_nickname())
-                return (senderr("NICK", clients[i].second.get_fd(), 0), false);
+            return (senderr("NICK", clients[i].second.get_fd(), 431), false);
+        if (!validNick(nick))
+            return (senderr(nick, clients[i].second.get_fd(), 432), false);
+		// for (client_t::iterator it = clients.begin(); it != clients.end(); it++)
+		// 	if (nick == it->second.get_nickname())
+        //         return (senderr("NICK", clients[i].second.get_fd(), 0), false);
 	} else if (!index) {
 		int condition = 0;
 		int j = 0;
@@ -47,7 +49,7 @@ void	server_join(std::vector<client> &clients, std::string client_msg, int i)
 	{
 		if (index > 5 && isspace(client_msg[4]))
 		{
-			std::string nick = trimFirst(client_msg, 5);
+			std::string nick = trim(client_msg, 5);
 			if (check_input(nick, clients, i, 1))
 				clients[i].second.set_nickname(nick);
 		}
@@ -62,7 +64,7 @@ void	server_join(std::vector<client> &clients, std::string client_msg, int i)
 		{
 			std::string _user = trim(client_msg, 5);
 			if (check_input(_user, clients, i, 0)) 
-				clients[i].second.set_user(trimFirst(_user,0));
+				clients[i].second.set_user(trimFront(_user,0));
 		}
 		else
             senderr("USER", clients[i].second.get_fd(), 461);

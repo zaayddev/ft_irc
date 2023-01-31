@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/31 03:54:02 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/31 04:28:54 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ bool    channel_operations(client_t &clients, channel_t &channels, std::string m
 	std::string	reply;
     (void) channels;
 	std::cout << "channel_operations:: ";
-	if (msg.find("PING") == 0)
+	if (!msg.find("PING"))
 		ping_message(clients, i);
 	return (false);
 }

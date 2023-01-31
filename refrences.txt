@@ -2,8 +2,13 @@ RFC 1459              Internet Relay Chat Protocol              May 1993
 
 The recommended order for a client to register is as follows:
 
-           1. Pass message
+           1. Pass message 
+                Cases of error :
+                    // {461 PASS :Not enough parameters} [ERR_NEEDMOREPARAMS] 
+                    // {462 :You may not reregister} [ERR_ALREADYREGISTRED]
            2. Nick message
+                [ <hopcount> ] If supplied by a client, it must be ignored.
+                
            3. User message
 
 Oikarinen & Reed                                               [Page 13]

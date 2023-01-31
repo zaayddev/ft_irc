@@ -6,13 +6,13 @@
 #    By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/26 16:33:22 by yelgharo          #+#    #+#              #
-#    Updated: 2023/01/31 03:04:54 by yelgharo         ###   ########.fr        #
+#    Updated: 2023/01/31 05:35:05 by yelgharo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ircserv
 
-LIB = Includes/Ircserv.hpp Includes/Users.hpp 
+LIB = Includes/Ircserv.hpp Includes/User.hpp 
 
 CC = c++
 
@@ -33,10 +33,10 @@ OFILES = $(SRC:.cpp=.o)
 
 all : $(NAME) 
 
-$(NAME) : $(OFILES)
+$(NAME) : $(OFILES) 
 	@${CC} $^ -o $@
 
-%.o: %.cpp
+%.o: %.cpp $(LIB)
 	@$(CC) $(FLAGS) -c $< -o $@
 
 clean :

@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:24:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/31 01:59:57 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/01/31 07:15:22 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,7 @@ int main(int argc, char **argv)
     // nick!user@ip                     -------> done 
     // if user < 5 && > 3 print error   -------> done
     // QUIT Command
-    // Fix all the errors for invalid inputs for each command enterd 
+    // Fix all the errors for invalid inputs for each command enterd
+    // change nickname need to finish;;
+    
     
