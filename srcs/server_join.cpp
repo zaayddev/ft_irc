@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 02:34:58 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/01 02:32:48 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/01 10:06:08 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ bool	check_input(std::string s, client_t &clients, int &i, int index)
 		if (condition != 4)
 			return (senderr("USER", clients[i].second.get_fd(), 461), false);
 	}
-	return (clients[i].second.set_realname(trim(s, r)), true);
+	return (clients[i].second.set_realname(trim(s, r - 1)), true);
 }
 
 void	server_join(std::vector<client> &clients, std::string client_msg, int i)
@@ -64,7 +64,7 @@ void	server_join(std::vector<client> &clients, std::string client_msg, int i)
 			std::string nick = trimFront(client_msg, 5);
 			if (check_input(nick, clients, i, 1)) {
 				clients[i].second.set_nickname(nick);
-				std::string s = "Introducing new nick " + nick + "\r\n" + prompte();
+				std::string s = ":ft_irc NOTICE AUTH :Introducing new nick " + nick + "\n";
 				send(clients[i].second.get_fd(), s.c_str(), s.length(), 0);
 			}
 		}
@@ -80,9 +80,9 @@ void	server_join(std::vector<client> &clients, std::string client_msg, int i)
 			std::string _user = trim(client_msg, 5);
 			if (check_input(_user, clients, i, 0)) {
 				clients[i].second.set_username(trimFront(_user,0));
-				std::string s = "User registering themselves with a username of \"" \
+				std::string s = ":ft_irc NOTICE AUTH :User registering themselves with a username of \"" \
 					+ clients[i].second.get_username() + "\" and real name \"" \
-					+ clients[i].second.get_realname() + "\"\r\n" + prompte();
+					+ clients[i].second.get_realname() + "\"\n";
 				send(clients[i].second.get_fd(), s.c_str(), s.length(), 0);
 			}
 		}

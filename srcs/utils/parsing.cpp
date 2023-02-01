@@ -6,18 +6,18 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 04:17:49 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/01 01:39:28 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/01 10:08:37 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Includes/Ircserv.hpp"
 
 bool	ifexist(client_t &clients, int i, std::string s) {
+	if (clients[i].second.get_nickname() == s)
+		return (senderr(s, clients[i].second.get_fd(), 433), false);
 	for (client_t::iterator it = clients.begin(); it != clients.end(); it++)
 		if (s == it->second.get_nickname())
-			return (senderr(s, clients[i].second.get_fd(), 433), false);
-	if (clients[i].second.get_nickname() == s)
-		return (senderr(s, clients[i].second.get_fd(), 436), false);
+			return (senderr(s, clients[i].second.get_fd(), 436), false);
 	return (true);
 }
 

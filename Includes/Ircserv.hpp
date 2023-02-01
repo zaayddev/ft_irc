@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/01 00:50:45 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/01 09:29:42 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,5 @@ std::string		trim(std::string s, int i);
 std::string		trimFront(std::string s, int i);
 std::string		getTime();
 std::string		ip_itostr(in_addr_t ip);
-std::string		prompte();
 
 #endif

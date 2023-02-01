@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 01:48:48 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/01 00:45:29 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/01 09:30:02 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ void    accept_call(std::vector<client> &clients, int socket_fd)
         clients.push_back(client(new_pollfd, new_user));
         std::cout << YELLOW << "client " << RST << "[" << ip_itostr( \
             client_addr.sin_addr.s_addr) << "]" << YELLOW << " is accepted" << std::endl;
-        std::string p = prompte();
-        send(new_user.get_fd(), p.c_str(), p.length(), 0);
     }
 }
 
@@ -75,10 +73,6 @@ std::string	rcv_msg(int client_fd, std::vector<client> &clients, size_t i, chann
     // std::cout << "receive_msg called" << std::endl;
     std::memset(buffer, 0, sizeof(buffer));
     recv_data = recv(client_fd, buffer, sizeof(buffer), 0);
-    if (recv_data) {
-        std::string reply = prompte();
-	    send(clients[i].second.get_fd(), reply.c_str(), reply.length(), 0);
-    } 
         
     //std::cout << buffer << std::endl;
     // [ EWOULDBLOCK ]the error message is not logged because it is expected to happen when the function is called in non-blocking mode. 
