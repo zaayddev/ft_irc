@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 02:34:58 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/01 02:29:42 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/01 02:32:48 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@ bool	check_input(std::string s, client_t &clients, int &i, int index)
                 if (s[j] == ':') {
 					std::string t = trim(s, r);
 					if (t != "")
-                    	return (clients[i].second.set_realname(t), true);
+						return (clients[i].second.set_realname(t), true);
 					condition--;
 				}
-            }
+			}
 		}
 		if (condition != 4)
 			return (senderr("USER", clients[i].second.get_fd(), 461), false);
