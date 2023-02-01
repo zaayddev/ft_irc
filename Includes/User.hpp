@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 23:35:19 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/31 05:31:28 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/01 00:07:20 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,33 +16,38 @@
 # include "Ircserv.hpp"
 
 class User {
-    private:
-        std::string     _ip;
-        std::string     _nickname;
-        std::string     _user;
-        int             _fd;
-        bool            _is_complete;
-        bool            _authentification;
-        
-    public:
-    
-        User(void);
-        User(std::string str);
-        std::string     msg;
+	private:
+		std::string	_ip;
+		std::string	_nickname;
+		std::string	_username;
+		std::string	_realname;
+		int			_fd;
+		bool		_is_complete;
+		bool		_authentification;
+		
+	public:
+		
+		
+		User(void);
+		User(std::string str);
 
-        std::string get_ip(void) const;
-        std::string	get_nickname(void) const;
-        std::string get_user(void) const;
-        bool	    get_authentification(void) const;
-        bool        get_is_complete(void) const;
-        int         get_fd(void) const;
+		std::string	get_ip(void) const;
+		std::string	get_nickname(void) const;
+		std::string	get_username(void) const;
+		std::string	get_realname(void) const;
+		bool		get_authentification(void) const;
+		bool		get_is_complete(void) const;
+		int			get_fd(void) const;
 
-        void        set_ip(const std::string ip);
-        void		set_user(const std::string user);
-        void        set_nickname(const std::string nickname);
-        void        set_authentification(const bool authentification);
-        void        set_is_complete(const bool is_complete);
-        void        set_fd(int fd);     
+		void		set_ip(const std::string ip);
+		void		set_username(const std::string username);
+		void		set_realname(const std::string realname);
+		void		set_nickname(const std::string nickname);
+		void		set_authentification(const bool authentification);
+		void		set_is_complete(const bool is_complete);
+		void		set_fd(int fd);     
+		
+		std::string	msg;
 };
 
 #endif

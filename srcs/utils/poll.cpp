@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 01:48:48 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/31 03:19:00 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/01 00:45:29 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void    accept_call(std::vector<client> &clients, int socket_fd)
         new_user.set_ip(ip_itostr(client_addr.sin_addr.s_addr));
         new_user.set_fd(new_fd);
         clients.push_back(client(new_pollfd, new_user));
-        std::cout << YELLOW << "client " << RESET << "[" << ip_itostr( \
+        std::cout << YELLOW << "client " << RST << "[" << ip_itostr( \
             client_addr.sin_addr.s_addr) << "]" << YELLOW << " is accepted" << std::endl;
         std::string p = prompte();
         send(new_user.get_fd(), p.c_str(), p.length(), 0);
@@ -55,12 +55,12 @@ void    accept_call(std::vector<client> &clients, int socket_fd)
 void	initialise_poll(std::vector<client> &clients, int fd_size)
 {
     std::vector<pollfd> poll_fd = clients_fd(clients);
-    std::cout << GREEN_BOLD << "poll() is waiting ..." << RESET << std::endl;
+    std::cout << GREEN_BOLD << "poll() is waiting ..." << RST << std::endl;
     int error = poll(poll_fd.data(), fd_size, TIMEOUT);
     if (error < 0)
-        std::cout << RED_BOLD << "poll() is failed!!" << RESET << std::endl;
+        std::cout << RED_BOLD << "poll() is failed!!" << RST << std::endl;
     else if (error == 0)
-        std::cout << BLUE << "poll() in time out" << RESET << std::endl;
+        std::cout << BLUE << "poll() in time out" << RST << std::endl;
     for (size_t i = 0; i < clients.size(); i++)
         clients.begin()[i].first.revents = poll_fd[i].revents;
 }
