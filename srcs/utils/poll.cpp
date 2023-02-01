@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   poll.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 01:48:48 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/01 09:30:02 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/01 17:34:11 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,11 @@ void    accept_call(std::vector<client> &clients, int socket_fd)
         }
         pollfd	new_pollfd;
         User	new_user;
+
+        // The timeout argument specifies the minimum number of milliseconds that poll() will block.
+        // Specifying a negative value in timeout means an infinite timeout.
+        // Specifying a timeout of zero causes poll() to return immediately, even if no file descriptors are ready.
+        
         new_pollfd.fd = new_fd;
         new_pollfd.events = POLLIN;
         new_pollfd.revents = 0;
@@ -54,6 +59,10 @@ void	initialise_poll(std::vector<client> &clients, int fd_size)
 {
     std::vector<pollfd> poll_fd = clients_fd(clients);
     std::cout << GREEN_BOLD << "poll() is waiting ..." << RST << std::endl;
+    
+    // poll() performs a similar task to select(2): 
+    // it waits for one of a set of file descriptors to become ready to perform I/O.
+    
     int error = poll(poll_fd.data(), fd_size, TIMEOUT);
     if (error < 0)
         std::cout << RED_BOLD << "poll() is failed!!" << RST << std::endl;
@@ -79,10 +88,13 @@ std::string	rcv_msg(int client_fd, std::vector<client> &clients, size_t i, chann
     // This can be used to prevent the program from getting stuck 
     // in an infinite loop waiting for data to be received. Instead, 
     // the function can continue execution and check for new data at a later time.
+
     if (recv_data < 0 && errno != EWOULDBLOCK)
         std::cout << "recv() failed" << std::endl;
+        
     // IMPORTANT to note that recv() returning 0 is not an error, 
     // it is a normal condition, it is just indicating the end of the connection.
+    
     if (recv_data == 0)
     {
         //kick_users_from_channels();

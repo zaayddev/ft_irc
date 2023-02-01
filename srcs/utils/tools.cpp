@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:46:44 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/01 00:37:06 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/01 13:03:58 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,17 @@ std::string trimFront(std::string s, int i)
 	while (s[i] && !isspace(s[i]))
 		ret += s[i++];
 	return (ret);
+}
+
+std::string	take_nickname_from_msg(std::string msg)
+{
+	int	i = 0;
+	std::string	nick;
+
+	for (; msg[i] != ' '; i++)
+		continue ;
+	i++;
+	for (; msg[i] != ' '; i++)
+		nick.push_back(msg[i]);
+	return (nick);
 }

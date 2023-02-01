@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Ircserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/01 09:29:42 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/01 16:35:59 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,10 @@
 class User;
 
 /*<------> Alternate names for our data types <------>*/
-typedef std::pair<pollfd, User>						client;
-typedef std::vector<client>							client_t;
-typedef std::map< std::string, std::vector<User> >	channel_t;
+typedef std::pair<pollfd, User>						    client;
+typedef std::pair< std::string, std::vector<User> >		channel;
+typedef std::vector<client>							    client_t;
+typedef std::map< std::string, std::vector<User> >	    channel_t;
 
 /*<------> DEFINE Variables <------>*/
 # define BACKLOG 1
@@ -59,10 +60,12 @@ typedef std::map< std::string, std::vector<User> >	channel_t;
 /*<------> SET Used Functions <------>*/
 int				tcp_server(int port);
 int				getPort(std::string s);
+
 bool			channel_operations(client_t &clients, channel_t &channels, std::string msg, int i);
 bool			validNick(std::string nick);
 bool			ifexist(client_t &clients, int i, std::string s);
 bool			check_input(std::string s, client_t &clients, int &i, int index);
+
 void			user_authentification(client_t &clients, std::string input, std::string password, size_t i);
 void			loop_connections(int socket_fd, std::string password);
 void			initialise_poll(std::vector<client> &clients, int fd_size);
@@ -73,11 +76,14 @@ void			server_join(std::vector<client> &clients, std::string client_msg, int i);
 void			welcome_msg(User user);
 void			nickchange_msg(User user, std::string str);
 void			senderr(std::string cmd, int fd,int ern);
+
 std::string		rcv_msg(int client_fd, std::vector<client> &clients, size_t i, channel_t &channels);
 std::string		reject_msg(std::string cmd, int ern);
 std::string		trim(std::string s, int i);
 std::string		trimFront(std::string s, int i);
 std::string		getTime();
 std::string		ip_itostr(in_addr_t ip);
+std::string	    take_nickname_from_msg(std::string msg);
+std::string	    msg_format(User &user);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:24:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/01 06:05:41 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/01 13:31:59 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,13 @@ int main(int argc, char **argv) {
 }
 
 
-// Need to add a "guest" mode : which is when a client connect to the server be 
-// treated as guest till he finish all the authentication steps (PASS, NICK & USER).
+/*
+	PING 
+	PRIVMSG #
+	PRIVMSG 
+	JOIN #
+	PART 
+	OPER 
+	KILL
+	DIE
+*/
