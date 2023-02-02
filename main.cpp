@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:24:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/02 09:57:02 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/02 14:22:09 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,5 @@ int main(int argc, char **argv) {
 	DIE
 */
 // TO DO: send JOIN server responses [ 403 | 401 ]
+// TO DO: create PRIVMSG # (private msgs for servers)
 // BUG detected : ./ircserv PORT " "

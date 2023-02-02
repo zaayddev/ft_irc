@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/02 12:52:58 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/02 14:59:09 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,6 @@ void	join_channel(client_t &clients, size_t i, channel_t &channels, std::string 
 		std::cout << "forbidden character in channel name" << std::endl;
 		return ;
 	}
-	if (channel_name == "SpotifyBot")
-	{
-		reply = system("python3 /Users/zchbani/Desktop/ft_irc/srcs/utils/main.py");
-	}
 	if (it == channels.end())
 	{
 		std::vector<User> channel_users;
@@ -117,15 +113,26 @@ void	join_channels(client_t &clients, size_t i, channel_t &channels, std::string
 	}
 }
 
+void	handle_bot_cmd(client_t &clients, size_t i)
+{	
+		// still working on
+		int status = system("python3 /Users/zchbani/Desktop/ft_irc/srcs/utils/main.py");
+   	 	send(clients[i].second.get_fd(), &status, sizeof(status), 0);
+}
+
 bool    channel_operations(client_t &clients, channel_t &channels, std::string msg, int i)
 {
 	std::string	reply;
-    (void) channels;
+
 	if (!msg.find("PING "))
 		ping_message(clients, i);
 	else if (!msg.find("PRIVMSG "))
 		priv_msg(clients, i, msg);
+	//else if (!msg.find("PRIVMSG #"))
+		//channel_msg(clients, i, channels, msg);
 	else if (!msg.find("JOIN #"))
 		join_channels(clients, i, channels, msg);
+	else if (!msg.find("BOT /"))
+		handle_bot_cmd(clients, i);
 	return (false);
 }

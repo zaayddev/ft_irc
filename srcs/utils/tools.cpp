@@ -6,12 +6,11 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:46:44 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/01 13:03:58 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/02 13:57:43 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Includes/Ircserv.hpp"
-
 
 int getPort(std::string s)
 {
@@ -23,6 +22,16 @@ int getPort(std::string s)
 			return (0);
 	}
 	return (stoi(s));
+}
+
+bool	check_user_exist(std::vector<User> users, std::string nick)
+{
+	for (std::vector<User>::iterator it_users = users.begin(); it_users != users.end(); it_users++)
+	{
+		if (it_users->get_nickname() == nick)
+			return (true);
+	}
+	return (false);
 }
 
 std::string	getTime()

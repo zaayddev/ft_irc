@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/01 16:35:59 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/02 13:57:17 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ bool			channel_operations(client_t &clients, channel_t &channels, std::string ms
 bool			validNick(std::string nick);
 bool			ifexist(client_t &clients, int i, std::string s);
 bool			check_input(std::string s, client_t &clients, int &i, int index);
+bool	check_user_exist(std::vector<User> users, std::string nick);
 
 void			user_authentification(client_t &clients, std::string input, std::string password, size_t i);
 void			loop_connections(int socket_fd, std::string password);
