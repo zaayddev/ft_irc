@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loop_connections.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 02:50:24 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/01/31 02:50:25 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/02 09:54:44 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,14 @@ void	loop_connections(int socket_fd, std::string password)
 	std::map<std::string, std::vector<User> > 	channels;
 	
 	socket.fd = socket_fd;
+	
 	// the events variable is set to POLLIN to tell the system that 
 	// the application is interested in monitoring the socket for incoming data, 
 	// and the revents variable is set to 0, to indicate that no events 
 	// have occurred on the socket yet, at the time of calling poll function.
 	// [ POLLIN is a macro constant defined in the <poll.h> header, 
 	// which represents an event flag that indicates that there is data available to read on the file descriptor. ]
+	
 	socket.events = POLLIN;
 	socket.revents = 0;
 	clients.push_back(client(socket, server));

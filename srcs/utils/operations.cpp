@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/01 17:16:21 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/02 12:52:58 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,28 @@ void	join_channel(client_t &clients, size_t i, channel_t &channels, std::string 
 
 	channel_t::iterator it = channels.find(channel_name);
 
+	msg.erase(0, 1);
+	if (msg.find(",", 0) != npos)
+	{
+		channel_name = msg.substr(0, msg.find(",", 0));
+		msg.erase(0, msg.find(",", 0) + 1);
+	}
+	else
+	{
+		channel_name = msg.substr(0, msg.find(" ", 0));
+		msg.erase(0, msg.find(",", 0));
+	}
+	if (channel_name.size() == 0)
+		return ;
+	if (!check_name(channel_name))
+	{
+		std::cout << "forbidden character in channel name" << std::endl;
+		return ;
+	}
+	if (channel_name == "SpotifyBot")
+	{
+		reply = system("python3 /Users/zchbani/Desktop/ft_irc/srcs/utils/main.py");
+	}
 	if (it == channels.end())
 	{
 		std::vector<User> channel_users;
@@ -73,7 +95,7 @@ void	join_channel(client_t &clients, size_t i, channel_t &channels, std::string 
 	else // add user to channel
 	{
 		(*it).second.push_back(clients[i].second);
-
+ 
 		std::vector<User>	users = (*it).second;
 		std::vector<User>::iterator	ite = users.begin();
 		for (; ite != users.end(); ite++)
@@ -86,6 +108,7 @@ void	join_channel(client_t &clients, size_t i, channel_t &channels, std::string 
 
 void	join_channels(client_t &clients, size_t i, channel_t &channels, std::string &msg)
 {	
+	msg.erase(0, 5);
 	if (msg.find(",", 0) == npos)
 		join_channel(clients, i, channels, msg);
 	else {

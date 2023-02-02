@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:24:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/01 13:31:59 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/02 09:57:02 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,3 +42,5 @@ int main(int argc, char **argv) {
 	KILL
 	DIE
 */
+// TO DO: send JOIN server responses [ 403 | 401 ]
+// BUG detected : ./ircserv PORT " "

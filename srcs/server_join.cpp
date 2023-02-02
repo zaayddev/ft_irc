@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server_join.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 02:34:58 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/01 10:06:08 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/02 12:54:11 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,16 @@ bool	check_input(std::string s, client_t &clients, int &i, int index)
 	int condition;
 
 	r = 0;
-	if (index) {
+	if (index)
+	{
 		if (s == "")
 			return (senderr("NICK", clients[i].second.get_fd(), 431), false);
 		if (!validNick(s))
 			return (senderr(s, clients[i].second.get_fd(), 432), false);
 		if (!ifexist(clients, i, s))
 			return (false);
-	} else if (!index) 
+	} 
+	else if (!index) 
 	{
 		condition = 0;
 		j = 0;
@@ -36,9 +38,11 @@ bool	check_input(std::string s, client_t &clients, int &i, int index)
 			while (s[j] && isspace(s[j]))
 				j++;
 			condition++;
-            if (condition == 3) {
+            if (condition == 3)
+			{
                 r = j + 1;
-                if (s[j] == ':') {
+                if (s[j] == ':')
+				{
 					std::string t = trim(s, r);
 					if (t != "")
 						return (clients[i].second.set_realname(t), true);
