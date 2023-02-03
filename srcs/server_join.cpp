@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server_join.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 02:34:58 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/03 14:35:58 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/03 15:50:29 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	server_join(std::vector<client> &clients, std::string client_msg, int i)
 			std::string nick = trimFront(client_msg, 5);
 			if (check_input(nick, clients, i, 1)) {
 				clients[i].second.set_nickname(nick);
-				std::string s = ":ft_irc NOTICE AUTH :* You are registered with a nickname of \"" + nick + "\"\r\n";
+				std::string s = ":ft_irc NOTICE AUTH : You are registered with a nickname of \"" + nick + "\"\r\n";
 				send(clients[i].second.get_fd(), s.c_str(), s.length(), 0);
 			}
 		}
@@ -84,7 +84,7 @@ void	server_join(std::vector<client> &clients, std::string client_msg, int i)
 			std::string _user = trim(client_msg, 5);
 			if (check_input(_user, clients, i, 0)) {
 				clients[i].second.set_username(trimFront(_user,0));
-				std::string s = ":ft_irc NOTICE AUTH :* You are registered with a username of \"" \
+				std::string s = ":ft_irc NOTICE AUTH : You are registered with a username of \"" \
 					+ clients[i].second.get_username() + "\" and real name \"" \
 					+ clients[i].second.get_realname() + "\"\r\n";
 				send(clients[i].second.get_fd(), s.c_str(), s.length(), 0);

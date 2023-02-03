@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 04:17:49 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/03 12:12:50 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/03 15:30:15 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Includes/Ircserv.hpp"
 
-bool	ifexist(client_t &clients, int i, std::string s) {
+bool	ifexist(client_t &clients, int i, std::string s)
+{
 	if (clients[i].second.get_nickname() == s)
 		return (senderr(s, clients[i].second.get_fd(), 433), false);
 	for (client_t::iterator it = clients.begin(); it != clients.end(); it++)

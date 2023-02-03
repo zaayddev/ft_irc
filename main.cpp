@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:24:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/03 10:33:52 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/03 15:28:36 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Includes/Ircserv.hpp"
 
-int main(int argc, char **argv) {	
+int main(int argc, char **argv)
+{	
 	int	port;
 	int socket_fd;
 

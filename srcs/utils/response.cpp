@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 23:46:49 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/03 14:50:02 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/03 15:49:08 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,10 @@ void	welcome_msg(User user)
 {
 	std::string s;
 
-	s = ":ft_irc NOTICE AUTH :*** Welcome to our IRC network! "+ user.get_nickname() \
-		+ "!" + user.get_username() + "@" + user.get_ip() + " ***\r\n";
+	s = ":ft_irc NOTICE AUTH :Welcome to our IRC network! "+ user.get_nickname() \
+		+ "!" + user.get_username() + "@" + user.get_ip() + " \r\n";
     s = s + ":ft_irc NOTICE AUTH : We're glad you're here.\r\n";
-    s = s + ":ft_irc NOTICE AUTH :If you need any help, just type /join #help "\
-        "and one of our friendly operators will assist you.\r\n";
-    s = s + ":ft_irc NOTICE AUTH :**Happy chatting!**\r\n";
+    s = s + ":ft_irc NOTICE AUTH : HAPPY CHATTING...\r\n";  
 	send(user.get_fd(), s.c_str(), s.length(), 0);
 }
 

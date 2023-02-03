@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:46:44 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/03 12:12:14 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/03 15:51:11 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,19 +38,6 @@ bool	check_user_exist(std::vector<User> users, std::string nick)
 			return (true);
 	}
 	return (false);
-}
-
-std::string	getTime()
-{
-	tm		*ltm;
-	time_t	now;
-
-	now = time(0);
-	ltm = localtime( &now );
-	return (std::string((1 + ltm->tm_hour) < 10 ? '0' \
-		+ std::to_string(ltm->tm_hour) : std::to_string(ltm->tm_hour)) \
-		+ ":" +std::string((1 + ltm->tm_min) < 10 ? '0' \
-		+ std::to_string(ltm->tm_min) : std::to_string(ltm->tm_min)));
 }
 
 std::string ip_itostr(in_addr_t ip)
