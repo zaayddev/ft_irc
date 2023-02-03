@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 04:17:49 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/01 10:08:37 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/03 12:12:50 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,14 @@ bool	ifexist(client_t &clients, int i, std::string s) {
 bool	changenick(client_t &clients, std::string &cmd, int i, int j)
 {
 	std::string tmp;
+    std::string oldNick;
 
+    oldNick = trimFront(cmd, 1);
+    tolowstr(oldNick);
 	if (!isspace(cmd[j - 1]) || !isspace(cmd[j + 4]))
 		return (senderr("NICK", clients[i].second.get_fd(), 431), false);
-	if (clients[i].second.get_nickname() == trimFront(cmd, 1))
+	if (clients[i].second.get_nickname() == oldNick)
+    
 		if (!check_input(trimFront(cmd, j + 5), clients, i, 1))
 			return (false);
 	tmp = clients[i].second.get_nickname();

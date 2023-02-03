@@ -3,14 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   tools.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:46:44 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/02 13:57:43 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/03 12:12:14 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Includes/Ircserv.hpp"
+
+void    tolowstr(std::string &s)
+{
+    for (int i = 0; s[i]; i++)
+        s[i] = tolower(s[i]);
+}
 
 int getPort(std::string s)
 {
