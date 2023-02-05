@@ -3,10 +3,10 @@
 
 ### FT_IRC
 > Simple IRC Server based on the RFC (mainly 2812) written in C++.
-This project does not support server-server communication and is best used with irssi, limchat (or any client that send packets terminated with \r\n).<\br>
-Do **make** and then run:
-`./ircserv <port> <password>`
-Then simply connect to the server using this command :
+This project does not support server-server communication and is best used with irssi, limchat (or any client that send packets terminated with \r\n).<br>
+Do **make** and then run:<br>
+`./ircserv <port> <password>`<br>
+Then simply connect to the server using this command :<br>
 `irssi -c localhost -w <password>`
 
 ### Resources
