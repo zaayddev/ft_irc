@@ -3,21 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 23:46:49 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/03 15:49:08 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/03 18:32:09 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Includes/Ircserv.hpp"
-
-std::string prompte()
-{
-	std::stringstream   ss;
-	ss << BLUE << "[" << getTime() << "] " << RST;
-	return (ss.str());
-}
 
 void	welcome_msg(User user)
 {
@@ -52,21 +45,23 @@ std::string	reject_msg(std::string cmd, int ern)
 	std::stringstream	ss;
 
 	if (ern == 431)
-		ss << ":ft_irc " << ern << "* No nickname given\r\n" ;
+		ss << ern << ": No nickname given\r\n" ;
 	else if (ern == 432)
-		ss << ":ft_irc " << ern  << cmd << "* Erroneus nickname\r\n";
+		ss << ern << ":*" << cmd << "* * Erroneus nickname\r\n";
 	else if (ern == 433)
-		ss << ":ft_irc " << ern  << cmd << "* Nickname is already in use\r\n";
+		ss << ern << ":*" << cmd << "* * Nickname is already in use\r\n";
 	else if (ern == 436)
-		ss << ":ft_irc " << ern  << cmd << "* Nickname collision KILL\r\n";
+		ss << ern << ":*" << cmd << "* * Nickname collision KILL\r\n";
 	else if ( ern == 461 )
-		ss << ":ft_irc " << ern  << cmd << "* Not enough parameters\r\n";
+		ss << ern << ":*" << cmd << "* * Not enough parameters\r\n";
 	else if (ern == 462)
-		ss << ":ft_irc " << ern << "* You may not reregister\r\n";
+		ss << ern << ": You may not reregister\r\n";
 	else if (ern == 464)
-		ss << ":ft_irc " << ern << "* Password incorrect\r\n";
-	else if (ern == 401)
-		ss << ":ft_irc " << ern << "* No such nick/channel\r\n";
+		ss << ern << ": Password incorrect\r\n";
+	else if (ern == 403)
+		ss << ern << ":*" << cmd << "* * No such channel\r\n"; // should fix the shown of the cmd in limechat
+    else if (ern == 401)
+		ss << ern << ":*" << cmd << "* * No such nick/channel\r\n";
 	return (ss.str());
 }
 

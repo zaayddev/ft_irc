@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   operations.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/02 14:59:09 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/05 11:30:25 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,26 +113,44 @@ void	join_channels(client_t &clients, size_t i, channel_t &channels, std::string
 	}
 }
 
-void	handle_bot_cmd(client_t &clients, size_t i)
+void	create_env_file(std::string name)
+{
+	std::ofstream	ofs(".env");
+	std::string	var1 = "CLIENT_ID = \"cfde0e10b10247f194386e2f5d2d375f\"";
+	std::string	var2 = "CLIENT_SECRET = \"6256e3fbb10e417eb5d7f55be82b81bc\"";
+	std::string	var3 = "ARTIST_NAME = \"" + name + "\"";
+	ofs << var1 << std::endl << var2 << std::endl << var3 << std::endl;
+	ofs.close();
+}
+
+void	handle_bot_cmd(client_t &clients, size_t i, std::string &name)
 {	
-		// still working on
-		int status = system("python3 /Users/zchbani/Desktop/ft_irc/srcs/utils/main.py");
-   	 	send(clients[i].second.get_fd(), &status, sizeof(status), 0);
+		// done
+        create_env_file(trim(name, 6));
+		std::string line;
+		system("python ./srcs/utils/main.py");
+        std::ifstream   ifs("songs");
+        while (getline(ifs, line)) {
+			std::string msg = "ft_irc NOTICE: ♪ " + line + "\r\n";
+   	 	    send(clients[i].second.get_fd(), msg.c_str(), msg.length(), 0);
+		}
+		ifs.close();
+		system("rm -f songs .env");
 }
 
 bool    channel_operations(client_t &clients, channel_t &channels, std::string msg, int i)
 {
 	std::string	reply;
 
-	if (!msg.find("PING "))
+	if (!msg.find("PING"))
 		ping_message(clients, i);
-	else if (!msg.find("PRIVMSG "))
+	else if (!msg.find("PRIVMSG"))
 		priv_msg(clients, i, msg);
 	//else if (!msg.find("PRIVMSG #"))
 		//channel_msg(clients, i, channels, msg);
-	else if (!msg.find("JOIN #"))
+	else if (!msg.find("JOIN"))
 		join_channels(clients, i, channels, msg);
-	else if (!msg.find("BOT /"))
-		handle_bot_cmd(clients, i);
+	else if (!msg.find("ARTIST "))
+		handle_bot_cmd(clients, i, msg);
 	return (false);
 }

@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/03 14:17:35 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/05 08:54:23 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 #include <map>
 #include <unistd.h>
 #include <cstdlib>
+#include <fstream>
 #include "User.hpp"
 
 /*<------> Forward Declaration <------>*/
@@ -87,7 +88,6 @@ std::string		trimFront(std::string s, int i);
 std::string		trim(std::string s, int i);
 std::string		ip_itostr(in_addr_t ip);
 std::string	    msg_format(User &user);
-std::string		getTime();
 
 
 #endif
