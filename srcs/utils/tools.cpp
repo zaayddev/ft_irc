@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:46:44 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/03 15:51:11 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/05 12:09:42 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,16 @@ void    tolowstr(std::string &s)
         s[i] = tolower(s[i]);
 }
 
-int getPort(std::string s)
+int getPort(char* s)
 {
-	if (s.length() > 5)
+	if (strlen(s) > 5)
 		return 0;
 	for (int i = 0; s[i]; i++)
 	{
 		if (!isdigit(s[i]))
 			return (0);
 	}
-	return (stoi(s));
+	return (atoi(s));
 }
 
 bool	check_user_exist(std::vector<User> users, std::string nick)
@@ -42,10 +42,11 @@ bool	check_user_exist(std::vector<User> users, std::string nick)
 
 std::string ip_itostr(in_addr_t ip)
 {
-	return (std::string(std::to_string(ip & 0xFF) + "." \
-		+ std::to_string((ip >> 8) & 0xFF) \
-		+ "." + std::to_string((ip >> 16) & 0xFF) \
-		+ "." + std::to_string((ip >> 24) & 0xFF)));
+    std::stringstream   ss;
+
+    ss << (ip & 0xFF)  << "." << ((ip >> 8) & 0xFF) << "." \
+        << ((ip >> 16) & 0xFF) << "." << ((ip >> 24) & 0xFF);
+	return (ss.str());
 }
 
 std::string trim(std::string s, int i)

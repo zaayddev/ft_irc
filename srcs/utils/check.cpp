@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 00:20:06 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/03 12:17:26 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/05 12:10:31 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	close_connection(client_t &clients, size_t i)
 	clients.erase(clients.begin() + i);
 }
 
-int	first_in_check(std::string s2, std::string s3)
+int	first_in_check(char* s2, std::string s3)
 {
 	int		port;
 	size_t	i;

@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/05 11:30:25 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/05 11:32:40 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ bool    channel_operations(client_t &clients, channel_t &channels, std::string m
 		//channel_msg(clients, i, channels, msg);
 	else if (!msg.find("JOIN"))
 		join_channels(clients, i, channels, msg);
-	else if (!msg.find("ARTIST "))
+	else if (!msg.find("ARTIST"))
 		handle_bot_cmd(clients, i, msg);
 	return (false);
 }

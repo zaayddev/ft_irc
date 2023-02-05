@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/05 08:54:23 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/05 12:10:58 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ typedef std::map< std::string, std::vector<User> >	    channel_t;
 # define RST			"\033[0m"
 
 /*<------> SET Used Functions <------>*/
-int				first_in_check(std::string s2, std::string s3);
-int				getPort(std::string s);
+int				first_in_check(char* s2, std::string s3);
+int				getPort(char* s);
 int				tcp_server(int port);
 
 bool			channel_operations(client_t &clients, channel_t &channels, std::string msg, int i);
