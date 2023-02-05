@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 02:34:58 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/03 18:10:21 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/05 16:36:08 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ bool	check_input(std::string s, client_t &clients, int &i, int index)
 	if (index)
 	{
 		if (s == "")
-			return (senderr("NICK", clients[i].second.get_fd(), 431), false);
+			return (senderr("NICK", i, clients, 431), false);
 		if (!validNick(s))
-			return (senderr(s, clients[i].second.get_fd(), 432), false);
+			return (senderr(s, i, clients, 432), false);
 		if (!ifexist(clients, i, s))
 			return (false);
 	} 
@@ -51,7 +51,7 @@ bool	check_input(std::string s, client_t &clients, int &i, int index)
 			}
 		}
 		if (condition < 4)
-			return (senderr("USER", clients[i].second.get_fd(), 461), false);
+			return (senderr("USER", i, clients, 461), false);
 	}
 	return (clients[i].second.set_realname(trimFront(s, r - 1)), true);
 }
@@ -61,6 +61,7 @@ void	server_join(std::vector<client> &clients, std::string client_msg, int i)
 	int		index ;
 
 	index = client_msg.length();
+    std::cout << "the msg : " << client_msg << std::endl;
 	if (!client_msg.find("NICK"))
 	{
 		if (index > 5 && isspace(client_msg[4]))
@@ -72,10 +73,8 @@ void	server_join(std::vector<client> &clients, std::string client_msg, int i)
 				send(clients[i].second.get_fd(), s.c_str(), s.length(), 0);
 			}
 		}
-		else if (clients[i].second.get_nickname().size())
-			senderr("NICK", clients[i].second.get_fd(), 2);
 		else
-			senderr("NICK", clients[i].second.get_fd(), 461);
+			senderr("NICK", i, clients, 461);
 	}
 	else if (!client_msg.find("USER") && clients[i].second.get_nickname().size())
 	{
@@ -91,7 +90,7 @@ void	server_join(std::vector<client> &clients, std::string client_msg, int i)
 			}
 		}
 		else
-			senderr("USER", clients[i].second.get_fd(), 461);
+			senderr("USER", i, clients, 461);
 	}
 	if (clients[i].second.get_nickname().size() && clients[i].second.get_username().size()) {
 		clients[i].second.set_is_complete(true);

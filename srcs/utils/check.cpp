@@ -6,17 +6,17 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 00:20:06 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/05 12:10:31 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/05 14:06:13 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Includes/Ircserv.hpp"
 
-static bool	check_password(std::string input, std::string pwd, int fd)
+static bool	check_password(std::string input, std::string pwd, int i, client_t &clients)
 {
 	std::string ps = trim(input, 5);
 	if (ps == "" || ! isspace(input[4]))
-		return (senderr("PASS", fd, 461), false);
+		return (senderr("PASS", i, clients, 461), false);
 	if (ps == pwd)
 		return (true);
 	return (false);
@@ -25,7 +25,7 @@ static bool	check_password(std::string input, std::string pwd, int fd)
 void	user_authentification(client_t &clients, \
 	std::string input, std::string password, size_t i)
 {
-	if (check_password(input, password, clients[i].second.get_fd()))
+	if (check_password(input, password, i, clients))
 		clients[i].second.set_authentification(true);
 	else
 		std::cout << RED << "[" << clients[i].second.get_ip() << "]" \

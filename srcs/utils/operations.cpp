@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/05 11:32:40 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/05 16:39:39 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	priv_msg(client_t &clients, size_t i, std::string &msg)
 		}
 	}
 	std::cout << "sending private message failed" << std::endl;
-	reply = reject_msg(take_nickname_from_msg(msg), 401);
+	reply = reject_msg(take_nickname_from_msg(msg), i, clients, 401);
 	send(clients[i].first.fd, reply.c_str(), reply.length(), 0);
 }
 
@@ -131,7 +131,7 @@ void	handle_bot_cmd(client_t &clients, size_t i, std::string &name)
 		system("python ./srcs/utils/main.py");
         std::ifstream   ifs("songs");
         while (getline(ifs, line)) {
-			std::string msg = "ft_irc NOTICE: ♪ " + line + "\r\n";
+			std::string msg = "PRIVMSG " + clients[i].second.get_nickname() + " :♪ " + line + "\r\n";
    	 	    send(clients[i].second.get_fd(), msg.c_str(), msg.length(), 0);
 		}
 		ifs.close();
@@ -150,7 +150,7 @@ bool    channel_operations(client_t &clients, channel_t &channels, std::string m
 		//channel_msg(clients, i, channels, msg);
 	else if (!msg.find("JOIN"))
 		join_channels(clients, i, channels, msg);
-	else if (!msg.find("ARTIST"))
+	else if (!msg.find("ARTIST "))
 		handle_bot_cmd(clients, i, msg);
 	return (false);
 }

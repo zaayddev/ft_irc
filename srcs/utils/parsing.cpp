@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 04:17:49 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/03 15:30:15 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/05 14:04:11 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 bool	ifexist(client_t &clients, int i, std::string s)
 {
 	if (clients[i].second.get_nickname() == s)
-		return (senderr(s, clients[i].second.get_fd(), 433), false);
+		return (senderr(s, i, clients, 433), false);
 	for (client_t::iterator it = clients.begin(); it != clients.end(); it++)
 		if (s == it->second.get_nickname())
-			return (senderr(s, clients[i].second.get_fd(), 436), false);
+			return (senderr(s, i, clients, 436), false);
 	return (true);
 }
 
@@ -30,7 +30,7 @@ bool	changenick(client_t &clients, std::string &cmd, int i, int j)
     oldNick = trimFront(cmd, 1);
     tolowstr(oldNick);
 	if (!isspace(cmd[j - 1]) || !isspace(cmd[j + 4]))
-		return (senderr("NICK", clients[i].second.get_fd(), 431), false);
+		return (senderr("NICK", i, clients, 431), false);
 	if (clients[i].second.get_nickname() == oldNick)
     
 		if (!check_input(trimFront(cmd, j + 5), clients, i, 1))
@@ -62,9 +62,9 @@ void	cmds_parsing(client_t &clients, channel_t &channels, \
 		else if (clients[i].second.get_is_complete())
 		{
 			if (!tmp.find("PASS"))
-				senderr("PASS", clients[i].second.get_fd(), 462);
+				senderr("PASS", i, clients, 462);
 			else if (!tmp.find("USER"))
-				senderr("USER", clients[i].second.get_fd(), 462);
+				senderr("USER", i, clients, 462);
 			else if (tmp[0] == ':')
 			{
 				if (int j = tmp.find("NICK") )

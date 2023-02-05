@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/05 12:10:58 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/05 17:06:45 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,17 +77,17 @@ void			accept_call(std::vector<client> &clients, int socket_fd);
 void			loop_connections(int socket_fd, std::string password);
 void			close_connection(client_t &clients, size_t i);
 void			nickchange_msg(User user, std::string str);
-void			senderr(std::string cmd, int fd,int ern);
+
+void			senderr(std::string cmd, int i, client_t &clients, int ern);
 void			tolowstr(std::string &s);
 void			welcome_msg(User user);
 
 std::string		rcv_msg(int client_fd, std::vector<client> &clients, size_t i, channel_t &channels);
-std::string	    take_nickname_from_msg(std::string msg);
-std::string		reject_msg(std::string cmd, int ern);
+std::string		reject_msg(std::string cmd, int ern, client_t &clients, int i);
+std::string		take_nickname_from_msg(std::string msg);
 std::string		trimFront(std::string s, int i);
 std::string		trim(std::string s, int i);
 std::string		ip_itostr(in_addr_t ip);
-std::string	    msg_format(User &user);
-
+std::string		msg_format(User &user);
 
 #endif

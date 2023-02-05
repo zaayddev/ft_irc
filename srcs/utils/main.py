@@ -13,19 +13,19 @@ client_id = os.getenv("CLIENT_ID")
 client_secret = os.getenv("CLIENT_SECRET")
 artist_name = os.getenv("ARTIST_NAME")
 
-# Request the access token
+# # Request the access token
 auth_header = base64.b64encode((client_id + ":" + client_secret).encode()).decode()
 auth_response = requests.post(token_url, headers={"Authorization": "Basic " + auth_header}, data={"grant_type": "client_credentials"})
 
 
-# Get the access token
+# # Get the access token
 access_token = auth_response.json()["access_token"]
 
-# Use the access token to search for an artist
+# # Use the access token to search for an artist
 search_url = "https://api.spotify.com/v1/search"
 search_response = requests.get(search_url, headers={"Authorization": "Bearer " + access_token}, params={"q": {artist_name}, "type": "artist", "limit": 1})
 
-# Get the artist ID
+# # Get the artist ID
 artist_id = search_response.json()["artists"]["items"][0]["id"]
 
 # Use the artist ID to retrieve the top tracks

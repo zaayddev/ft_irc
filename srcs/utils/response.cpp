@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 23:46:49 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/03 18:32:09 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/05 14:18:19 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,38 +35,38 @@ void	nickchange_msg(User user, std::string str)
 {
 	std::string s;
 
-	s = ":ft_irc NOTICE AUTH :* " + str + " changed his nickname to " + user.get_nickname() \
+	s = ":ft_irc NOTICE AUTH : " + str + " changed his nickname to " + user.get_nickname() \
         + "\r\n";
 	send(user.get_fd(), s.c_str(), s.length(), 0);
 }
 
-std::string	reject_msg(std::string cmd, int ern)
+std::string	reject_msg(std::string cmd, int ern, client_t &clients, int i)
 {
 	std::stringstream	ss;
 
 	if (ern == 431)
-		ss << ern << ": No nickname given\r\n" ;
+		ss << ern <<" "<< clients[i].second.get_fd() <<": No nickname given\r\n" ;
 	else if (ern == 432)
-		ss << ern << ":*" << cmd << "* * Erroneus nickname\r\n";
+		ss << ern <<" "<< clients[i].second.get_fd() <<": " << cmd << " Erroneus nickname\r\n";
 	else if (ern == 433)
-		ss << ern << ":*" << cmd << "* * Nickname is already in use\r\n";
+		ss << ern <<" "<< clients[i].second.get_fd() <<": " << cmd << " Nickname is already in use\r\n";
 	else if (ern == 436)
-		ss << ern << ":*" << cmd << "* * Nickname collision KILL\r\n";
+		ss << ern <<" "<< clients[i].second.get_fd() <<": " << cmd << " Nickname collision KILL\r\n";
 	else if ( ern == 461 )
-		ss << ern << ":*" << cmd << "* * Not enough parameters\r\n";
+		ss << ern <<" "<< clients[i].second.get_fd() <<": " << cmd << " Not enough parameters\r\n";
 	else if (ern == 462)
-		ss << ern << ": You may not reregister\r\n";
+		ss << ern <<" "<< clients[i].second.get_fd() <<": You may not reregister\r\n";
 	else if (ern == 464)
-		ss << ern << ": Password incorrect\r\n";
+		ss << ern <<" "<< clients[i].second.get_fd() <<": Password incorrect\r\n";
 	else if (ern == 403)
-		ss << ern << ":*" << cmd << "* * No such channel\r\n"; // should fix the shown of the cmd in limechat
+		ss << ern <<" "<< clients[i].second.get_fd() <<": " << cmd << " No such channel\r\n"; // should fix the shown of the cmd in limechat
     else if (ern == 401)
-		ss << ern << ":*" << cmd << "* * No such nick/channel\r\n";
+		ss << ern <<" "<< clients[i].second.get_fd() <<": " << cmd << " No such nick/channel\r\n";
 	return (ss.str());
 }
 
-void	senderr(std::string cmd, int fd, int ern)
+void	senderr(std::string cmd, int i, client_t &clients, int ern)
 {
-	std::string reject = reject_msg(cmd, ern);
-	send(fd, reject.c_str(), reject.length(), 0);
+	std::string reject = reject_msg(cmd, ern, clients, i);
+	send(clients[i].second.get_fd(), reject.c_str(), reject.length(), 0);
 }
