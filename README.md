@@ -1,4 +1,4 @@
-#####  Project Introduction
+####  Project Introduction
 > An IRC (Internet Relay Chat) server is a type of chat server that enables communication through text-based messages between multiple users. It operates using the IRC protocol, which provides a way for people to communicate in real-time over the internet. IRC servers can host multiple channels, where users can participate in group conversations or join private conversations with other users. IRC is often used for community-based discussions and has been popular for many years, especially in the open-source software community.
 
 ##### FT_IRC
