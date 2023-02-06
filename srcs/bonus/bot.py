@@ -38,5 +38,5 @@ f = open("songs", "w")
 top_tracks = tracks_response.json()["tracks"][:5]
 enumerated_tracks = list(enumerate(top_tracks))
 for i, track in enumerate(top_tracks):
-    f.write(track['name'] + "\n")
+    f.write(track['name'].encode('UTF-8') + "\n")
     

@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/05 17:06:45 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/06 15:43:00 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include <iostream> 
 #include <fcntl.h>
 #include <vector>
+#include <list>
 #include <map>
 #include <unistd.h>
 #include <cstdlib>
@@ -58,6 +59,13 @@ typedef std::map< std::string, std::vector<User> >	    channel_t;
 # define RED			"\033[31m"
 # define RST			"\033[0m"
 
+/*<------> Channels and there keys <------>*/
+struct s_list {
+	
+		std::list<std::string>	_channel;
+		std::list<std::string>	_key;
+};
+
 /*<------> SET Used Functions <------>*/
 int				first_in_check(char* s2, std::string s3);
 int				getPort(char* s);
@@ -71,14 +79,15 @@ bool			validNick(std::string nick);
 
 void			cmds_parsing(client_t &clients, channel_t &channels, std::string &msg, int i, std::string password);
 void			user_authentification(client_t &clients, std::string input, std::string password, size_t i);
+void			join_channels(client_t &clients, size_t i, channel_t &channels, std::string &msg);
 void			server_join(std::vector<client> &clients, std::string client_msg, int i);
+void			senderr(std::string cmd, int i, client_t &clients, int ern);
 void			initialise_poll(std::vector<client> &clients, int fd_size);
 void			accept_call(std::vector<client> &clients, int socket_fd);
 void			loop_connections(int socket_fd, std::string password);
+void			bot(client_t &clients, size_t i, std::string &name);
 void			close_connection(client_t &clients, size_t i);
 void			nickchange_msg(User user, std::string str);
-
-void			senderr(std::string cmd, int i, client_t &clients, int ern);
 void			tolowstr(std::string &s);
 void			welcome_msg(User user);
 

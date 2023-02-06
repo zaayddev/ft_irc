@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 23:46:49 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/05 14:18:19 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/05 17:17:57 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ std::string	reject_msg(std::string cmd, int ern, client_t &clients, int i)
 	else if (ern == 464)
 		ss << ern <<" "<< clients[i].second.get_fd() <<": Password incorrect\r\n";
 	else if (ern == 403)
-		ss << ern <<" "<< clients[i].second.get_fd() <<": " << cmd << " No such channel\r\n"; // should fix the shown of the cmd in limechat
+		ss << ern <<" "<< clients[i].second.get_fd() <<": " << cmd << " No such channel\r\n";
     else if (ern == 401)
 		ss << ern <<" "<< clients[i].second.get_fd() <<": " << cmd << " No such nick/channel\r\n";
 	return (ss.str());

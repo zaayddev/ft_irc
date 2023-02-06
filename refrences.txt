@@ -8,8 +8,21 @@ The recommended order for a client to register is as follows:
                     // {462 :You may not reregister} [ERR_ALREADYREGISTRED]
            2. Nick message
                 [ <hopcount> ] If supplied by a client, it must be ignored.
-                
            3. User message
 
 Oikarinen & Reed                                               [Page 13]
 
+******************************************************
+*   “Give me six hours to chop down a tree           *
+*   and I will spend the first four sharpening       *
+*   sharpening the axe.”                             *
+*                                 -Abraham Lincoln-  *
+******************************************************
+||  || || || || || || || || || || || || || || || || ||                       
+******************************************************
+*   “If I had an hour to solve a problem             *
+*   I'd spend 55 minutes thinking about the problem  *
+*   and five minutes thinking about solutions.”      *
+*                                 -Albert Einstein-  *
+******************************************************
+                                             ~yasen007

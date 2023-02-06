@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+         #
+#    By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/26 16:33:22 by yelgharo          #+#    #+#              #
-#    Updated: 2023/02/01 11:57:22 by zchbani          ###   ########.fr        #
+#    Updated: 2023/02/06 15:39:06 by yelgharo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,9 @@ SRC =	main.cpp \
 			srcs/User.cpp \
 			srcs/server_join.cpp \
 			srcs/loop_connections.cpp \
+				srcs/bonus/bot.cpp \
 				srcs/utils/check.cpp \
+				srcs/utils/join.cpp \
 				srcs/utils/operations.cpp \
 				srcs/utils/poll.cpp \
 				srcs/utils/parsing.cpp \
