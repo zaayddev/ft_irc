@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 08:19:53 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/06 18:42:58 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/07 15:00:45 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 bool	check_name(std::string input)
 {
+	std::cout << input << std::endl;
 	for (int i = 0; input[i] != '\0'; i++)
 	{
 		if (isalnum(input[i]) == 0)
@@ -25,56 +26,63 @@ bool	check_name(std::string input)
 	return (true);
 }
 // stiil working on join_channel part
-/*void	join_channel(client_t &clients, size_t i, channel_t &channels, s_list &user)
+void	join_channel(client_t &clients, size_t i, channel_t &channels, s_list &user)
 {
 	std::string		reply;
-	std::string		channel_name;
-	channel_t::iterator it = channels.find(channel_name);
-
-	msg.erase(0, 1);
-	if (msg.find(",", 0) != npos)
-	{
-		channel_name = msg.substr(0, msg.find(",", 0));
-		msg.erase(0, msg.find(",", 0) + 1);
-	}
-	else
-	{
-		channel_name = msg.substr(0, msg.find(" ", 0));
-		msg.erase(0, msg.find(",", 0));
-	}
-	if (channel_name.size() == 0)
-		return ;
-	if (!check_name(channel_name))
-	{
-		std::cout << "forbidden character in channel name" << std::endl;
-		return ;
-	}
-	if (it == channels.end())
-	{
-		std::vector<User> channel_users;
-
-		channel_users.push_back(clients[i].second);
-		channel new_channel(channel_name, channel_users);
-		channels.insert(new_channel);
-		
-		reply = msg_format(clients[i].second) + " JOIN #" + channel_name + "\r\n";
-		send(clients[i].first.fd, reply.c_str(), reply.length(), 0);
-		std::cout << "channel created" << std::endl;
-	}
-	else // add user to channel
-	{
-		(*it).second.push_back(clients[i].second);
- 
-		std::vector<User>	users = (*it).second;
-		std::vector<User>::iterator	ite = users.begin();
-		for (; ite != users.end(); ite++)
-		{
-			reply = msg_format(clients[i].second) + " JOIN #" + channel_name + "\r\n";
-			send((*ite).get_fd(), reply.c_str(), reply.length(), 0);
+	std::string		channel_name = "";
+    std::string		channel_key = "";
+	bool			is_there = true;
+	while (user._channel.size()) {
+		channel_name = user._channel.back();
+		if (user._key.size())
+			channel_key = user._key.back();
+		channel_t::iterator map;
+		for (channel_t::iterator iter = channels.begin(); iter != channels.end(); ++iter) {
+			std::pair<std::string, std::string> key = iter->first;
+			if (key.first == channel_name) {
+				map = iter;
+				is_there = false;
+			}
 		}
+		if (!check_name(channel_name))
+		{
+			std::cout << "forbidden character in channel name" << std::endl;
+			return ;
+		}
+		if (is_there)
+		{
+			std::vector<User> channel_users;
+			std::pair<std::string, std::string>	chaine;
+			channel_users.push_back(clients[i].second);
+			chaine.first = channel_name;
+			chaine.second = channel_key;
+			channel new_channel(chaine, channel_users);
+			channels.insert(new_channel);
+			
+			reply = msg_format(clients[i].second) + " JOIN #" + channel_name + "\r\n";
+			send(clients[i].first.fd, reply.c_str(), reply.length(), 0);
+			std::cout << "channel created" << std::endl;
+		}
+		else // add user to channel
+		{
+			(*map).second.push_back(clients[i].second);
+	
+			std::vector<User>	users = (*map).second;
+			std::vector<User>::iterator	ite = users.begin();
+			for (; ite != users.end(); ite++)
+			{
+				reply = msg_format(clients[i].second) + " JOIN #" + channel_name + "\r\n";
+				send((*ite).get_fd(), reply.c_str(), reply.length(), 0);
+			}
+		}
+		channel_name = "";
+		if (user._key.size()) {
+			user._key.pop_back();
+			channel_key = "";
+		}
+		user._channel.pop_back();
 	}
-}*/
-
+}
 void	join_channels(client_t &clients, size_t i, channel_t &channels, std::string &msg)
 {
 
@@ -114,7 +122,6 @@ void	join_channels(client_t &clients, size_t i, channel_t &channels, std::string
 			key.erase(0,  key.length());
 		}
 	}
-	return;
-	// if (user._channel.size())
-	// 	join_channel(clients, i, channels, user);
+	if (user._channel.size())
+		join_channel(clients, i, channels, user);
 }

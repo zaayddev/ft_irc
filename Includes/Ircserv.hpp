@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/06 15:43:00 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/07 09:44:51 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@
 class User;
 
 /*<------> Alternate names for our data types <------>*/
-typedef std::pair<pollfd, User>						    client;
-typedef std::pair< std::string, std::vector<User> >		channel;
-typedef std::vector<client>							    client_t;
-typedef std::map< std::string, std::vector<User> >	    channel_t;
+typedef std::pair<pollfd, User>												client;
+typedef std::pair<std::pair<std::string, std::string>, std::vector<User> >	channel;
+typedef std::vector<client>													client_t;
+typedef std::map<std::pair<std::string, std::string>, std::vector<User> >	channel_t;
 
 /*<------> DEFINE Variables <------>*/
 # define npos			std::string::npos

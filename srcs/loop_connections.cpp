@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loop_connections.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 02:50:24 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/02 09:54:44 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/07 10:17:51 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void	loop_connections(int socket_fd, std::string password)
 {
-	std::vector<client>							clients;
-	pollfd										socket;
-	User										server(" ");
-	std::map<std::string, std::vector<User> > 	channels;
+	std::vector<client>	clients;
+	channel_t			channels;
+	pollfd				socket;
+	User				server(" ");
 	
 	socket.fd = socket_fd;
 	

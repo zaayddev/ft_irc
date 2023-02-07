@@ -6,7 +6,7 @@
 #    By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/26 16:33:22 by yelgharo          #+#    #+#              #
-#    Updated: 2023/02/06 15:39:06 by yelgharo         ###   ########.fr        #
+#    Updated: 2023/02/07 13:32:13 by yelgharo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ LIB = Includes/Ircserv.hpp \
 
 CC = c++
 
-FLAGS = -Wall -Wextra -Werror -std=c++98
+FLAGS = -Wall -Wextra -Werror -std=c++11
 
 SRC =	main.cpp \
 			srcs/tcp_server.cpp \

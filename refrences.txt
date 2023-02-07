@@ -14,7 +14,7 @@ Oikarinen & Reed                                               [Page 13]
 
 ******************************************************
 *   “Give me six hours to chop down a tree           *
-*   and I will spend the first four sharpening       *
+*   and I will spend the first four                  *
 *   sharpening the axe.”                             *
 *                                 -Abraham Lincoln-  *
 ******************************************************

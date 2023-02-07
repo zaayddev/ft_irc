@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/06 10:27:15 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/07 15:40:54 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,9 @@ void	priv_msg(client_t &clients, size_t i, std::string &msg)
 
 static void		leave_channel(client_t &clients, size_t i, channel_t &channels, std::string &msg, std::string part_msg)
 {
-	std::string				reply;
-	std::string				channel_name;
+	std::string		reply;
+	std::string		channel_name;
+	bool			is_there = false;
 
 	msg.erase(0, 1);
 	if (msg.find(",", 0) != npos)
@@ -55,27 +56,34 @@ static void		leave_channel(client_t &clients, size_t i, channel_t &channels, std
 	}
 	if (channel_name.size() == 0)
 		return ;
-	channel_t::iterator	it = channels.find(channel_name);
-	if (it != channels.end())
+    channel_t::iterator map;
+	for (channel_t::iterator iter = channels.begin(); iter != channels.end(); ++iter) {
+		std::pair<std::string, std::string> key = iter->first;
+		if (key.first == channel_name) {
+			map = iter;
+			is_there = true;
+		}
+	}
+	if (is_there)
 	{
 		std::vector<User>::iterator	ite;
-		for (ite = (*it).second.begin(); ite != (*it).second.end(); ite++)
+		for (ite = (*map).second.begin(); ite != (*map).second.end(); ite++)
 		{
 			reply = msg_format(clients[i].second) + " PART #" + channel_name + " " + part_msg + "\r\n";
 			send((*ite).get_fd(), reply.c_str(), reply.length(), 0);
 		}
-		for (ite = (*it).second.begin(); ite != (*it).second.end(); ite++)
+		for (ite = (*map).second.begin(); ite != (*map).second.end(); ite++)
 		{
 			if (clients[i].second.get_nickname() == (*ite).get_nickname())
 			{
-				(*it).second.erase(ite);
+				(*map).second.erase(ite);
 				break ;
 			}
 		}
-		if ((*it).second.size() == 0)
+		if ((*map).second.size() == 0)
 		{
 			std::cout << "channel deleted" << std::endl;
-			channels.erase(channel_name);
+			channels.erase(map);
 		}
 	}
 	else
