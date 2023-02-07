@@ -16,7 +16,7 @@ void	welcome_msg(User user)
 {
 	std::string s;
 
-	s = ":ft_irc NOTICE AUTH :Welcome to our IRC network! "+ user.get_nickname() \
+	s = ":ft_irc NOTICE AUTH 001 Welcome to our IRC network! "+ user.get_nickname() \
 		+ "!" + user.get_username() + "@" + user.get_ip() + " \r\n";
     s = s + ":ft_irc NOTICE AUTH : We're glad you're here.\r\n";
     s = s + ":ft_irc NOTICE AUTH : HAPPY CHATTING...\r\n";  

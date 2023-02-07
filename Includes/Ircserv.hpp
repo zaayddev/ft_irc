@@ -18,6 +18,7 @@
 #include <netinet/in.h>
 #include <poll.h>
 #include <string>
+#include <cstring>
 #include <sstream>
 #include <iostream> 
 #include <fcntl.h>

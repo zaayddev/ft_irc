@@ -12,6 +12,31 @@
 
 #include "../../Includes/Ircserv.hpp"
 
+static std::string	get_names(channel_t channels, std::string channel_name)
+{
+	std::string	names;
+
+	channel_t::iterator	it = channels.find(channel_name);
+	std::vector<User>	users = (*it).second;
+	std::vector<User>::iterator	ite = users.begin();
+	for (; ite != users.end() - 1; ite++)
+		names += (*ite).get_nickname() + " ";
+	names += (*ite).get_nickname();
+	return (names);
+}
+
+std::string	channel_response(channel_t &channels, std::string channel_name, User &user)
+{
+	std::stringstream	ss;
+
+	ss	<< ":" << SERVER << " 353 " << user.get_nickname()
+		<< " = #" << channel_name << " :" << get_names(channels, channel_name) << "\r\n";
+	
+	ss	<< ":" << SERVER << " 366 " << user.get_nickname()
+		<< " #" << channel_name << " :End of NAMES list." << "\r\n";
+	return (ss.str());
+}
+
 bool	check_name(std::string input)
 {
 	for (int i = 0; input[i] != '\0'; i++)
@@ -80,6 +105,8 @@ void	join_channel(client_t &clients, size_t i, channel_t &channels, s_list &user
 				reply = "475  " + msg_format(clients[i].second) + " :Cannot join channel (+k)\r\n";
 				send(clients[i].second.get_fd(), reply.c_str(), reply.length(), 0);
 			}
+			reply = channel_response(channels, channel_name, clients[i].second);
+			send(clients[i].first.fd, reply.c_str(), reply.length(), 0);
 		}
 		channel_name = "";
 		if (user._key.size()) {
