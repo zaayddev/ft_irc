@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 08:19:53 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/07 15:00:45 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/07 16:50:14 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 bool	check_name(std::string input)
 {
-	std::cout << input << std::endl;
 	for (int i = 0; input[i] != '\0'; i++)
 	{
 		if (isalnum(input[i]) == 0)
@@ -65,14 +64,21 @@ void	join_channel(client_t &clients, size_t i, channel_t &channels, s_list &user
 		}
 		else // add user to channel
 		{
-			(*map).second.push_back(clients[i].second);
-	
-			std::vector<User>	users = (*map).second;
-			std::vector<User>::iterator	ite = users.begin();
-			for (; ite != users.end(); ite++)
+			std::vector<User>::iterator	ite;
+			if(map->first.second == channel_key)
 			{
-				reply = msg_format(clients[i].second) + " JOIN #" + channel_name + "\r\n";
-				send((*ite).get_fd(), reply.c_str(), reply.length(), 0);
+				(*map).second.push_back(clients[i].second);
+		
+				std::vector<User>	users = (*map).second;
+				std::vector<User>::iterator	ite = users.begin();
+				for (; ite != users.end(); ite++)
+				{
+					reply = msg_format(clients[i].second) + " JOIN #" + channel_name + "\r\n";
+					send((*ite).get_fd(), reply.c_str(), reply.length(), 0);
+				}
+			} else {
+				reply = "475  " + msg_format(clients[i].second) + " :Cannot join channel (+k)\r\n";
+				send(clients[i].second.get_fd(), reply.c_str(), reply.length(), 0);
 			}
 		}
 		channel_name = "";
