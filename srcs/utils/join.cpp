@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 08:19:53 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/07 16:50:14 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/08 11:14:15 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,14 @@ static std::string	get_names(channel_t channels, std::string channel_name)
 {
 	std::string	names;
 
-	channel_t::iterator	it = channels.find(channel_name);
-	std::vector<User>	users = (*it).second;
+	channel_t::iterator map;
+    for (channel_t::iterator iter = channels.begin(); iter != channels.end(); ++iter) {
+        std::pair<std::string, std::string> key = iter->first;
+        if (key.first == channel_name) {
+            map = iter;
+        }
+    }
+	std::vector<User>	users = (*map).second;
 	std::vector<User>::iterator	ite = users.begin();
 	for (; ite != users.end() - 1; ite++)
 		names += (*ite).get_nickname() + " ";
