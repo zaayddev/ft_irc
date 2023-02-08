@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 23:46:49 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/05 17:17:57 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/08 12:12:45 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ void	welcome_msg(User user)
 {
 	std::string s;
 
-	s = ":ft_irc NOTICE AUTH 001 Welcome to our IRC network! "+ user.get_nickname() \
+	s = ":" + (std::string)SERVER + " 001 " + user.get_nickname() + " :Welcome to our IRC network! "+ user.get_nickname() \
 		+ "!" + user.get_username() + "@" + user.get_ip() + " \r\n";
-    s = s + ":ft_irc NOTICE AUTH : We're glad you're here.\r\n";
-    s = s + ":ft_irc NOTICE AUTH : HAPPY CHATTING...\r\n";  
+    s = s + ":" + (std::string)SERVER +  " 002 " + user.get_nickname() + " :We're glad you're here.\r\n";
+    s = s + ":" + (std::string)SERVER + " 003 " + user.get_nickname() + " :HAPPY CHATTING...\r\n";  
 	send(user.get_fd(), s.c_str(), s.length(), 0);
 }
 
