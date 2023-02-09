@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/07 15:40:54 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/09 16:46:52 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,10 +154,10 @@ bool    channel_operations(client_t &clients, channel_t &channels, std::string m
 
 	if (!msg.find("PING "))
 		ping_message(clients, i);
-	else if (!msg.find("PRIVMSG "))
-		priv_msg(clients, i, msg);
 	else if (!msg.find("PRIVMSG #"))
 		channel_msg(clients, i, channels, msg);
+	else if (!msg.find("PRIVMSG "))
+		priv_msg(clients, i, msg);
 	else if (!msg.find("JOIN "))
 		join_channels(clients, i, channels, msg);
     else if (!msg.find("PART"))

@@ -18,11 +18,31 @@ Oikarinen & Reed                                               [Page 13]
 *   sharpening the axe.”                             *
 *                                 -Abraham Lincoln-  *
 ******************************************************
-||  || || || || || || || || || || || || || || || || ||                       
+||  || || || || || || || || || || || || || || || || ||
 ******************************************************
 *   “If I had an hour to solve a problem             *
 *   I'd spend 55 minutes thinking about the problem  *
 *   and five minutes thinking about solutions.”      *
 *                                 -Albert Einstein-  *
 ******************************************************
+|| || || || || || || || || || || || || || || ||  || ||
+******************************************************
+*   “He who would learn to fly one day must first    *
+*   learn to walk and run and climb and dance;       *
+*   one cannot fly into flying.”                     *
+*                             -Friedrich Nietzsche-  *
+******************************************************
+|| || || || || || || || || || || || || || || ||  || ||
+******************************************************
+*   “Every great developer you know got there        *
+*    by solving problems they were unqualified       *
+*    to solve until they actually did it.”           *
+*                                -Patrick McKenzie-  *
+******************************************************
                                              ~yasen007
+
+------------------------------------------------------
+|    'Cogito, ergo sum'                              |
+|    "I code, therefore I am, ( ͡° ͜ʖ ͡°)"              |
+|                                 -René Descartes-   |
+------------------------------------------------------
