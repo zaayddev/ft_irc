@@ -120,6 +120,34 @@ void		leave_channels(client_t &clients, size_t i, channel_t &channels, std::stri
 	}
 }
 
+bool	channel_msg(client_t &clients, size_t i, channel_t &channels, std::string &msg)
+{
+	std::string 						reply;
+	std::string							channel_name = msg.substr(9, (msg.find(" ", 9) - 9));
+	std::pair<std::string, std::string> key = std::make_pair(channel_name, "");
+	channel_t::iterator					it = channels.find(key);
+	
+	if (it != channels.end() && check_user_exist((*it).second, clients[i].second.get_nickname()))
+	{
+		std::vector<User>			users = (*it).second;
+		std::vector<User>::iterator	ite = users.begin();
+		for (; ite != users.end(); ite++)
+		{
+			if (clients[i].second.get_nickname() == (*ite).get_nickname())
+				continue ;
+			reply = msg_format(clients[i].second) + " " + msg + "\r\n";
+			send((*ite).get_fd(), reply.c_str(), reply.length(), 0);
+		}
+	}
+	else
+	{
+		std::cout << "channel message failed" << std::endl;
+		reply = reject_msg("", i, clients, 401);
+		send(clients[i].first.fd, reply.c_str(), reply.length(), 0);
+	}
+	return (false);
+}
+
 bool    channel_operations(client_t &clients, channel_t &channels, std::string msg, int i)
 {
 	std::string	reply;
@@ -128,8 +156,8 @@ bool    channel_operations(client_t &clients, channel_t &channels, std::string m
 		ping_message(clients, i);
 	else if (!msg.find("PRIVMSG "))
 		priv_msg(clients, i, msg);
-	//else if (!msg.find("PRIVMSG #"))
-		//channel_msg(clients, i, channels, msg);
+	else if (!msg.find("PRIVMSG #"))
+		channel_msg(clients, i, channels, msg);
 	else if (!msg.find("JOIN "))
 		join_channels(clients, i, channels, msg);
     else if (!msg.find("PART"))
