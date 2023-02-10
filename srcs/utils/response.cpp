@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 23:46:49 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/08 12:12:45 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/10 11:49:20 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ std::string	msg_format(User &user)
 {
 	std::stringstream	ss;
 
-	ss	<< ":" << user.get_nickname() << "!" << user.get_username() << "@" << user.get_ip();
+	ss	<< ":" << user.get_nickname() << \
+        "!" << user.get_username() << "@" << user.get_ip();
 	return (ss.str());
 }
 
