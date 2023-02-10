@@ -6,23 +6,37 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 08:19:53 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/10 11:51:44 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/10 16:57:30 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Includes/Ircserv.hpp"
+
+
+bool Alreadythere(User &user, std::string name) {
+	if (!user._owned_channels.size())
+		return false;
+	std::vector<std::string>::iterator it = user._owned_channels.begin();
+	for( ; it != user._owned_channels.end(); ++it) 
+	{
+		if ((*it) == name)
+			return true;
+	}
+	return false;
+}
+
 
 static std::string	get_names(channel_t channels, std::string channel_name)
 {
 	std::string	names;
 
 	channel_t::iterator map;
-    for (channel_t::iterator iter = channels.begin(); iter != channels.end(); ++iter) {
-        std::pair<std::string, std::string> key = iter->first;
-        if (key.first == channel_name) {
-            map = iter;
-        }
-    }
+	for (channel_t::iterator iter = channels.begin(); iter != channels.end(); ++iter) {
+		std::pair<std::string, std::string> key = iter->first;
+		if (key.first == channel_name) {
+			map = iter;
+		}
+	}
 	std::vector<User>	users = (*map).second;
 	std::vector<User>::iterator	ite = users.begin();
 	for (; ite != users.end() - 1; ite++)
@@ -37,9 +51,9 @@ std::string	channel_response(channel_t &channels, std::string channel_name, User
 
 	ss	<< ":" << SERVER << " 353 " << user.get_nickname()
 		<< " = #" << channel_name << " :" << get_names(channels, channel_name) << "\r\n";
-	
-	ss	<< ":" << SERVER << " 366 " << user.get_nickname()
-		<< " #" << channel_name << " :End of NAMES list." << "\r\n";
+	// to avoid part:
+	// ss	<< ":" << SERVER << " 366 " << user.get_nickname()
+	// 	<< " #" << channel_name << " :End of NAMES list." << "\r\n";
 	return (ss.str());
 }
 
@@ -60,9 +74,11 @@ void	join_channel(client_t &clients, size_t i, channel_t &channels, s_list &user
 {
 	std::string		reply;
 	std::string		channel_name = "";
-    std::string		channel_key = "";
-	bool			is_there = true;
+	std::string		channel_key = "";
+
 	while (user._channel.size()) {
+		bool			channel_is_there = false;
+		bool			user_is_there = false;
 		channel_name = user._channel.back();
 		if (user._key.size())
 			channel_key = user._key.back();
@@ -70,49 +86,65 @@ void	join_channel(client_t &clients, size_t i, channel_t &channels, s_list &user
 		for (channel_t::iterator iter = channels.begin(); iter != channels.end(); ++iter) {
 			std::pair<std::string, std::string> key = iter->first;
 			if (key.first == channel_name) {
+				std::vector<User>::iterator it = (*iter).second.begin();
+				for(; it != (*iter).second.end(); ++it) {
+					if ((*it).get_nickname() == clients[i].second.get_nickname()) {
+                        user_is_there = true;
+                        break;
+                    }
+				}
 				map = iter;
-				is_there = false;
+				channel_is_there = true;
+				break;
 			}
 		}
+		
 		if (!check_name(channel_name))
 		{
 			std::cout << "forbidden character in channel name" << std::endl;
 			return ;
 		}
-		if (is_there)
+		if (!user_is_there)
 		{
-			std::vector<User> channel_users;
-			std::pair<std::string, std::string>	chaine;
-			channel_users.push_back(clients[i].second);
-			chaine.first = channel_name;
-			chaine.second = channel_key;
-			channel new_channel(chaine, channel_users);
-			channels.insert(new_channel);
-			
-			reply = msg_format(clients[i].second) + " JOIN #" + channel_name + "\r\n";
-			send(clients[i].first.fd, reply.c_str(), reply.length(), 0);
-			std::cout << "channel created" << std::endl;
-		}
-		else // add user to channel
-		{
-			std::vector<User>::iterator	ite;
-			if(map->first.second == channel_key)
+			if (!channel_is_there)
 			{
-				(*map).second.push_back(clients[i].second);
-		
-				std::vector<User>	users = (*map).second;
-				std::vector<User>::iterator	ite = users.begin();
-				for (; ite != users.end(); ite++)
-				{
-					reply = msg_format(clients[i].second) + " JOIN #" + channel_name + "\r\n";
-					send((*ite).get_fd(), reply.c_str(), reply.length(), 0);
-				}
-			} else {
-				reply = "475  " + msg_format(clients[i].second) + " :Cannot join channel (+k)\r\n";
-				send(clients[i].second.get_fd(), reply.c_str(), reply.length(), 0);
+				std::vector<User> channel_users;
+				std::pair<std::string, std::string>	chaine;
+				channel_users.push_back(clients[i].second);
+				chaine.first = channel_name;
+				chaine.second = channel_key;
+				channel new_channel(chaine, channel_users);
+				channels.insert(new_channel);
+				clients[i].second._owned_channels.push_back(channel_name);
+				reply = msg_format(clients[i].second) + " JOIN #" + channel_name + "\r\n";
+				send(clients[i].first.fd, reply.c_str(), reply.length(), 0);
+				std::cout << "channel created" << std::endl;
 			}
-			reply = channel_response(channels, channel_name, clients[i].second);
-			send(clients[i].first.fd, reply.c_str(), reply.length(), 0);
+			else // add user to channel
+			{
+				
+				std::vector<User>::iterator	ite;
+				if(map->first.second == channel_key)
+				{
+					(*map).second.push_back(clients[i].second);
+			
+					std::vector<User>	users = (*map).second;
+					std::vector<User>::iterator	ite = users.begin();
+					for (; ite != users.end(); ite++)
+					{
+						reply = msg_format(clients[i].second) + " JOIN #" + channel_name + "\r\n";
+						send((*ite).get_fd(), reply.c_str(), reply.length(), 0);
+					}
+				} else {
+					reply = "475  " + msg_format(clients[i].second) + " :Cannot join channel (+k)\r\n";
+					send(clients[i].second.get_fd(), reply.c_str(), reply.length(), 0);
+				}
+				reply = channel_response(channels, channel_name, clients[i].second);
+				send(clients[i].first.fd, reply.c_str(), reply.length(), 0);
+			}
+		} else {
+			reply = "443 " + msg_format(clients[i].second) + " :is already on channel\r\n";
+				send(clients[i].second.get_fd(), reply.c_str(), reply.length(), 0);
 		}
 		channel_name = "";
 		if (user._key.size()) {
