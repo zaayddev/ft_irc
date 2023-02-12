@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 04:17:49 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/05 14:04:11 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/12 16:03:14 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,6 @@ void	cmds_parsing(client_t &clients, channel_t &channels, \
 				senderr("PASS", i, clients, 462);
 			else if (!tmp.find("USER"))
 				senderr("USER", i, clients, 462);
-			else if (tmp[0] == ':')
-			{
-				if (int j = tmp.find("NICK") )
-					changenick(clients, tmp, i, j);
-			}
 			if (channel_operations(clients, channels, tmp, i))
 				break;
 		}

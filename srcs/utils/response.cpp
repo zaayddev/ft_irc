@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 23:46:49 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/10 11:49:20 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/12 17:05:00 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ void	nickchange_msg(User user, std::string str)
 {
 	std::string s;
 
-	s = ":ft_irc NOTICE AUTH : " + str + " changed his nickname to " + user.get_nickname() \
-        + "\r\n";
+	s = ":" + str + " NICK " + user.get_nickname() + " :You are kown as " + user.get_nickname() + "\r\n";
 	send(user.get_fd(), s.c_str(), s.length(), 0);
 }
 

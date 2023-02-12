@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 02:34:58 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/08 12:09:16 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/12 16:40:06 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,16 +61,21 @@ void	server_join(std::vector<client> &clients, std::string client_msg, int i)
 	int		index ;
 
 	index = client_msg.length();
-    std::cout << "the msg : " << client_msg << std::endl;
 	if (!client_msg.find("NICK"))
 	{
 		if (index > 5 && isspace(client_msg[4]))
 		{
 			std::string nick = trimFront(client_msg, 5);
 			if (check_input(nick, clients, i, 1)) {
-				clients[i].second.set_nickname(nick);
-				std::string s = ":" + (std::string)SERVER + " NOTICE AUTH :You are registered with a nickname of \"" + nick + "\"\r\n";
-				send(clients[i].second.get_fd(), s.c_str(), s.length(), 0);
+                if (!clients[i].second.get_nickname().size()) {
+                    clients[i].second.set_nickname(nick);
+                    std::string s = ":" + (std::string)SERVER + " NOTICE AUTH :You are registered with a nickname of \"" + nick + "\"\r\n";
+                    send(clients[i].second.get_fd(), s.c_str(), s.length(), 0);
+                } else {
+                    std::string tmp = clients[i].second.get_nickname();
+                    clients[i].second.set_nickname(nick);
+                    nickchange_msg(clients[i].second, tmp);
+                }
 			}
 		}
 		else

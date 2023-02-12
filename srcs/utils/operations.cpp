@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/09 16:46:52 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/12 16:57:14 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,10 @@ bool	channel_msg(client_t &clients, size_t i, channel_t &channels, std::string &
 	return (false);
 }
 
+void	mode(client_t &clients, size_t i, channel_t &channels, std::string &msg) {
+	
+}
+
 bool    channel_operations(client_t &clients, channel_t &channels, std::string msg, int i)
 {
 	std::string	reply;
@@ -164,5 +168,7 @@ bool    channel_operations(client_t &clients, channel_t &channels, std::string m
 		leave_channels(clients, i, channels, msg);
 	else if (!msg.find("ARTIST "))
 		bot(clients, i, msg);
+    else if (!msg.find("MODE "))
+	    mode(clients, i, channels ,msg);
 	return (false);
 }
