@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 23:46:49 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/12 17:05:00 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/16 14:37:44 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,36 @@ void	nickchange_msg(User user, std::string str)
 {
 	std::string s;
 
-	s = ":" + str + " NICK " + user.get_nickname() + " :You are kown as " + user.get_nickname() + "\r\n";
+	s = ":" + str + " NICK " + user.get_nickname() + " :You are known as " + user.get_nickname() + "\r\n";
 	send(user.get_fd(), s.c_str(), s.length(), 0);
+}
+
+std::string	no_privileges(std::string nick)
+{
+	std::stringstream	ss;
+
+	ss	<< ":" << SERVER << " 481 " << nick
+		<< " :Permission Denied - You're not an IRC operator" << "\r\n";
+	return (ss.str());
+}
+
+std::string	kill_failed(std::string nick)
+{
+	std::stringstream	ss;
+
+	ss	<< ":" << SERVER << " 485 " << nick
+		<< " :Permission Denied - You can't kick yourself" << "\r\n";
+	return (ss.str());
+}
+
+std::string	kill_done(std::string nick, std::string reason)
+{
+	std::stringstream	ss;
+
+	ss	<< ":" << SERVER << " 361 " << nick
+		<< " :was kicked. (reason: " << reason
+		<< ")" << "\r\n";
+	return (ss.str());
 }
 
 std::string	reject_msg(std::string cmd, int ern, client_t &clients, int i)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 00:20:06 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/05 14:06:13 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/16 14:13:59 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,11 @@ static bool	check_password(std::string input, std::string pwd, int i, client_t &
 void	user_authentification(client_t &clients, \
 	std::string input, std::string password, size_t i)
 {
-	if (check_password(input, password, i, clients))
+	if (check_password(input, password, i, clients)) {
 		clients[i].second.set_authentification(true);
+		std::cout << GREEN_BOLD << "[" << clients[i].second.get_ip() << "]" \
+			<< RST << " : Password correct" << std::endl;
+	}
 	else
 		std::cout << RED << "[" << clients[i].second.get_ip() << "]" \
 			<< RST << " : Password incorrect" << std::endl;
@@ -51,6 +54,13 @@ void	close_connection(client_t &clients, size_t i)
 	if (close(clients[i].first.fd) == -1)
 		std::cerr << "failed to close file descriptor" << std::endl;
 	clients.erase(clients.begin() + i);
+}
+
+void	close_connection(client_t &clients, client_t::iterator it)
+{
+	if (close((*it).second.get_fd()) == -1)
+		std::cerr << "failed to close file descriptor" << std::endl;
+	clients.erase(it);
 }
 
 int	first_in_check(char* s2, std::string s3)

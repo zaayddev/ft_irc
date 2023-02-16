@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Ircserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/10 15:53:16 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/16 15:17:56 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,12 @@ void			close_connection(client_t &clients, size_t i);
 void			nickchange_msg(User user, std::string str);
 void			tolowstr(std::string &s);
 void			welcome_msg(User user);
+void			close_connection(client_t &clients, client_t::iterator it);
+void 			kick_from_channels(client_t &clients, channel_t &channels, const std::string &nick);
 
+std::string		kill_done(std::string nick, std::string reason);
+std::string		kill_failed(std::string nick);
+std::string		no_privileges(std::string nick);
 std::string		rcv_msg(int client_fd, std::vector<client> &clients, size_t i, channel_t &channels);
 std::string		reject_msg(std::string cmd, int ern, client_t &clients, int i);
 std::string		take_nickname_from_msg(std::string msg);
