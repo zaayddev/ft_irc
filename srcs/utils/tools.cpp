@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:46:44 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/16 15:17:31 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/16 18:16:01 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ bool	user_present(std::vector<User> users, std::string nick)
 	return (false);
 }
 
-void kick_from_channels(client_t &clients, channel_t &channels, const std::string &nick)
+void kick_from_channels(channel_t &channels, const std::string &nick)
 {
 	channel_t::iterator it = channels.begin();
 	for (; it != channels.end(); it++)

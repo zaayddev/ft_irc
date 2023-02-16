@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/16 15:17:56 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/16 18:16:14 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void			nickchange_msg(User user, std::string str);
 void			tolowstr(std::string &s);
 void			welcome_msg(User user);
 void			close_connection(client_t &clients, client_t::iterator it);
-void 			kick_from_channels(client_t &clients, channel_t &channels, const std::string &nick);
+void 			kick_from_channels(channel_t &channels, const std::string &nick);
 
 std::string		kill_done(std::string nick, std::string reason);
 std::string		kill_failed(std::string nick);
