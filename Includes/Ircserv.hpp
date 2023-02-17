@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/16 21:53:20 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/17 16:05:26 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 # define IRCSERV_HPP
 
 /*<------> INCLUDE Headers <------>*/
+#include <sys/types.h>
 #include <sys/socket.h>
+#include <netdb.h>
 #include <netinet/in.h>
 #include <poll.h>
 #include <string>
@@ -28,6 +30,7 @@
 #include <unistd.h>
 #include <cstdlib>
 #include <fstream>
+#include <arpa/inet.h>
 #include "User.hpp"
 
 /*<------> Forward Declaration <------>*/
@@ -70,7 +73,8 @@ struct s_list {
 /*<------> SET Used Functions <------>*/
 int				first_in_check(char* s2, std::string s3);
 int				getPort(char* s);
-int				tcp_server(int port);
+// int				tcp_server(int port);
+int tcp_server(int port, struct addrinfo **p);
 
 bool			channel_operations(client_t &clients, channel_t &channels, std::string msg, int i);
 bool			check_input(std::string s, client_t &clients, int &i, int index);
@@ -85,20 +89,26 @@ void			join_channels(client_t &clients, size_t i, channel_t &channels, std::stri
 void			server_join(std::vector<client> &clients, std::string client_msg, int i);
 void			senderr(std::string cmd, int i, client_t &clients, int ern);
 void			initialise_poll(std::vector<client> &clients, int fd_size);
-void			accept_call(std::vector<client> &clients, int socket_fd);
-void			loop_connections(int socket_fd, std::string password);
+void			accept_call(std::vector<client> &clients, int socket_fd, struct addrinfo *p);
+void			loop_connections(int socket_fd, std::string password, struct addrinfo *p);
+
 void			bot(client_t &clients, size_t i, std::string &name);
 void			close_connection(client_t &clients, size_t i);
 void			nickchange_msg(User user, std::string str);
 void			tolowstr(std::string &s);
 void			welcome_msg(User user);
+void			close_connection(client_t &clients, client_t::iterator it);
+void 			kick_from_channels(channel_t &channels, const std::string &nick);
 
+std::string		kill_done(std::string nick, std::string reason);
+std::string		kill_failed(std::string nick);
+std::string		no_privileges(std::string nick);
 std::string		rcv_msg(int client_fd, std::vector<client> &clients, size_t i, channel_t &channels);
 std::string		reject_msg(std::string cmd, int ern, client_t &clients, int i);
 std::string		take_nickname_from_msg(std::string msg);
 std::string		trimFront(std::string s, int i);
 std::string		trim(std::string s, int i);
-std::string		ip_itostr(in_addr_t ip);
+std::string		ip_itostr(struct addrinfo  *addr_info);
 std::string		msg_format(User &user);
 
 /*<---> SET Mode channel (+/-o) Functions <--->*/

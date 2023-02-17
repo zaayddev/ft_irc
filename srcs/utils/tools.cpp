@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:46:44 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/05 12:09:42 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/16 18:16:01 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,27 @@ bool	check_user_exist(std::vector<User> users, std::string nick)
 	return (false);
 }
 
-std::string ip_itostr(in_addr_t ip)
+std::string ip_itostr(struct addrinfo  *addr_info)
 {
-    std::stringstream   ss;
+	std::stringstream ss;
+    char ip_str[INET6_ADDRSTRLEN];
 
-    ss << (ip & 0xFF)  << "." << ((ip >> 8) & 0xFF) << "." \
-        << ((ip >> 16) & 0xFF) << "." << ((ip >> 24) & 0xFF);
-	return (ss.str());
+    if (addr_info->ai_family == AF_INET) // IPV4
+	{
+        struct sockaddr_in* ipv4 = reinterpret_cast<struct sockaddr_in*>(addr_info->ai_addr);
+        inet_ntop(AF_INET, &(ipv4->sin_addr), ip_str, INET_ADDRSTRLEN);
+
+    } else if (addr_info->ai_family == AF_INET6) // IPV6
+	{
+        struct sockaddr_in6* ipv6 = reinterpret_cast<struct sockaddr_in6*>(addr_info->ai_addr);
+        inet_ntop(AF_INET6, &(ipv6->sin6_addr), ip_str, INET6_ADDRSTRLEN);
+    } else
+        return "FAILED";
+    
+    ss << ip_str;
+    return ss.str();
 }
+
 
 std::string trim(std::string s, int i)
 {
@@ -88,4 +101,36 @@ std::string	take_nickname_from_msg(std::string msg)
 	for (; msg[i] != ' '; i++)
 		nick.push_back(msg[i]);
 	return (nick);
+}
+
+bool	user_present(std::vector<User> users, std::string nick)
+{
+	for (std::vector<User>::iterator it_users = users.begin(); it_users != users.end(); it_users++)
+	{
+		if (it_users->get_nickname() == nick)
+			return (true);
+	}
+	return (false);
+}
+
+void kick_from_channels(channel_t &channels, const std::string &nick)
+{
+	channel_t::iterator it = channels.begin();
+	for (; it != channels.end(); it++)
+	{
+		if (user_present((*it).second, nick))
+		{
+			for (std::vector<User>::iterator it_users = (*it).second.begin(); it_users != (*it).second.end(); it_users++)
+			{
+				if (it_users->get_nickname() == nick)
+				{
+					(*it).second.erase(it_users);
+					break;
+				}
+			}
+			std::string	reply = "kicked from channels";
+			for (std::vector<User>::iterator it_users = (*it).second.begin(); it_users != (*it).second.end(); it_users++)
+				send((*it_users).get_fd(), reply.c_str(), reply.length(), 0);
+		}
+	}
 }

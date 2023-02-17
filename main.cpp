@@ -16,12 +16,14 @@ int main(int argc, char **argv)
 {	
 	int	port;
 	int socket_fd;
+	struct addrinfo *p = nullptr;
 
 	if (argc == 3) {
 		if (!(port = first_in_check(argv[1], argv[2])))
-				return (1);
-        socket_fd = tcp_server(port);
-        loop_connections(socket_fd, argv[2]);
+			return (1);
+        socket_fd = tcp_server(port,  &p);
+        loop_connections(socket_fd, argv[2], p);
+		freeaddrinfo(p);
     }
 	else
 		return (std::cerr << RED_BOLD << " ERROR;\n" << RED \

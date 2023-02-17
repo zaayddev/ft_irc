@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 23:35:19 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/10 15:41:54 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/16 14:27:06 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ class User {
 		void						set_realname(const std::string realname);
 		void						set_nickname(const std::string nickname);
 		void						set_is_complete(const bool is_complete);
+		void						set_op(bool op);
 		void						set_ip(const std::string ip);
 		void						set_fd(int fd);     
 		

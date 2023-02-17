@@ -17,7 +17,7 @@ LIB = Includes/Ircserv.hpp \
 
 CC = c++
 
-FLAGS = -Wall -Wextra -Werror -std=c++11
+FLAGS = -Wall -Wextra -Werror -std=c++98
 
 SRC =	main.cpp \
 			srcs/tcp_server.cpp \
