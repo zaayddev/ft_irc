@@ -23,14 +23,12 @@ std::vector<pollfd> clients_fd(std::vector<client> &clients)
     return (clients_fd);
 }
 
-void    accept_call(std::vector<client> &clients, int socket_fd)
+void    accept_call(std::vector<client> &clients, int socket_fd, struct addrinfo *client_addr)
 {
-    struct sockaddr_in  client_addr;
-    socklen_t           lenght;
-
     while (true)
     {
-        int new_fd = accept(socket_fd, (sockaddr*)&client_addr, &lenght);
+        int new_fd = accept(socket_fd, client_addr->ai_addr, &(client_addr->ai_addrlen));
+
         if (new_fd == -1)
         {
             if (errno != EWOULDBLOCK)
@@ -40,18 +38,25 @@ void    accept_call(std::vector<client> &clients, int socket_fd)
         pollfd	new_pollfd;
         User	new_user;
 
-        // The timeout argument specifies the minimum number of milliseconds that poll() will block.
-        // Specifying a negative value in timeout means an infinite timeout.
-        // Specifying a timeout of zero causes poll() to return immediately, even if no file descriptors are ready.
-        
+        /* 
+         * The timeout argument specifies the minimum number of milliseconds that poll() will block.
+         * Specifying a negative value in timeout means an infinite timeout.
+         * Specifying a timeout of zero causes poll() to return immediately, even if no file descriptors are ready.
+        */
         new_pollfd.fd = new_fd;
         new_pollfd.events = POLLIN;
         new_pollfd.revents = 0;
-        new_user.set_ip(ip_itostr(client_addr.sin_addr.s_addr));
+        std::string _ip = ip_itostr(client_addr);
+        if (_ip == "FAILED")
+        {
+            close(socket_fd);
+            std::cerr << RED_BOLD << " INVALID IP " << RST << std::endl;
+            break;
+        }
+        new_user.set_ip(_ip);
         new_user.set_fd(new_fd);
         clients.push_back(client(new_pollfd, new_user));
-        std::cout << YELLOW << "client " << RST << "[" << ip_itostr( \
-            client_addr.sin_addr.s_addr) << "]" << YELLOW << " is accepted" << std::endl;
+        std::cout << YELLOW << "client " << RST << "[" << ip_itostr(client_addr) << "]" << YELLOW << " is accepted" << std::endl;
     }
 }
 
@@ -82,12 +87,14 @@ std::string	rcv_msg(int client_fd, std::vector<client> &clients, size_t i, chann
     // std::cout << "receive_msg called" << std::endl;
     std::memset(buffer, 0, sizeof(buffer));
     recv_data = recv(client_fd, buffer, sizeof(buffer), 0);
-        
-    //std::cout << buffer << std::endl;
-    // [ EWOULDBLOCK ]the error message is not logged because it is expected to happen when the function is called in non-blocking mode. 
-    // This can be used to prevent the program from getting stuck 
-    // in an infinite loop waiting for data to be received. Instead, 
-    // the function can continue execution and check for new data at a later time.
+
+    /*    
+     * std::cout << buffer << std::endl;
+     * [ EWOULDBLOCK ]the error message is not logged because it is expected to happen when the function is called in non-blocking mode. 
+     * This can be used to prevent the program from getting stuck 
+     * in an infinite loop waiting for data to be received. Instead, 
+     * the function can continue execution and check for new data at a later time.
+    */
 
     if (recv_data < 0 && errno != EWOULDBLOCK)
         std::cout << "recv() failed" << std::endl;
@@ -97,7 +104,7 @@ std::string	rcv_msg(int client_fd, std::vector<client> &clients, size_t i, chann
     
     if (recv_data == 0)
     {
-        //kick_users_from_channels();
+        // kick_users_from_channels();
         close_connection(clients, i);
     }
     return (buffer);

@@ -40,14 +40,27 @@ bool	check_user_exist(std::vector<User> users, std::string nick)
 	return (false);
 }
 
-std::string ip_itostr(in_addr_t ip)
+std::string ip_itostr(struct addrinfo  *addr_info)
 {
-    std::stringstream   ss;
+	std::stringstream ss;
+    char ip_str[INET6_ADDRSTRLEN];
 
-    ss << (ip & 0xFF)  << "." << ((ip >> 8) & 0xFF) << "." \
-        << ((ip >> 16) & 0xFF) << "." << ((ip >> 24) & 0xFF);
-	return (ss.str());
+    if (addr_info->ai_family == AF_INET) // IPV4
+	{
+        struct sockaddr_in* ipv4 = reinterpret_cast<struct sockaddr_in*>(addr_info->ai_addr);
+        inet_ntop(AF_INET, &(ipv4->sin_addr), ip_str, INET_ADDRSTRLEN);
+
+    } else if (addr_info->ai_family == AF_INET6) // IPV6
+	{
+        struct sockaddr_in6* ipv6 = reinterpret_cast<struct sockaddr_in6*>(addr_info->ai_addr);
+        inet_ntop(AF_INET6, &(ipv6->sin6_addr), ip_str, INET6_ADDRSTRLEN);
+    } else
+        return "FAILED";
+    
+    ss << ip_str;
+    return ss.str();
 }
+
 
 std::string trim(std::string s, int i)
 {
