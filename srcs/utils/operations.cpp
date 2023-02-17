@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   operations.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/13 00:20:07 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/16 18:29:02 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ bool	channel_msg(client_t &clients, size_t i, channel_t &channels, std::string &
 	std::string							channel_name = msg.substr(9, (msg.find(" ", 9) - 9));
 	std::pair<std::string, std::string> key = std::make_pair(channel_name, "");
 	channel_t::iterator					it = channels.find(key);
-	
+
 	if (it != channels.end() && check_user_exist((*it).second, clients[i].second.get_nickname()))
 	{
 		std::vector<User>			users = (*it).second;
@@ -154,7 +154,7 @@ void	mode(client_t &clients, size_t i, channel_t &channels, std::string &msg) {
 	(void) clients;
 	(void) i;
 	(void) channels;
-    
+
     msg.erase(0,5);
     if (msg[0] == '#') {
         std::string channel = msg.substr(1, msg.find(' '));
@@ -219,6 +219,46 @@ void	mode(client_t &clients, size_t i, channel_t &channels, std::string &msg) {
     }
 }
 
+bool    kick_user(client_t &clients, size_t i, channel_t &channels, std::string &msg)
+{
+	std::string	nick = msg.substr(5, (msg.find(" ", 5) - 5));
+	std::string	reason;
+    std::string	reply;
+	size_t		n = msg.find(":");
+	if (n != npos)
+		reason = msg.substr(n + 1);
+
+	// if (//check if user is an operator or not)
+	// {
+	// 	reply = build_no_privileges(clients[i].second.get_nick());
+	// 	send(clients[i].first.fd, reply.c_str(), reply.size(), 0);
+	// 	irc_log(WARNING, "not a op (kill cmd)");
+	// }
+	if (clients[i].second.get_nickname() == nick)
+	{
+		reply = kill_failed(clients[i].second.get_nickname());
+		send(clients[i].first.fd, reply.c_str(), reply.size(), 0);
+	}
+	else
+	{
+		client_t::iterator it = clients.begin();
+		for (; it != clients.end(); it++)
+		{
+			if ((*it).second.get_nickname() == nick)
+			{
+				reply = kill_done(nick, reason);
+				send(clients[i].first.fd, reply.c_str(), reply.size(), 0);
+				send((*it).first.fd, reply.c_str(), reply.size(), 0);
+				kick_from_channels(channels, nick);
+				close_connection(clients, it);
+				return (true);
+			}
+		}
+        // send no suck nick response
+	}
+	return (false);
+}
+
 bool    channel_operations(client_t &clients, channel_t &channels, std::string msg, int i)
 {
 	std::string	reply;
@@ -237,5 +277,7 @@ bool    channel_operations(client_t &clients, channel_t &channels, std::string m
 		bot(clients, i, msg);
     else if (!msg.find("MODE "))
 	    mode(clients, i, channels ,msg);
+    else if (!msg.find("KILL "))
+        kick_user(clients, i, channels, msg);
 	return (false);
 }
