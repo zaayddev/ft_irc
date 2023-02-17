@@ -11,44 +11,6 @@
 /* ************************************************************************** */
 
 #include "../Includes/Ircserv.hpp"
-/*
-int tcp_server(int port)
-{
-    int socket_fd = socket(AF_INET, SOCK_STREAM, 0);
-    if (socket_fd < 0)
-        std::cerr << RED_BOLD << "error; socket() failed!!" << RST << std::endl;
-
-    int optval = 1;
-    int reuse = setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, (char *)&optval, sizeof(optval));
-    if (reuse == -1)
-        std::cerr << RED_BOLD << "error; setsockopt() failed!!" << RST << std::endl;
-
-    reuse = fcntl(socket_fd, F_SETFL, O_NONBLOCK);
-    if (reuse < 0)
-        std::cerr << RED_BOLD << "error; fcntl() failed!!" << RST << std::endl;
-
-    struct sockaddr_in addr;
-
-    std::memset(&addr, 0, sizeof(addr));
-    addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    addr.sin_port = htons(port);
-    reuse = bind(socket_fd, (struct sockaddr *)&addr, sizeof(addr));
-
-
-
-
-    if (reuse == -1)
-    {
-        std::cerr << RED_BOLD << "error; bind() failed!!" << RST << std::endl;
-        exit(1);
-    }
-    reuse = listen(socket_fd, 0);
-    if (reuse == -1)
-        std::cerr << RED_BOLD << "error; listen() failed!!" << RST << std::endl;
-    return (socket_fd);
-}
-*/
 
 /*
  * This function creates a TCP server socket that listens for incoming connections on the specified port.
@@ -138,7 +100,7 @@ int tcp_server(int port, struct addrinfo **p)
     }
 
     // Free the list of address structures returned by getaddrinfo.
-    // freeaddrinfo(result);
+     // freeaddrinfo(result);
 
     // if a successful bind did not occur, output an error message and return -1
     if (*p == nullptr)
