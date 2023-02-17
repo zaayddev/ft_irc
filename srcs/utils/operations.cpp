@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/13 00:20:07 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/16 21:52:00 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,78 +148,28 @@ bool	channel_msg(client_t &clients, size_t i, channel_t &channels, std::string &
 	return (false);
 }
 // 0 1 2 3
-// M O D E #mychannel +v someuser
+// M O D E #mychannel (+/-)o someuser
 
 void	mode(client_t &clients, size_t i, channel_t &channels, std::string &msg) {
 	(void) clients;
 	(void) i;
 	(void) channels;
-    
-    msg.erase(0,5);
-    if (msg[0] == '#') {
-        std::string channel = msg.substr(1, msg.find(' '));
-        msg.erase(0,  msg.find(' ') + 1);
-        if (msg[0] == '+' && (msg[2] == ' ' || msg[2] == '\0')) {
-            std::string valid = "ntmpsiklbvo";
-            size_t e = valid.find(msg[1]);
-            if (e != npos) {
-                switch (e) {
-                    case 0 : std::cout << valid[0] << std::endl;
-                        break;
-                    case 1 : std::cout << valid[1] << std::endl;
-                        break;
-                    case 2 : std::cout << valid[2] << std::endl;
-                        break;
-                    case 3 : std::cout << valid[3] << std::endl;
-                        break;
-                    case 4 : std::cout << valid[4] << std::endl;
-                        break;
-                    case 5 : std::cout << valid[5] << std::endl;
-                        break;
-                    case 6 : std::cout << valid[6] << std::endl;
-                        break;
-                    case 7 : std::cout << valid[7] << std::endl;
-                        break;
-                    case 8 : std::cout << valid[8] << std::endl;
-                        break;
-                    case 9 : std::cout << valid[9] << std::endl;
-                        break;
-                    case 10 : std::cout << valid[10] << std::endl;
-                }
-            }
-        } else if (msg[0] == '-' && (msg[2] == ' ' || msg[2] == '\0')) {
-            std::string valid = "ntmpsiklbvo";
-            size_t e = valid.find(msg[1]);
-            if (e != npos) {
-                switch (e) {
-                    case 0 : std::cout << valid[0] << std::endl;
-                        break;
-                    case 1 : std::cout << valid[1] << std::endl;
-                        break;
-                    case 2 : std::cout << valid[2] << std::endl;
-                        break;
-                    case 3 : std::cout << valid[3] << std::endl;
-                        break;
-                    case 4 : std::cout << valid[4] << std::endl;
-                        break;
-                    case 5 : std::cout << valid[5] << std::endl;
-                        break;
-                    case 6 : std::cout << valid[6] << std::endl;
-                        break;
-                    case 7 : std::cout << valid[7] << std::endl;
-                        break;
-                    case 8 : std::cout << valid[8] << std::endl;
-                        break;
-                    case 9 : std::cout << valid[9] << std::endl;
-                        break;
-                    case 10 : std::cout << valid[10] << std::endl;
-                }
-            }
-        }  
-    }
+
+	msg.erase(0,5);
+	if (msg[0] == '#') {
+		std::string channel = msg.substr(1, msg.find(' ') - 1);
+		msg.erase(0,  msg.find(' ') + 1);
+		if (msg[0] == '+' && msg[1] == 'o' && msg[2] == ' ') {
+			msg.erase(0,  3);
+            omode(clients, i, channels, msg, channel);
+		} else if (msg[0] == '-' && msg[1] == 'o' && msg[2] == ' ') {
+            msg.erase(0,  3);
+			o_mode(clients, i, channels, msg, channel);
+		}
+	}
 }
 
-bool    channel_operations(client_t &clients, channel_t &channels, std::string msg, int i)
+bool	channel_operations(client_t &clients, channel_t &channels, std::string msg, int i)
 {
 	std::string	reply;
 
@@ -231,11 +181,11 @@ bool    channel_operations(client_t &clients, channel_t &channels, std::string m
 		priv_msg(clients, i, msg);
 	else if (!msg.find("JOIN "))
 		join_channels(clients, i, channels, msg);
-    else if (!msg.find("PART"))
+	else if (!msg.find("PART"))
 		leave_channels(clients, i, channels, msg);
 	else if (!msg.find("ARTIST "))
 		bot(clients, i, msg);
-    else if (!msg.find("MODE "))
-	    mode(clients, i, channels ,msg);
+	else if (!msg.find("MODE "))
+		mode(clients, i, channels ,msg);
 	return (false);
 }
