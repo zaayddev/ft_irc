@@ -6,7 +6,7 @@
 #    By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/26 16:33:22 by yelgharo          #+#    #+#              #
-#    Updated: 2023/02/07 13:32:13 by yelgharo         ###   ########.fr        #
+#    Updated: 2023/02/13 15:46:09 by yelgharo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ SRC =	main.cpp \
 				srcs/bonus/bot.cpp \
 				srcs/utils/check.cpp \
 				srcs/utils/join.cpp \
+				srcs/utils/modes.cpp \
 				srcs/utils/operations.cpp \
 				srcs/utils/poll.cpp \
 				srcs/utils/parsing.cpp \

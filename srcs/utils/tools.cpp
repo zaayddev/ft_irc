@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:46:44 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/16 18:16:01 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/17 16:18:02 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,36 +101,4 @@ std::string	take_nickname_from_msg(std::string msg)
 	for (; msg[i] != ' '; i++)
 		nick.push_back(msg[i]);
 	return (nick);
-}
-
-bool	user_present(std::vector<User> users, std::string nick)
-{
-	for (std::vector<User>::iterator it_users = users.begin(); it_users != users.end(); it_users++)
-	{
-		if (it_users->get_nickname() == nick)
-			return (true);
-	}
-	return (false);
-}
-
-void kick_from_channels(channel_t &channels, const std::string &nick)
-{
-	channel_t::iterator it = channels.begin();
-	for (; it != channels.end(); it++)
-	{
-		if (user_present((*it).second, nick))
-		{
-			for (std::vector<User>::iterator it_users = (*it).second.begin(); it_users != (*it).second.end(); it_users++)
-			{
-				if (it_users->get_nickname() == nick)
-				{
-					(*it).second.erase(it_users);
-					break;
-				}
-			}
-			std::string	reply = "kicked from channels";
-			for (std::vector<User>::iterator it_users = (*it).second.begin(); it_users != (*it).second.end(); it_users++)
-				send((*it_users).get_fd(), reply.c_str(), reply.length(), 0);
-		}
-	}
 }

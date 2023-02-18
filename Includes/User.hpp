@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 23:35:19 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/16 14:27:06 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/17 19:20:10 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ class User {
 		
 	public:
 
-		std::string					msg;
         std::vector<std::string>	_owned_channels;
+		std::string					msg;
 		
 		User(void);
 		User(std::string str);

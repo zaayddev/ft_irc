@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Ircserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/16 18:16:14 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/17 19:22:22 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,5 +110,9 @@ std::string		trimFront(std::string s, int i);
 std::string		trim(std::string s, int i);
 std::string		ip_itostr(struct addrinfo  *addr_info);
 std::string		msg_format(User &user);
+
+/*<---> SET Mode channel (+/-o) Functions <--->*/
+void			omode(client_t &clients, size_t i, channel_t &channels, std::string &msg, std::string &name);
+void			o_mode(client_t &clients, size_t i, channel_t &channels, std::string &msg, std::string &name);
 
 #endif

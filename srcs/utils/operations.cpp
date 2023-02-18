@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   operations.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/16 18:29:02 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/17 16:17:51 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,118 +148,24 @@ bool	channel_msg(client_t &clients, size_t i, channel_t &channels, std::string &
 	return (false);
 }
 // 0 1 2 3
-// M O D E #mychannel +v someuser
+// M O D E #mychannel (+/-)o someuser
 
 void	mode(client_t &clients, size_t i, channel_t &channels, std::string &msg) {
-	(void) clients;
-	(void) i;
-	(void) channels;
-
-    msg.erase(0,5);
-    if (msg[0] == '#') {
-        std::string channel = msg.substr(1, msg.find(' '));
-        msg.erase(0,  msg.find(' ') + 1);
-        if (msg[0] == '+' && (msg[2] == ' ' || msg[2] == '\0')) {
-            std::string valid = "ntmpsiklbvo";
-            size_t e = valid.find(msg[1]);
-            if (e != npos) {
-                switch (e) {
-                    case 0 : std::cout << valid[0] << std::endl;
-                        break;
-                    case 1 : std::cout << valid[1] << std::endl;
-                        break;
-                    case 2 : std::cout << valid[2] << std::endl;
-                        break;
-                    case 3 : std::cout << valid[3] << std::endl;
-                        break;
-                    case 4 : std::cout << valid[4] << std::endl;
-                        break;
-                    case 5 : std::cout << valid[5] << std::endl;
-                        break;
-                    case 6 : std::cout << valid[6] << std::endl;
-                        break;
-                    case 7 : std::cout << valid[7] << std::endl;
-                        break;
-                    case 8 : std::cout << valid[8] << std::endl;
-                        break;
-                    case 9 : std::cout << valid[9] << std::endl;
-                        break;
-                    case 10 : std::cout << valid[10] << std::endl;
-                }
-            }
-        } else if (msg[0] == '-' && (msg[2] == ' ' || msg[2] == '\0')) {
-            std::string valid = "ntmpsiklbvo";
-            size_t e = valid.find(msg[1]);
-            if (e != npos) {
-                switch (e) {
-                    case 0 : std::cout << valid[0] << std::endl;
-                        break;
-                    case 1 : std::cout << valid[1] << std::endl;
-                        break;
-                    case 2 : std::cout << valid[2] << std::endl;
-                        break;
-                    case 3 : std::cout << valid[3] << std::endl;
-                        break;
-                    case 4 : std::cout << valid[4] << std::endl;
-                        break;
-                    case 5 : std::cout << valid[5] << std::endl;
-                        break;
-                    case 6 : std::cout << valid[6] << std::endl;
-                        break;
-                    case 7 : std::cout << valid[7] << std::endl;
-                        break;
-                    case 8 : std::cout << valid[8] << std::endl;
-                        break;
-                    case 9 : std::cout << valid[9] << std::endl;
-                        break;
-                    case 10 : std::cout << valid[10] << std::endl;
-                }
-            }
-        }  
-    }
-}
-
-bool    kick_user(client_t &clients, size_t i, channel_t &channels, std::string &msg)
-{
-	std::string	nick = msg.substr(5, (msg.find(" ", 5) - 5));
-	std::string	reason;
-    std::string	reply;
-	size_t		n = msg.find(":");
-	if (n != npos)
-		reason = msg.substr(n + 1);
-
-	// if (//check if user is an operator or not)
-	// {
-	// 	reply = build_no_privileges(clients[i].second.get_nick());
-	// 	send(clients[i].first.fd, reply.c_str(), reply.size(), 0);
-	// 	irc_log(WARNING, "not a op (kill cmd)");
-	// }
-	if (clients[i].second.get_nickname() == nick)
-	{
-		reply = kill_failed(clients[i].second.get_nickname());
-		send(clients[i].first.fd, reply.c_str(), reply.size(), 0);
-	}
-	else
-	{
-		client_t::iterator it = clients.begin();
-		for (; it != clients.end(); it++)
-		{
-			if ((*it).second.get_nickname() == nick)
-			{
-				reply = kill_done(nick, reason);
-				send(clients[i].first.fd, reply.c_str(), reply.size(), 0);
-				send((*it).first.fd, reply.c_str(), reply.size(), 0);
-				kick_from_channels(channels, nick);
-				close_connection(clients, it);
-				return (true);
-			}
+	msg.erase(0,5);
+	if (msg[0] == '#') {
+		std::string channel = msg.substr(1, msg.find(' ') - 1);
+		msg.erase(0,  msg.find(' ') + 1);
+		if (msg[0] == '+' && msg[1] == 'o' && msg[2] == ' ') {
+			msg.erase(0,  3);
+            omode(clients, i, channels, msg, channel);
+		} else if (msg[0] == '-' && msg[1] == 'o' && msg[2] == ' ') {
+            msg.erase(0,  3);
+			o_mode(clients, i, channels, msg, channel);
 		}
-        // send no suck nick response
 	}
-	return (false);
 }
 
-bool    channel_operations(client_t &clients, channel_t &channels, std::string msg, int i)
+bool	channel_operations(client_t &clients, channel_t &channels, std::string msg, int i)
 {
 	std::string	reply;
 
@@ -271,13 +177,11 @@ bool    channel_operations(client_t &clients, channel_t &channels, std::string m
 		priv_msg(clients, i, msg);
 	else if (!msg.find("JOIN "))
 		join_channels(clients, i, channels, msg);
-    else if (!msg.find("PART"))
+	else if (!msg.find("PART"))
 		leave_channels(clients, i, channels, msg);
 	else if (!msg.find("ARTIST "))
 		bot(clients, i, msg);
     else if (!msg.find("MODE "))
 	    mode(clients, i, channels ,msg);
-    else if (!msg.find("KILL "))
-        kick_user(clients, i, channels, msg);
 	return (false);
 }

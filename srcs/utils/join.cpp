@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 08:19:53 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/10 16:57:30 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/17 19:37:43 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,6 +193,6 @@ void	join_channels(client_t &clients, size_t i, channel_t &channels, std::string
 			key.erase(0,  key.length());
 		}
 	}
-	if (user._channel.size())
+	if (user._channel.size() && user._channel.front() != "")
 		join_channel(clients, i, channels, user);
 }
