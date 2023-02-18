@@ -1,0 +1,107 @@
+
+ 3267  cd goinfre
+ 3268  pwd
+ 3269  mkdir FlutterDev
+ 3270  cd
+ 3271  cd goinfre/FlutterDev
+ 3272  export PATH="$PATH:`pwd`/flutter/bin"\n
+ 3273  vi ~/.zshrc
+ 3274  ls -l
+ 3275  cd flutter
+ 3276  ls bin
+ 3277  ls
+ 3278  pwd
+ 3279  flutter
+ 3280  open -a Simulator
+ 3281  flutter doctor -v
+ 3282  source ~/.zshrc
+ 3283  flutter doctor -v
+ 3284  cd
+ 3285  cd goinfre/FlutterDev
+ 3286  ls
+ 3287  mkdir android_sdk
+ 3288  mv cmdline-tools android_sdk
+ 3289  pwd
+ 3290  cd android_sdk
+ 3291  ls
+ 3292  cd cmdline-tools
+ 3293  mkdir latest
+ 3294  ls -la
+ 3295  mv * latest
+ 3296  ls -l
+ 3297  ls -la
+ 3298  cd latest
+ 3299  ls -la
+ 3300  flutter config --android-sdk
+ 3301  pwd
+ 3302  flutter config --android-sdk /Users/aybouras/goinfre/FlutterDev/android_sdk/cmdline-tools/latest/bin
+ 3303  flutter doctor -v
+ 3304  flutter config --android-sdk /Users/aybouras/goinfre/FlutterDev/android_sdk/cmdline-tools/latest
+ 3305  pwd
+ 3306  ls -l
+ 3307  ls -la
+ 3308  pwd
+ 3309  cd ../
+ 3310  ls
+ 3311  cd android_sdk
+ 3312  ls -la
+ 3313  pwd
+ 3314  flutter config --android-sdk `pwd`
+ 3315  flutter doctor -v
+ 3316  flutter config --android-sdk /Users/aybouras/goinfre/FlutterDev/android_sdk/cmdline-tools
+ 3317  flutter doctor -v
+ 3318  flutter config --android-sdk /Users/aybouras/goinfre/FlutterDev/android_sdk/cmdline-tools/latest
+ 3319  flutter doctor -v
+ 3320  flutter config --android-sdk /Users/aybouras/goinfre/FlutterDev/android_sdk/cmdline-tools/latest/bin
+ 3321  flutter doctor -v
+ 3322  cd 
+ 3323  cd Library
+ 3324  ls -la
+ 3325  cd Android
+ 3326  du -d 1 -h
+ 3327  cd sdk
+ 3328  ls -la
+ 3329  cd
+ 3330  cd goinfre/FlutterDev
+ 3331  ls
+ 3332  cd android
+ 3333  cd android_sdk
+ 3334  ls -la
+ 3335  cd cmdline-tools
+ 3336  ls
+ 3337  cd latest
+ 3338  ls
+ 3339  cd bin
+ 3340  ls -la
+ 3341  pwd
+ 3342  cd ../../
+ 3343  mv Android ~/goinfre/FlutterDev
+ 3344  cd
+ 3345  ls -la
+ 3346  ln -s /goinfre/aybouras/FlutterDev/Android .
+ 3347  ls -la
+ 3348  cd
+ 3349  mv .android /goinfre/aybouras/FlutterDev
+ 3350  ln -s /goinfre/aybouras/FlutterDev
+ 3351  ls -la
+ 3352  ln -s /goinfre/aybouras/FlutterDev/.android
+ 3353  ls -la
+ 3354  rm -rf FlutterDev
+ 3355  ls -la
+ 3356  open ~/goinfre/FlutterDev
+ 3357  flutter devices
+ 3358  pwd
+ 3359  cd
+ 3360  flutter doctor -v
+ 3361  flutter devices
+ 3362  flutter doctor -v
+ 3363  ls /Users/aybouras/Library/Android/sdk
+ 3364  flutter config --android-sdk /Users/aybouras/Library/Android/sdk
+ 3365  flutter doctor -v
+ 3366  flutter doctor --android-licenses
+ 3367  y
+ 3368  flutter doctor --android-licenses
+ 3369  flutter doctor -v
+ 3370* ping 10.12.100.178
+ 3371* ssh level00@10.12.100.178 -p 4242
+ 3372  history
