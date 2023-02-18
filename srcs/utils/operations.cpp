@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/17 16:09:45 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/17 16:17:51 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,10 +151,6 @@ bool	channel_msg(client_t &clients, size_t i, channel_t &channels, std::string &
 // M O D E #mychannel (+/-)o someuser
 
 void	mode(client_t &clients, size_t i, channel_t &channels, std::string &msg) {
-	(void) clients;
-	(void) i;
-	(void) channels;
-
 	msg.erase(0,5);
 	if (msg[0] == '#') {
 		std::string channel = msg.substr(1, msg.find(' ') - 1);
@@ -167,46 +163,6 @@ void	mode(client_t &clients, size_t i, channel_t &channels, std::string &msg) {
 			o_mode(clients, i, channels, msg, channel);
 		}
 	}
-}
-
-bool    kick_user(client_t &clients, size_t i, channel_t &channels, std::string &msg)
-{
-	std::string	nick = msg.substr(5, (msg.find(" ", 5) - 5));
-	std::string	reason;
-    std::string	reply;
-	size_t		n = msg.find(":");
-	if (n != npos)
-		reason = msg.substr(n + 1);
-
-	// if (//check if user is an operator or not)
-	// {
-	// 	reply = build_no_privileges(clients[i].second.get_nick());
-	// 	send(clients[i].first.fd, reply.c_str(), reply.size(), 0);
-	// 	irc_log(WARNING, "not a op (kill cmd)");
-	// }
-	if (clients[i].second.get_nickname() == nick)
-	{
-		reply = kill_failed(clients[i].second.get_nickname());
-		send(clients[i].first.fd, reply.c_str(), reply.size(), 0);
-	}
-	else
-	{
-		client_t::iterator it = clients.begin();
-		for (; it != clients.end(); it++)
-		{
-			if ((*it).second.get_nickname() == nick)
-			{
-				reply = kill_done(nick, reason);
-				send(clients[i].first.fd, reply.c_str(), reply.size(), 0);
-				send((*it).first.fd, reply.c_str(), reply.size(), 0);
-				kick_from_channels(channels, nick);
-				close_connection(clients, it);
-				return (true);
-			}
-		}
-        // send no suck nick response
-	}
-	return (false);
 }
 
 bool	channel_operations(client_t &clients, channel_t &channels, std::string msg, int i)
@@ -227,7 +183,5 @@ bool	channel_operations(client_t &clients, channel_t &channels, std::string msg,
 		bot(clients, i, msg);
     else if (!msg.find("MODE "))
 	    mode(clients, i, channels ,msg);
-    else if (!msg.find("KILL "))
-        kick_user(clients, i, channels, msg);
 	return (false);
 }
