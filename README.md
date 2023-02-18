@@ -16,4 +16,6 @@ Then simply connect to the server using this command :<br>
 - http://chi.cs.uchicago.edu/chirc/index.html
 - https://github.com/clbouche/ft_irc#readme[![](aa)]
 
+![image](https://user-images.githubusercontent.com/115412096/219873666-986a2e26-37b4-4e43-ad81-65e2eae063f0.png)
+
 >  With a combination of these resources, you should be well-equipped to start building your own IRC server.
