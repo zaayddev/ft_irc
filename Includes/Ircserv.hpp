@@ -14,6 +14,7 @@
 # define IRCSERV_HPP
 
 /*<------> INCLUDE Headers <------>*/
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
@@ -31,6 +32,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <arpa/inet.h>
+#include <cstdio>
 #include "User.hpp"
 
 /*<------> Forward Declaration <------>*/
@@ -114,5 +116,15 @@ std::string		msg_format(User &user);
 /*<---> SET Mode channel (+/-o) Functions <--->*/
 void			omode(client_t &clients, size_t i, channel_t &channels, std::string &msg, std::string &name);
 void			o_mode(client_t &clients, size_t i, channel_t &channels, std::string &msg, std::string &name);
+
+/*<---> BONUS <--->*/
+void writeToFile(std::string key, std::string value);
+void list();
+void upload();
+void download();
+void writeToFile(std::string key, std::string value);
+void readFromFile();
+
+
 
 #endif
