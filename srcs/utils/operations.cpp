@@ -12,14 +12,14 @@
 
 #include "../../Includes/Ircserv.hpp"
 
-void    ping_message(client_t &clients, size_t i)
+void ping_message(client_t &clients, size_t i)
 {
 	std::string reply = "PONG :" + (std::string)SERVER + "\r\n";
 	send(clients[i].second.get_fd(), reply.c_str(), reply.length(), 0);
 	std::cout << "channel_operations:: ";
 }
 
-void	priv_msg(client_t &clients, size_t i, std::string &msg)
+void priv_msg(client_t &clients, size_t i, std::string &msg)
 {
 	std::string reply;
 
@@ -29,7 +29,7 @@ void	priv_msg(client_t &clients, size_t i, std::string &msg)
 		{
 			reply = msg_format(clients[i].second) + " " + msg + "\r\n";
 			send((*it).first.fd, reply.c_str(), reply.length(), 0);
-			return ;
+			return;
 		}
 	}
 	std::cout << "sending private message failed" << std::endl;
@@ -37,11 +37,11 @@ void	priv_msg(client_t &clients, size_t i, std::string &msg)
 	send(clients[i].first.fd, reply.c_str(), reply.length(), 0);
 }
 
-static void		leave_channel(client_t &clients, size_t i, channel_t &channels, std::string &msg, std::string part_msg)
+static void leave_channel(client_t &clients, size_t i, channel_t &channels, std::string &msg, std::string part_msg)
 {
-	std::string		reply;
-	std::string		channel_name;
-	bool			is_there = false;
+	std::string reply;
+	std::string channel_name;
+	bool is_there = false;
 
 	msg.erase(0, 1);
 	if (msg.find(",", 0) != npos)
@@ -55,18 +55,20 @@ static void		leave_channel(client_t &clients, size_t i, channel_t &channels, std
 		msg.erase(0, msg.find(",", 0));
 	}
 	if (channel_name.size() == 0)
-		return ;
-    channel_t::iterator map;
-	for (channel_t::iterator iter = channels.begin(); iter != channels.end(); ++iter) {
+		return;
+	channel_t::iterator map;
+	for (channel_t::iterator iter = channels.begin(); iter != channels.end(); ++iter)
+	{
 		std::pair<std::string, std::string> key = iter->first;
-		if (key.first == channel_name) {
+		if (key.first == channel_name)
+		{
 			map = iter;
 			is_there = true;
 		}
 	}
 	if (is_there)
 	{
-		std::vector<User>::iterator	ite;
+		std::vector<User>::iterator ite;
 		for (ite = (*map).second.begin(); ite != (*map).second.end(); ite++)
 		{
 			reply = msg_format(clients[i].second) + " PART #" + channel_name + " " + part_msg + "\r\n";
@@ -77,7 +79,7 @@ static void		leave_channel(client_t &clients, size_t i, channel_t &channels, std
 			if (clients[i].second.get_nickname() == (*ite).get_nickname())
 			{
 				(*map).second.erase(ite);
-				break ;
+				break;
 			}
 		}
 		if ((*map).second.size() == 0)
@@ -96,14 +98,14 @@ static void		leave_channel(client_t &clients, size_t i, channel_t &channels, std
 /*
 	The PART command causes the user sending the message to be removed
 	from the list of active members for all given channels listed in the
-   	parameter string.
+	parameter string.
 	If a "Part Message" is given, this will be sent
-   	instead of the default message, the nickname.
+	instead of the default message, the nickname.
 */
 
-void		leave_channels(client_t &clients, size_t i, channel_t &channels, std::string &msg)
+void leave_channels(client_t &clients, size_t i, channel_t &channels, std::string &msg)
 {
-	std::string		part_msg;
+	std::string part_msg;
 
 	if (msg.find(":", 0) != npos)
 	{
@@ -120,21 +122,21 @@ void		leave_channels(client_t &clients, size_t i, channel_t &channels, std::stri
 	}
 }
 
-bool	channel_msg(client_t &clients, size_t i, channel_t &channels, std::string &msg)
+bool channel_msg(client_t &clients, size_t i, channel_t &channels, std::string &msg)
 {
-	std::string 						reply;
-	std::string							channel_name = msg.substr(9, (msg.find(" ", 9) - 9));
+	std::string reply;
+	std::string channel_name = msg.substr(9, (msg.find(" ", 9) - 9));
 	std::pair<std::string, std::string> key = std::make_pair(channel_name, "");
-	channel_t::iterator					it = channels.find(key);
+	channel_t::iterator it = channels.find(key);
 
 	if (it != channels.end() && check_user_exist((*it).second, clients[i].second.get_nickname()))
 	{
-		std::vector<User>			users = (*it).second;
-		std::vector<User>::iterator	ite = users.begin();
+		std::vector<User> users = (*it).second;
+		std::vector<User>::iterator ite = users.begin();
 		for (; ite != users.end(); ite++)
 		{
 			if (clients[i].second.get_nickname() == (*ite).get_nickname())
-				continue ;
+				continue;
 			reply = msg_format(clients[i].second) + " " + msg + "\r\n";
 			send((*ite).get_fd(), reply.c_str(), reply.length(), 0);
 		}
@@ -150,24 +152,29 @@ bool	channel_msg(client_t &clients, size_t i, channel_t &channels, std::string &
 // 0 1 2 3
 // M O D E #mychannel (+/-)o someuser
 
-void	mode(client_t &clients, size_t i, channel_t &channels, std::string &msg) {
-	msg.erase(0,5);
-	if (msg[0] == '#') {
+void mode(client_t &clients, size_t i, channel_t &channels, std::string &msg)
+{
+	msg.erase(0, 5);
+	if (msg[0] == '#')
+	{
 		std::string channel = msg.substr(1, msg.find(' ') - 1);
-		msg.erase(0,  msg.find(' ') + 1);
-		if (msg[0] == '+' && msg[1] == 'o' && msg[2] == ' ') {
-			msg.erase(0,  3);
-            omode(clients, i, channels, msg, channel);
-		} else if (msg[0] == '-' && msg[1] == 'o' && msg[2] == ' ') {
-            msg.erase(0,  3);
+		msg.erase(0, msg.find(' ') + 1);
+		if (msg[0] == '+' && msg[1] == 'o' && msg[2] == ' ')
+		{
+			msg.erase(0, 3);
+			omode(clients, i, channels, msg, channel);
+		}
+		else if (msg[0] == '-' && msg[1] == 'o' && msg[2] == ' ')
+		{
+			msg.erase(0, 3);
 			o_mode(clients, i, channels, msg, channel);
 		}
 	}
 }
 
-bool	channel_operations(client_t &clients, channel_t &channels, std::string msg, int i)
+bool channel_operations(client_t &clients, channel_t &channels, std::string msg, int i)
 {
-	std::string	reply;
+	std::string reply;
 
 	if (!msg.find("PING "))
 		ping_message(clients, i);
@@ -181,7 +188,9 @@ bool	channel_operations(client_t &clients, channel_t &channels, std::string msg,
 		leave_channels(clients, i, channels, msg);
 	else if (!msg.find("ARTIST "))
 		bot(clients, i, msg);
-    else if (!msg.find("MODE "))
-	    mode(clients, i, channels ,msg);
+	else if (!msg.find("MODE "))
+		mode(clients, i, channels, msg);
+	else if (!msg.find("FILE"))
+		transfer(clients, i);
 	return (false);
 }

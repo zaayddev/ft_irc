@@ -20,12 +20,13 @@ CC = c++
 FLAGS = -Wall -Wextra -Werror -std=c++98
 
 SRC =	main.cpp \
-		transfer.cpp \
 			srcs/tcp_server.cpp \
 			srcs/User.cpp \
 			srcs/server_join.cpp \
 			srcs/loop_connections.cpp \
 				srcs/bonus/bot.cpp \
+				srcs/bonus/transfer.cpp \
+				srcs/bonus/path_management.cpp \
 				srcs/utils/check.cpp \
 				srcs/utils/join.cpp \
 				srcs/utils/modes.cpp \
