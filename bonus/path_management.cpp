@@ -2,7 +2,10 @@
 #include <cstring>
 #include <dirent.h>
 #include <sys/stat.h>
+<<<<<<< HEAD
 // #include "path_management.h"
+=======
+>>>>>>> ebf90232fb73fc8c39b9e5e7f13b20f679d38a4e
 
 bool is_file(const char *path)
 {
