@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 01:48:48 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/01 17:34:11 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/21 20:46:18 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,7 @@ std::string	rcv_msg(int client_fd, std::vector<client> &clients, size_t i, chann
     std::memset(buffer, 0, sizeof(buffer));
     recv_data = recv(client_fd, buffer, sizeof(buffer), 0);
 
-    /*    
-     * std::cout << buffer << std::endl;
+    /*
      * [ EWOULDBLOCK ]the error message is not logged because it is expected to happen when the function is called in non-blocking mode. 
      * This can be used to prevent the program from getting stuck 
      * in an infinite loop waiting for data to be received. Instead, 
@@ -104,7 +103,6 @@ std::string	rcv_msg(int client_fd, std::vector<client> &clients, size_t i, chann
     
     if (recv_data == 0)
     {
-        // kick_users_from_channels();
         close_connection(clients, i);
     }
     return (buffer);

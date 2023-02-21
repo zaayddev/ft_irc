@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Ircserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/21 09:54:02 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/21 21:59:00 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ struct s_list {
 int				first_in_check(char* s2, std::string s3);
 int				getPort(char* s);
 // int				tcp_server(int port);
-int tcp_server(int port, struct addrinfo **p);
+int 			tcp_server(int port, struct addrinfo **p);
 
 bool			channel_operations(client_t &clients, channel_t &channels, std::string msg, int i);
 bool			check_input(std::string s, client_t &clients, int &i, int index);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   operations.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/21 15:44:25 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/21 20:42:16 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void    ping_message(client_t &clients, size_t i)
 {
 	std::string reply = "PONG :" + (std::string)SERVER + "\r\n";
 	send(clients[i].second.get_fd(), reply.c_str(), reply.length(), 0);
-	std::cout << "channel_operations:: ";
 }
 
 void	priv_msg(client_t &clients, size_t i, std::string &msg)
@@ -93,14 +92,6 @@ static void		leave_channel(client_t &clients, size_t i, channel_t &channels, std
 	}
 }
 
-/*
-	The PART command causes the user sending the message to be removed
-	from the list of active members for all given channels listed in the
-   	parameter string.
-	If a "Part Message" is given, this will be sent
-   	instead of the default message, the nickname.
-*/
-
 void		leave_channels(client_t &clients, size_t i, channel_t &channels, std::string &msg)
 {
 	std::string		part_msg;
@@ -168,23 +159,86 @@ void	mode(client_t &clients, size_t i, channel_t &channels, std::string &msg) {
 	}
 }
 
+int32_t check(client_t &clients, std::string msg, int i) {
+	if (msg.find("JOIN #") == 0) {
+		if (msg.length() == 6) {
+			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
+			return 0;
+		}
+		else 
+			return 1;
+	}
+	else if (msg.find("ARTIST ") == 0) {
+		if (msg.length() == 7) {
+			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
+			return 0;
+		}
+		else 
+			return 2;
+	}
+	else if (msg.find("PART #") == 0) {
+		if (msg.length() == 6) {
+			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
+			return 0;
+		}
+		else 
+			return 3;
+	}
+	else if (msg.find("PRIVMSG #") == 0) {
+		if (msg.length() == 9) {
+			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
+			return 0;
+		}
+		else 
+			return 4;
+	}
+	else if (msg.find("PRIVMSG ") == 0) {
+		if (msg.length() == 8) {
+			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
+			return 0;
+		}
+		else 
+			return 5;
+	}
+	else if (msg.find("MODE ") == 0) {
+		if (msg.length() == 5) {
+			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
+			return 0;
+		}
+		else 
+			return 6;
+	}
+	else if (msg.find("PING ") == 0 || msg.find("PONG ") == 0) {
+		if (msg.length() == 5) {
+			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
+			return 0;
+		}
+		else 
+			return 7;
+	}
+	else
+		senderr(msg.substr(0, msg.find(" ")), i, clients, 421);
+	return 0;
+}
+
 bool	channel_operations(client_t &clients, channel_t &channels, std::string msg, int i)
 {
 	std::string	reply;
+	int n = check(clients, msg, i);
 
-	if (!msg.find("PING "))
-		ping_message(clients, i);
-	else if (!msg.find("PRIVMSG #"))
-		channel_msg(clients, i, channels, msg);
-	else if (!msg.find("PRIVMSG "))
-		priv_msg(clients, i, msg);
-	else if (!msg.find("JOIN "))
+	if (n == 1)
 		join_channels(clients, i, channels, msg);
-	else if (!msg.find("PART"))
-		leave_channels(clients, i, channels, msg);
-	else if (!msg.find("ARTIST "))
+	else if (n == 2)
 		bot(clients, i, msg);
-    else if (!msg.find("MODE "))
+	else if (n == 3)
+		leave_channels(clients, i, channels, msg);
+	else if (n == 4)
+		channel_msg(clients, i, channels, msg);
+	else if (n == 5)
+		priv_msg(clients, i, msg);
+    else if (n == 6)
 	    mode(clients, i, channels ,msg);
+	else if (n == 7)
+		ping_message(clients, i);
 	return (false);
 }

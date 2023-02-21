@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 08:19:53 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/21 09:51:36 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/21 16:26:41 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Includes/Ircserv.hpp"
-
 
 bool Alreadythere(User &user, std::string name) {
 	if (!user._owned_channels.size())
@@ -68,14 +67,15 @@ bool	check_name(std::string input)
 	}
 	return (true);
 }
-// stiil working on join_channel part
+
 void	join_channel(client_t &clients, size_t i, channel_t &channels, s_list &user)
 {
 	std::string		reply;
 	std::string		channel_name = "";
 	std::string		channel_key = "";
 
-	while (user._channel.size()) {
+	while (user._channel.size())
+	{
 		bool			channel_is_there = false;
 		bool			user_is_there = false;
 		channel_name = user._channel.back();
@@ -121,7 +121,6 @@ void	join_channel(client_t &clients, size_t i, channel_t &channels, s_list &user
 			}
 			else // add user to channel
 			{
-				
 				std::set<User>::iterator	ite;
 				if(map->first.second == channel_key)
 				{

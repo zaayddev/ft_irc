@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tcp_server.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:34:23 by zchbani           #+#    #+#             */
-/*   Updated: 2023/02/10 17:53:51 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/21 22:52:08 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,12 @@ int tcp_server(int port, struct addrinfo **p)
                 std::cerr << RED_BOLD << "socket() failed.." << RST << std::endl;
                 continue;
             }
-
-            if ((reuse = bind(socket_fd, (*p)->ai_addr, (*p)->ai_addrlen)) == -1)
+            
+            int optval = 1;
+            if (setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, (char *)&optval, sizeof(optval)) == -1)
             {
-                // If binding to the address fails, close the socket and try the next address.
-                close(socket_fd);
-                std::cerr << RED_BOLD << "bind() failed.." << RST << std::endl;
-                continue;
+                std::cerr << "setsockopt() failed" << std::endl;
+                return -1;
             }
 
             // Set timeout on socket
@@ -83,12 +82,14 @@ int tcp_server(int port, struct addrinfo **p)
             timeout.tv_sec = 5; // 5 seconds
             timeout.tv_usec = 0;
 
-            if (setsockopt(socket_fd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout)) < 0)
+            reuse = bind(socket_fd, (*p)->ai_addr, (*p)->ai_addrlen);
+            if (reuse == -1)
             {
-                std::cerr << "setsockopt() failed" << std::endl;
-                return -1;
+                // If binding to the address fails, close the socket and try the next address.
+                std::cerr << RED_BOLD << strerror(errno) << ", " << "bind() failed.." << RST << std::endl;
+                close(socket_fd);
+                exit(1);
             }
-
             break;
         }
 
@@ -100,7 +101,7 @@ int tcp_server(int port, struct addrinfo **p)
     }
 
     // Free the list of address structures returned by getaddrinfo.
-     // freeaddrinfo(result);
+    // freeaddrinfo(result);
 
     // if a successful bind did not occur, output an error message and return -1
     if (*p == nullptr)
