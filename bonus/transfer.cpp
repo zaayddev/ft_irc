@@ -152,7 +152,6 @@ void upload()
     }
     pclose(pipe);
 
-
     // Extract the id
     size_t last_pos = result.find_last_of("/");
     size_t second_last_pos = result.find_last_of("/", last_pos - 1);

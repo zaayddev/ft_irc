@@ -2,6 +2,7 @@
 #include <cstring>
 #include <dirent.h>
 #include <sys/stat.h>
+#include "path_management.h"
 
 bool is_file(const char *path)
 {
@@ -44,6 +45,43 @@ std::string remove_extra_slashes(const std::string &path)
     return result;
 }
 
+void list_dir(std::string &input, std::string &history)
+{
+    if (input[input.length() - 1] == '/' && input[input.length() - 2] == '/')
+    {
+        input = remove_extra_slashes(input);
+        history = input + "/";
+    }
+
+    std::cout << " ==> Contents of directory " << input << ": \n\n";
+    DIR *dir;
+    struct dirent *ent;
+    struct stat st;
+    if ((dir = opendir(input.c_str())) != NULL)
+    {
+        while ((ent = readdir(dir)) != NULL)
+        {
+            if (strcmp(ent->d_name, ".") == 0 || strcmp(ent->d_name, "..") == 0)
+            {
+                continue;
+            }
+
+            std::string name = ent->d_name;
+            std::string path = input + "/" + name;
+            if (stat(path.c_str(), &st) == 0 && S_ISDIR(st.st_mode))
+            {
+                name += "/";
+            }
+            std::cout << name << std::endl;
+        }
+        closedir(dir);
+    }
+    else
+    {
+        std::cerr << "Could not open directory " << input << std::endl;
+    }
+}
+
 std::string path_management()
 {
     std::string input;
@@ -57,8 +95,24 @@ std::string path_management()
         std::getline(std::cin, input);
         if (input == "clear")
         {
-             history = "";
-             continue;
+            history = "";
+            continue;
+        }
+        if (input == "." || input == "..")
+        {
+            if (input == ".")
+            {
+                size_t pos = history.find_last_of('/');
+                input = history.substr(0, pos);
+                history = "";
+            }
+            else
+            {
+                size_t last_pos = history.find_last_of("/");
+                size_t second_last_pos = history.find_last_of("/", last_pos - 1);
+                input = history.substr(0, second_last_pos);
+                history = "";
+            }
         }
         input = history + input;
         (input[input.length() - 1] == '/') ? history = input : history = input + "/";
@@ -68,50 +122,20 @@ std::string path_management()
         // Input is a directory
         else if (is_directory(input.c_str()))
         {
-            if (input[input.length() - 1] == '/' && input[input.length() - 2] == '/')
-            {
-                input = remove_extra_slashes(input);
-                history = input + "/";
-            }
-
-            std::cout << "Contents of directory " << input << ": \n\n";
-            DIR *dir;
-            struct dirent *ent;
-            struct stat st;
-            if ((dir = opendir(input.c_str())) != NULL)
-            {
-                while ((ent = readdir(dir)) != NULL)
-                {
-                    if (strcmp(ent->d_name, ".") == 0 || strcmp(ent->d_name, "..") == 0)
-                    {
-                        continue;
-                    }
-
-                    std::string name = ent->d_name;
-                    std::string path = input + "/" + name;
-                    if (stat(path.c_str(), &st) == 0 && S_ISDIR(st.st_mode))
-                    {
-                        name += "/";
-                    }
-                    std::cout << name << std::endl;
-                }
-                closedir(dir);
-            }
-            else
-            {
-                std::cerr << "Could not open directory " << input << std::endl;
-            }
+            list_dir(input, history);
         }
         else
         {
             // Input is neither a file nor a directory
-            std::cerr << input << " is not a valid file or directory" << std::endl;
+            std::cerr << "\n"
+                      << input << " is not a valid file or directory\n\n";
             input = remove_extra_slashes(input);
             size_t pos = input.find_last_of('/');
-            std::string filename = input.substr(0, pos);
 
             input = input.substr(0, pos);
             history = input + "/";
+
+            list_dir(input, history);
         }
     }
 
