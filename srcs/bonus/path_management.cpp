@@ -1,11 +1,4 @@
-#include <iostream>
-#include <cstring>
-#include <dirent.h>
-#include <sys/stat.h>
-<<<<<<< HEAD
-// #include "path_management.h"
-=======
->>>>>>> ebf90232fb73fc8c39b9e5e7f13b20f679d38a4e
+#include "../../Includes/Ircserv.hpp"
 
 bool is_file(const char *path)
 {
@@ -143,6 +136,6 @@ std::string path_management()
     }
 
     std::cout << "chosen File: " << input << std::endl;
-exit(0);
+
     return input;
 }

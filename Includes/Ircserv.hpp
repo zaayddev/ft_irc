@@ -34,6 +34,9 @@
 #include <fstream>
 #include <arpa/inet.h>
 #include <cstdio>
+#include <dirent.h>
+#include <sys/stat.h>
+
 #include "User.hpp"
 
 /*<------> Forward Declaration <------>*/
@@ -126,6 +129,8 @@ void upload();
 void download();
 void writeToFile(std::string key, std::string value);
 void readFromFile();
+void transfer(client_t &clients, size_t i);
+std::string path_management();
 
 
 

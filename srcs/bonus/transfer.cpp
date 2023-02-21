@@ -1,24 +1,4 @@
-// #include "Includes/Ircserv.hpp"
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <netinet/in.h>
-#include <poll.h>
-#include <string>
-#include <cstring>
-#include <sstream>
-#include <iostream>
-#include <fcntl.h>
-#include <vector>
-#include <list>
-#include <map>
-#include <unistd.h>
-#include <cstdlib>
-#include <fstream>
-#include <arpa/inet.h>
-#include <cstdio>
-
-#include "path_management.cpp"
+#include "../../Includes/Ircserv.hpp"
 
 void list()
 {
@@ -35,7 +15,7 @@ void list()
         while (std::getline(file, line))
         {
             std::size_t pos = line.find(":");
-            if (pos != std::string::npos)
+            if (pos != npos)
             {
                 std::string key = line.substr(0, pos);
                 std::string value = line.substr(pos + 1);
@@ -79,7 +59,7 @@ std::string readFromFile(std::string searched_id)
         while (std::getline(file, line))
         {
             std::size_t pos = line.find(":");
-            if (pos != std::string::npos)
+            if (pos != npos)
             {
                 std::string file_id = line.substr(0, pos);
                 if (file_id == searched_id)
@@ -102,7 +82,7 @@ std::string readFromFile(std::string searched_id)
 void replaceSpecialChars(std::string &str)
 {
     std::string::size_type pos = 0;
-    while ((pos = str.find_first_of(" !\"#$%&'()*+,:;<=>?@[\\]^`{|}~")) != std::string::npos)
+    while ((pos = str.find_first_of(" !\"#$%&'()*+,:;<=>?@[\\]^`{|}~")) != npos)
     {
         str.replace(pos, 1, "_");
     }
@@ -112,14 +92,12 @@ void upload()
 {
     std::string oldPath;
     std::string filename;
-    // std::getline(std::cin >> std::ws, oldPath);
     oldPath = path_management();
 
     std::string newPath = oldPath;
-    // newPath = "/Volumes/King28/usb/Alex Charalabidis - The Book of IRC-No Starch Press_ Publishers Group West [distributor] (2000).pdf";
 
     size_t pos = newPath.find_last_of('/');
-    if (pos != std::string::npos)
+    if (pos != npos)
     {
         filename = newPath.substr(pos + 1);
         replaceSpecialChars(filename);
@@ -184,14 +162,35 @@ void download()
     std::cout << "File Downloaded Successfully.." << std::endl;
 }
 
-int main()
+void transfer(client_t &clients, size_t i)
 {
-    std::string action;
+    // std::string action;
+    char buffer[1024];
+    ssize_t n_read;
+
+    int fd = clients[i].second.get_fd();
 
     while (true)
     {
-        std::cout << "\ninput [UP / DOWN / LIST / EXIT]: \n";
-        std::getline(std::cin >> std::ws, action);
+        // std::cout << "\ninput [UP / DOWN / LIST / EXIT]: \n";
+        // std::getline(std::cin >> std::ws, action);
+
+        
+        std::memset(buffer, 0, sizeof(buffer));
+        std::string msg = "\ninput [UP / DOWN / LIST / EXIT]: \n";
+        send(fd, msg.c_str(), msg.length(), 0);
+
+        n_read = recv(fd, buffer, sizeof(buffer), 0);
+        // n_read = read(fd, buffer, sizeof(buffer));
+        if (n_read == -1 && errno != EWOULDBLOCK)
+        {
+            std::cerr << "Error reading from file descriptor\n";
+            return;
+        }
+
+        std::string action(buffer, n_read);
+        if(action.size())
+            send(fd, action.c_str(), action.length(), 0);
 
         if (action.compare("UP") == 0)
             upload();
@@ -202,8 +201,9 @@ int main()
         else if (action.compare("EXIT") == 0)
         {
             std::cout << "\nThanks For Your Visit..." << std::endl;
-            exit(0);
+            return;
         }
     }
-    return 0;
+
+    send(clients[i].second.get_fd(), "hello", 5, 0);
 }
