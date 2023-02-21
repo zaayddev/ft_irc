@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 08:19:53 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/17 19:37:43 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/21 09:51:36 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 bool Alreadythere(User &user, std::string name) {
 	if (!user._owned_channels.size())
 		return false;
-	std::vector<std::string>::iterator it = user._owned_channels.begin();
+	std::set<std::string>::iterator it = user._owned_channels.begin();
 	for( ; it != user._owned_channels.end(); ++it) 
 	{
 		if ((*it) == name)
@@ -37,10 +37,12 @@ static std::string	get_names(channel_t channels, std::string channel_name)
 			map = iter;
 		}
 	}
-	std::vector<User>	users = (*map).second;
-	std::vector<User>::iterator	ite = users.begin();
-	for (; ite != users.end() - 1; ite++)
+    size_t i = 0;
+	std::set<User>::iterator	ite = map->second.begin();
+	for (; i < map->second.size() - 1; ite++) {
 		names += (*ite).get_nickname() + " ";
+        i++;
+    }
 	names += (*ite).get_nickname();
 	return (names);
 }
@@ -51,9 +53,6 @@ std::string	channel_response(channel_t &channels, std::string channel_name, User
 
 	ss	<< ":" << SERVER << " 353 " << user.get_nickname()
 		<< " = #" << channel_name << " :" << get_names(channels, channel_name) << "\r\n";
-	// to avoid part:
-	// ss	<< ":" << SERVER << " 366 " << user.get_nickname()
-	// 	<< " #" << channel_name << " :End of NAMES list." << "\r\n";
 	return (ss.str());
 }
 
@@ -86,7 +85,7 @@ void	join_channel(client_t &clients, size_t i, channel_t &channels, s_list &user
 		for (channel_t::iterator iter = channels.begin(); iter != channels.end(); ++iter) {
 			std::pair<std::string, std::string> key = iter->first;
 			if (key.first == channel_name) {
-				std::vector<User>::iterator it = (*iter).second.begin();
+				std::set<User>::iterator it = (*iter).second.begin();
 				for(; it != (*iter).second.end(); ++it) {
 					if ((*it).get_nickname() == clients[i].second.get_nickname()) {
                         user_is_there = true;
@@ -108,14 +107,14 @@ void	join_channel(client_t &clients, size_t i, channel_t &channels, s_list &user
 		{
 			if (!channel_is_there)
 			{
-				std::vector<User> channel_users;
+				std::set<User> channel_users;
 				std::pair<std::string, std::string>	chaine;
-				channel_users.push_back(clients[i].second);
+				channel_users.insert(clients[i].second);
 				chaine.first = channel_name;
 				chaine.second = channel_key;
 				channel new_channel(chaine, channel_users);
 				channels.insert(new_channel);
-				clients[i].second._owned_channels.push_back(channel_name);
+				clients[i].second._owned_channels.insert(channel_name);
 				reply = msg_format(clients[i].second) + " JOIN #" + channel_name + "\r\n";
 				send(clients[i].first.fd, reply.c_str(), reply.length(), 0);
 				std::cout << "channel created" << std::endl;
@@ -123,13 +122,13 @@ void	join_channel(client_t &clients, size_t i, channel_t &channels, s_list &user
 			else // add user to channel
 			{
 				
-				std::vector<User>::iterator	ite;
+				std::set<User>::iterator	ite;
 				if(map->first.second == channel_key)
 				{
-					(*map).second.push_back(clients[i].second);
+					(*map).second.insert(clients[i].second);
 			
-					std::vector<User>	users = (*map).second;
-					std::vector<User>::iterator	ite = users.begin();
+					std::set<User>	users = (*map).second;
+					std::set<User>::iterator	ite = users.begin();
 					for (; ite != users.end(); ite++)
 					{
 						reply = msg_format(clients[i].second) + " JOIN #" + channel_name + "\r\n";

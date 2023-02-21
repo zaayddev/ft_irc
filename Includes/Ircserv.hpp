@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/17 19:22:22 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/21 09:54:02 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 #include <vector>
 #include <list>
 #include <map>
+#include <set>
 #include <unistd.h>
 #include <cstdlib>
 #include <fstream>
@@ -39,10 +40,10 @@
 class User;
 
 /*<------> Alternate names for our data types <------>*/
-typedef std::pair<pollfd, User>												client;
-typedef std::pair<std::pair<std::string, std::string>, std::vector<User> >	channel;
-typedef std::vector<client>													client_t;
-typedef std::map<std::pair<std::string, std::string>, std::vector<User> >	channel_t;
+typedef std::pair<pollfd, User>											client;
+typedef std::pair<std::pair<std::string, std::string>, std::set<User> >	channel;
+typedef std::vector<client>												client_t;
+typedef std::map<std::pair<std::string, std::string>, std::set<User> >	channel_t;
 
 /*<------> DEFINE Variables <------>*/
 # define npos			std::string::npos
@@ -80,7 +81,7 @@ int tcp_server(int port, struct addrinfo **p);
 
 bool			channel_operations(client_t &clients, channel_t &channels, std::string msg, int i);
 bool			check_input(std::string s, client_t &clients, int &i, int index);
-bool			check_user_exist(std::vector<User> users, std::string nick);
+bool			check_user_exist(std::set<User> users, std::string nick);
 bool			ifexist(client_t &clients, int i, std::string s);
 bool			Alreadythere(User &user, std::string name);
 bool			validNick(std::string nick);
@@ -116,6 +117,7 @@ std::string		msg_format(User &user);
 /*<---> SET Mode channel (+/-o) Functions <--->*/
 void			omode(client_t &clients, size_t i, channel_t &channels, std::string &msg, std::string &name);
 void			o_mode(client_t &clients, size_t i, channel_t &channels, std::string &msg, std::string &name);
+void	        b_mode(client_t &clients, size_t i, channel_t &channels, std::string &msg, std::string &name);
 
 /*<---> BONUS <--->*/
 void writeToFile(std::string key, std::string value);

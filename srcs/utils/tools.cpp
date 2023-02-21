@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 18:46:44 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/17 16:18:02 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/21 09:54:55 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ int getPort(char* s)
 	return (atoi(s));
 }
 
-bool	check_user_exist(std::vector<User> users, std::string nick)
+bool	check_user_exist(std::set<User> users, std::string nick)
 {
-	for (std::vector<User>::iterator it_users = users.begin(); it_users != users.end(); it_users++)
+	for (std::set<User>::iterator it_users = users.begin(); it_users != users.end(); it_users++)
 	{
 		if (it_users->get_nickname() == nick)
 			return (true);

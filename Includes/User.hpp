@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 23:35:19 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/17 19:20:10 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/21 11:48:21 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,9 @@ class User {
 		
 	public:
 
-        std::vector<std::string>	_owned_channels;
-		std::string					msg;
+        std::set<std::string>	_owned_channels;
+        std::set<std::string>	_banded_channels;
+		std::string				msg;
 		
 		User(void);
 		User(std::string str);
@@ -50,7 +51,9 @@ class User {
 		void						set_is_complete(const bool is_complete);
 		void						set_op(bool op);
 		void						set_ip(const std::string ip);
-		void						set_fd(int fd);     
+		void						set_fd(int fd);
+
+        bool                        operator<(const User& rhs) const;
 		
 };
 

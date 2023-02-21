@@ -2,7 +2,7 @@
 #include <cstring>
 #include <dirent.h>
 #include <sys/stat.h>
-#include "path_management.h"
+// #include "path_management.h"
 
 bool is_file(const char *path)
 {
@@ -140,6 +140,6 @@ std::string path_management()
     }
 
     std::cout << "chosen File: " << input << std::endl;
-
+exit(0);
     return input;
 }
