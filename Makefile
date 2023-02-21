@@ -6,7 +6,7 @@
 #    By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/26 16:33:22 by yelgharo          #+#    #+#              #
-#    Updated: 2023/02/13 15:46:09 by yelgharo         ###   ########.fr        #
+#    Updated: 2023/02/20 17:41:57 by yelgharo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ SRC =	main.cpp \
 				srcs/utils/parsing.cpp \
 				srcs/utils/response.cpp \
 				srcs/utils/tools.cpp
+# transfer.cpp
 
 OFILES = $(SRC:.cpp=.o)
 

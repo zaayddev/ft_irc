@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 00:00:18 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/16 14:26:54 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/21 09:47:36 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,3 +30,4 @@ void		User::set_ip(const std::string ip)							{ _ip = ip; }
 void		User::set_fd(int fd)										{ _fd = fd; }
 void		User::set_authentification(const bool authentification)		{ _authentification = authentification; }
 void		User::set_is_complete(const bool is_complete)				{ _is_complete = is_complete; }
+bool        User::operator<(const User& rhs) const                      { return _fd < rhs._fd; }

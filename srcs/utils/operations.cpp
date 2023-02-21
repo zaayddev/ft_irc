@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/17 16:17:51 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/21 15:44:25 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static void leave_channel(client_t &clients, size_t i, channel_t &channels, std:
 	}
 	if (is_there)
 	{
-		std::vector<User>::iterator ite;
+		std::set<User>::iterator	ite;
 		for (ite = (*map).second.begin(); ite != (*map).second.end(); ite++)
 		{
 			reply = msg_format(clients[i].second) + " PART #" + channel_name + " " + part_msg + "\r\n";
@@ -131,8 +131,8 @@ bool channel_msg(client_t &clients, size_t i, channel_t &channels, std::string &
 
 	if (it != channels.end() && check_user_exist((*it).second, clients[i].second.get_nickname()))
 	{
-		std::vector<User> users = (*it).second;
-		std::vector<User>::iterator ite = users.begin();
+		std::set<User>			users = (*it).second;
+		std::set<User>::iterator	ite = users.begin();
 		for (; ite != users.end(); ite++)
 		{
 			if (clients[i].second.get_nickname() == (*ite).get_nickname())
@@ -168,6 +168,9 @@ void mode(client_t &clients, size_t i, channel_t &channels, std::string &msg)
 		{
 			msg.erase(0, 3);
 			o_mode(clients, i, channels, msg, channel);
+		}  else if (msg[0] == 'b' && msg[1] == ' ') {
+            msg.erase(0, 2);
+			b_mode(clients, i, channels, msg, channel);
 		}
 	}
 }
