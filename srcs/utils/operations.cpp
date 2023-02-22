@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/22 09:40:53 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/22 17:44:32 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,9 +176,10 @@ int32_t check(client_t &clients, std::string msg, int i) {
 		else 
 			return 2;
 	}
-	else if (msg.find("PART #") == 0) {
+	else if (msg.find("PART :") == 0) {
 		if (msg.length() == 6) {
 			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
+            std::cout << msg << std::endl;
 			return 0;
 		}
 		else 
@@ -200,8 +201,8 @@ int32_t check(client_t &clients, std::string msg, int i) {
 		else 
 			return 5;
 	}
-	else if (msg.find("MODE ") == 0) {
-		if (msg.length() == 5) {
+	else if (msg.find("MODE") == 0) {
+		if (msg.length() == 4) {
 			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
 			return 0;
 		}
@@ -247,6 +248,7 @@ int32_t check(client_t &clients, std::string msg, int i) {
 
 bool	channel_operations(client_t &clients, channel_t &channels, std::string msg, int i)
 {
+    std::cout << msg << std::endl;
 	std::string	reply;
 	int n = check(clients, msg, i);
 

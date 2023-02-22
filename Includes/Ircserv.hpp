@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/22 09:37:04 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/22 11:48:17 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ bool			channel_operations(client_t &clients, channel_t &channels, std::string ms
 bool			check_input(std::string s, client_t &clients, int &i, int index);
 bool			check_user_exist(std::set<User> users, std::string nick);
 bool			ifexist(client_t &clients, int i, std::string s);
-bool			Alreadythere(User &user, std::string name);
 bool			validNick(std::string nick);
 
 void			cmds_parsing(client_t &clients, channel_t &channels, std::string &msg, int i, std::string password);
