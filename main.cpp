@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:24:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/03 15:28:36 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/21 21:59:08 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 	if (argc == 3) {
 		if (!(port = first_in_check(argv[1], argv[2])))
 			return (1);
-        socket_fd = tcp_server(port,  &p);
+        socket_fd = tcp_server(port, &p);
         loop_connections(socket_fd, argv[2], p);
 		freeaddrinfo(p);
     }

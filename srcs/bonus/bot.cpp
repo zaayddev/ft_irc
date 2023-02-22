@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 08:05:11 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/22 09:04:17 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/22 09:05:05 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	bot(client_t &clients, size_t i, std::string &name)
 		system("python ./srcs/bonus/bot.py");
         std::ifstream   ifs("songs");
         while (getline(ifs, line)) {
-			std::string msg = "PRIVMSG " + clients[i].second.get_nickname() + " :♪ " + line + "\r\n";
+			std::string msg = ":ARTIST NOTICE " + clients[i].second.get_nickname() + " :♪ " + line + "\r\n";
    	 	    send(clients[i].second.get_fd(), msg.c_str(), msg.length(), 0);
 		}
 		ifs.close();

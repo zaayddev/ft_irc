@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/21 09:54:02 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/22 09:37:04 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ struct s_list {
 int				first_in_check(char* s2, std::string s3);
 int				getPort(char* s);
 // int				tcp_server(int port);
-int tcp_server(int port, struct addrinfo **p);
+int 			tcp_server(int port, struct addrinfo **p);
 
 bool			channel_operations(client_t &clients, channel_t &channels, std::string msg, int i);
 bool			check_input(std::string s, client_t &clients, int &i, int index);
@@ -129,7 +129,7 @@ void upload();
 void download();
 void writeToFile(std::string key, std::string value);
 void readFromFile();
-void transfer(client_t &clients, size_t i);
+void transfer(client_t &clients, size_t i, int n, std::string &msg);
 std::string path_management();
 
 

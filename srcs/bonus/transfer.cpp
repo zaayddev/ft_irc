@@ -34,7 +34,7 @@ void list()
 
 void writeToFile(std::string key, std::string value)
 {
-    const std::string filename = "./download/database";
+    const std::string filename = "./srcs/bonus/download/database";
     std::ofstream file(filename.c_str(), std::ios::app);
     std::string str = key + ':' + value;
 
@@ -51,7 +51,7 @@ void writeToFile(std::string key, std::string value)
 
 std::string readFromFile(std::string searched_id)
 {
-    const std::string filename = "./download/database";
+    const std::string filename = "./srcs/bonus/download/database";
     std::ifstream file(filename.c_str());
     if (file.is_open())
     {
@@ -88,12 +88,13 @@ void replaceSpecialChars(std::string &str)
     }
 }
 
-void upload()
+void upload(client_t &clients, int i, std::string &msg)
 {
     std::string oldPath;
     std::string filename;
-    oldPath = path_management();
-
+    msg.erase(0, 8);
+    // oldPath = path_management();
+    oldPath = msg;
     std::string newPath = oldPath;
 
     size_t pos = newPath.find_last_of('/');
@@ -101,16 +102,22 @@ void upload()
     {
         filename = newPath.substr(pos + 1);
         replaceSpecialChars(filename);
-        std::cout << "filename: " << filename << std::endl;
+        std::string tmp = "filename: " + filename + "\r\n";
+        std::cout << tmp << std::endl;
+        send(clients[i].second.get_fd(), tmp.c_str(), tmp.length(), 0);
     }
     else
     {
-        std::cerr << "path separator not found in path" << std::endl;
+        std::string tmp = "path separator not found in path \r\n";
+        std::cout << tmp << std::endl;
+        send(clients[i].second.get_fd(), tmp.c_str(), tmp.length(), 0);
     }
 
     if (std::rename(oldPath.c_str(), newPath.c_str()) != 0)
     {
-        std::cout << "Error renaming file" << std::endl;
+        std::string tmp = "Error renaming file \r\n";
+        std::cout << tmp << std::endl;
+        send(clients[i].second.get_fd(), tmp.c_str(), tmp.length(), 0);
         // if we dont have permissions
     }
 
@@ -118,7 +125,9 @@ void upload()
     FILE *pipe = popen(command.c_str(), "r");
     if (!pipe)
     {
-        std::cerr << "popen() failed!" << std::endl;
+        std::string tmp = "popen() failed! \r\n";
+        std::cout << tmp << std::endl;
+        send(clients[i].second.get_fd(), tmp.c_str(), tmp.length(), 0);
         return;
     }
     std::string result;
@@ -135,9 +144,15 @@ void upload()
     size_t second_last_pos = result.find_last_of("/", last_pos - 1);
     // Extract the id between the two /id/
     std::string id = result.substr(second_last_pos + 1, last_pos - second_last_pos - 1);
-    std::cout << "ID = " << id << std::endl;
+
+    std::string tmp = "ID = " + id + " \r\n";
+    std::cout << tmp << std::endl;
+    tmp += "File Uploaded Successfully...\r\n";
+    send(clients[i].second.get_fd(), tmp.c_str(), tmp.length(), 0);
     writeToFile(id, filename);
-    std::cout << "File Uploaded Successfully..." << std::endl;
+
+    // std::cout << "ID = " << id << std::endl;
+    // std::cout << "File Uploaded Successfully..." << std::endl;
 }
 
 void download()
@@ -162,48 +177,48 @@ void download()
     std::cout << "File Downloaded Successfully.." << std::endl;
 }
 
-void transfer(client_t &clients, size_t i)
+void transfer(client_t &clients, size_t i, int n, std::string &msg)
 {
     // std::string action;
-    char buffer[1024];
-    ssize_t n_read;
+    // char buffer[1024];
+    // ssize_t n_read;
 
-    int fd = clients[i].second.get_fd();
+    // int fd = clients[i].second.get_fd();
 
-    while (true)
-    {
+    // while (true)
+    // {
         // std::cout << "\ninput [UP / DOWN / LIST / EXIT]: \n";
         // std::getline(std::cin >> std::ws, action);
 
         
-        std::memset(buffer, 0, sizeof(buffer));
-        std::string msg = "\ninput [UP / DOWN / LIST / EXIT]: \n";
-        send(fd, msg.c_str(), msg.length(), 0);
+        // std::memset(buffer, 0, sizeof(buffer));
+        // std::string msg = "\ninput [UP / DOWN / LIST / EXIT]: \n";
+        // send(fd, msg.c_str(), msg.length(), 0);
 
-        n_read = recv(fd, buffer, sizeof(buffer), 0);
-        // n_read = read(fd, buffer, sizeof(buffer));
-        if (n_read == -1 && errno != EWOULDBLOCK)
-        {
-            std::cerr << "Error reading from file descriptor\n";
-            return;
-        }
+        // n_read = recv(fd, buffer, sizeof(buffer), 0);
+        // // n_read = read(fd, buffer, sizeof(buffer));
+        // if (n_read == -1 && errno != EWOULDBLOCK)
+        // {
+        //     std::cerr << "Error reading from file descriptor\n";
+        //     return;
+        // }
 
-        std::string action(buffer, n_read);
-        if(action.size())
-            send(fd, action.c_str(), action.length(), 0);
+        // std::string action(buffer, n_read);
+        // if(action.size())
+        //     send(fd, action.c_str(), action.length(), 0);
 
-        if (action.compare("UP") == 0)
-            upload();
-        else if (action.compare("DOWN") == 0)
-            download();
-        else if (action.compare("LIST") == 0)
-            list();
-        else if (action.compare("EXIT") == 0)
-        {
-            std::cout << "\nThanks For Your Visit..." << std::endl;
-            return;
-        }
-    }
+        if (n == 8)
+            upload(clients, i, msg);
+        // else if (n == 2)
+        //     download(clients, i, msg);
+        // else if (n == 3)
+        //     list(clients, i, msg);
+        // else if (action.compare("EXIT") == 0)
+        // {
+        //     std::cout << "\nThanks For Your Visit..." << std::endl;
+        //     return;
+        // }
+    // }
 
-    send(clients[i].second.get_fd(), "hello", 5, 0);
+    // send(clients[i].second.get_fd(), "hello", 5, 0);
 }
