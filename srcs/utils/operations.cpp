@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/24 00:02:29 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/24 00:08:37 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,10 +161,7 @@ void	mode(client_t &clients, size_t i, channel_t &channels, std::string &msg) {
 
 void    quit(client_t &clients, int i, channel_t &channels, std::string &msg)
 {
-    // msg.erase(0 ,5);
-    // for (channel_t::iterator it = channels.begin()) {
-        
-    // }
+    return ;
 }
 
 void    kick(client_t &clients, int &i, channel_t &channels, std::string &msg) {
@@ -182,7 +179,7 @@ void    kick(client_t &clients, int &i, channel_t &channels, std::string &msg) {
         }
     } else {
         //you are not allowed to kick no one a l3zaaaawiiiiii
-        std::cout << "You are not allowed to kick" << std::endl;
+        senderr(msg.substr(0, msg.find(" ")), i, clients, 482);
     }
 }
 
