@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Ircserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/22 11:48:17 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/23 15:20:21 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ std::string		msg_format(User &user);
 
 /*<---> SET Mode channel (+/-o) Functions <--->*/
 void			omode(client_t &clients, size_t i, channel_t &channels, std::string &msg, std::string &name);
-void			o_mode(client_t &clients, size_t i, channel_t &channels, std::string &msg, std::string &name);
+void			o_mode(client_t &clients, size_t i, std::string &msg, std::string &name);
 void	        b_mode(client_t &clients, size_t i, channel_t &channels, std::string &msg, std::string &name);
 
 /*<---> BONUS <--->*/

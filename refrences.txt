@@ -46,10 +46,3 @@ Oikarinen & Reed                                               [Page 13]
 |    "I code, therefore I am, ( ͡° ͜ʖ ͡°)"              |
 |                                 -René Descartes-   |
 ------------------------------------------------------
-
-
-
-PASS 10
-NICK yass
-USER yayass * * ayyass
-join 

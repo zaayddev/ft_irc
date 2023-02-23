@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 08:19:53 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/22 14:33:21 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/22 18:42:32 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,7 @@ void	join_channel(client_t &clients, size_t i, channel_t &channels, s_list &user
                         if ((*it).get_nickname() == clients[i].second.get_nickname()) {
                             user_is_there = true;
                             break;
-                        }
-                        
+                        }       
                     }
                     map = iter;
                     channel_is_there = true;

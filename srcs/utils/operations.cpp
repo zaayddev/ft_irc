@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   operations.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/22 17:44:32 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/23 15:20:52 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ void	mode(client_t &clients, size_t i, channel_t &channels, std::string &msg) {
             omode(clients, i, channels, msg, channel);
 		} else if (msg[0] == '-' && msg[1] == 'o' && msg[2] == ' ') {
             msg.erase(0,  3);
-			o_mode(clients, i, channels, msg, channel);
+			o_mode(clients, i, msg, channel);
 		}  else if (msg[0] == 'b' && msg[1] == ' ') {
             msg.erase(0, 2);
 			b_mode(clients, i, channels, msg, channel);
@@ -176,10 +176,9 @@ int32_t check(client_t &clients, std::string msg, int i) {
 		else 
 			return 2;
 	}
-	else if (msg.find("PART :") == 0) {
-		if (msg.length() == 6) {
+	else if (msg.find("PART :") == 0 || msg.find("PART ") == 0) {
+		if (msg.length() <= 6) {
 			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
-            std::cout << msg << std::endl;
 			return 0;
 		}
 		else 
@@ -248,7 +247,6 @@ int32_t check(client_t &clients, std::string msg, int i) {
 
 bool	channel_operations(client_t &clients, channel_t &channels, std::string msg, int i)
 {
-    std::cout << msg << std::endl;
 	std::string	reply;
 	int n = check(clients, msg, i);
 
