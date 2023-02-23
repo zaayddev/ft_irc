@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   operations.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/23 15:20:52 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/24 00:02:29 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ bool	channel_msg(client_t &clients, size_t i, channel_t &channels, std::string &
 	return (false);
 }
 // 0 1 2 3
-// M O D E #mychannel (+/-)o someuser
+// M O D E #mychannel (+/-)o/b someuser
 
 void	mode(client_t &clients, size_t i, channel_t &channels, std::string &msg) {
 	msg.erase(0,5);
@@ -157,6 +157,33 @@ void	mode(client_t &clients, size_t i, channel_t &channels, std::string &msg) {
 			b_mode(clients, i, channels, msg, channel);
 		}
 	}
+}
+
+void    quit(client_t &clients, int i, channel_t &channels, std::string &msg)
+{
+    // msg.erase(0 ,5);
+    // for (channel_t::iterator it = channels.begin()) {
+        
+    // }
+}
+
+void    kick(client_t &clients, int &i, channel_t &channels, std::string &msg) {
+    
+    msg.erase(0, msg.find(' ') + 1);
+    std::string channel_name = trimFront(msg, 0);
+    msg.erase(0, msg.find(' ') + 1);
+    std::cout << "this is channel name : " << channel_name << std::endl;
+    std::string target_name = trimFront(msg,0);
+    std::cout << "this is target name : " << target_name << std::endl;
+    if (is_there(clients[i].second, channel_name)) {
+        for (size_t r = 0; r < clients.size(); r++) {
+            if (clients[r].second.get_nickname() == target_name)
+                leave_channel(clients, r, channels, channel_name += " ", "kicked");
+        }
+    } else {
+        //you are not allowed to kick no one a l3zaaaawiiiiii
+        std::cout << "You are not allowed to kick" << std::endl;
+    }
 }
 
 int32_t check(client_t &clients, std::string msg, int i) {
@@ -179,6 +206,7 @@ int32_t check(client_t &clients, std::string msg, int i) {
 	else if (msg.find("PART :") == 0 || msg.find("PART ") == 0) {
 		if (msg.length() <= 6) {
 			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
+            std::cout << msg << std::endl;
 			return 0;
 		}
 		else 
@@ -240,13 +268,31 @@ int32_t check(client_t &clients, std::string msg, int i) {
 		else 
 			return 10;
 	}
+    else if (msg.find("QUIT ") == 0) {
+		if (msg.length() == 5) {
+			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
+			return 0;
+		}
+		else 
+			return 11;
+    }
+    else if (msg.find("KICK ") == 0) {
+		if (msg.length() == 5) {
+			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
+			return 0;
+		}
+		else 
+			return 12;
+    }
 	else
 		senderr(msg.substr(0, msg.find(" ")), i, clients, 421);
 	return 0;
 }
 
+
 bool	channel_operations(client_t &clients, channel_t &channels, std::string msg, int i)
 {
+    std::cout << msg << std::endl;
 	std::string	reply;
 	int n = check(clients, msg, i);
 
@@ -270,5 +316,9 @@ bool	channel_operations(client_t &clients, channel_t &channels, std::string msg,
 		transfer(clients, i, n, msg);
     else if (n == 10)
 		transfer(clients, i, n, msg);
+    else if (n == 11)
+		quit(clients, i, channels, msg);
+    else if (n == 12)
+		kick(clients, i, channels, msg);
 	return (false);
 }

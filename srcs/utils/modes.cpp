@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   modes.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:46:20 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/23 15:27:28 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/23 23:52:56 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Includes/Ircserv.hpp"
 
-static bool    is_there(User &user, std::string &name) {
+bool    is_there(User &user, std::string &name) {
     std::set<std::string>::iterator it = user._owned_channels.find(name);
 	if (it != user._owned_channels.end()) {
 			return true;
