@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/24 00:08:37 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/24 15:36:57 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,10 +159,10 @@ void	mode(client_t &clients, size_t i, channel_t &channels, std::string &msg) {
 	}
 }
 
-void    quit(client_t &clients, int i, channel_t &channels, std::string &msg)
-{
-    return ;
-}
+// void    quit(client_t &clients, int i, channel_t &channels, std::string &msg)
+// {
+//     return ;
+// }
 
 void    kick(client_t &clients, int &i, channel_t &channels, std::string &msg) {
     
@@ -181,6 +181,12 @@ void    kick(client_t &clients, int &i, channel_t &channels, std::string &msg) {
         //you are not allowed to kick no one a l3zaaaawiiiiii
         senderr(msg.substr(0, msg.find(" ")), i, clients, 482);
     }
+}
+
+void    names(client_t &clients, size_t i, channel_t &channels, std::string &msg) {
+    msg.erase(0, 7);
+    std::string tmp = channel_response(channels, msg, clients[i].second);
+    send(clients[i].first.fd, tmp.c_str(), tmp.length(), 0);
 }
 
 int32_t check(client_t &clients, std::string msg, int i) {
@@ -281,6 +287,14 @@ int32_t check(client_t &clients, std::string msg, int i) {
 		else 
 			return 12;
     }
+    else if (msg.find("NAMES ") == 0) {
+		if (msg.length() == 6) {
+			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
+			return 0;
+		}
+		else 
+			return 13;
+    }
 	else
 		senderr(msg.substr(0, msg.find(" ")), i, clients, 421);
 	return 0;
@@ -313,9 +327,11 @@ bool	channel_operations(client_t &clients, channel_t &channels, std::string msg,
 		transfer(clients, i, n, msg);
     else if (n == 10)
 		transfer(clients, i, n, msg);
-    else if (n == 11)
-		quit(clients, i, channels, msg);
+    // else if (n == 11)
+	// 	quit(clients, i, channels, msg);
     else if (n == 12)
 		kick(clients, i, channels, msg);
+    else if (n == 13)
+		names(clients, i, channels, msg);
 	return (false);
 }

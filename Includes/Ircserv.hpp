@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/23 23:53:32 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/24 15:30:19 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ std::string		kill_done(std::string nick, std::string reason);
 std::string		kill_failed(std::string nick);
 std::string		no_privileges(std::string nick);
 std::string		rcv_msg(int client_fd, std::vector<client> &clients, size_t i, channel_t &channels);
+std::string     channel_response(channel_t &channels, std::string channel_name, User &user);
 std::string		reject_msg(std::string cmd, int ern, client_t &clients, int i);
 std::string		take_nickname_from_msg(std::string msg);
 std::string		trimFront(std::string s, int i);
