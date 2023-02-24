@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 01:48:48 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/22 18:26:38 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/21 20:46:18 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,14 @@ void    accept_call(std::vector<client> &clients, int socket_fd, struct addrinfo
         new_user.set_ip(_ip);
         new_user.set_fd(new_fd);
         clients.push_back(client(new_pollfd, new_user));
-        std::cout << YELLOW << "client " << RST << "[" << ip_itostr(client_addr) << "]" << YELLOW << " is accepted" << RST << std::endl;
+        std::cout << YELLOW << "client " << RST << "[" << ip_itostr(client_addr) << "]" << YELLOW << " is accepted" << std::endl;
     }
 }
 
 void	initialise_poll(std::vector<client> &clients, int fd_size)
 {
     std::vector<pollfd> poll_fd = clients_fd(clients);
-    //std::cout << GREEN_BOLD << "poll() is waiting ..." << RST << std::endl;
+    std::cout << GREEN_BOLD << "poll() is waiting ..." << RST << std::endl;
     
     // poll() performs a similar task to select(2): 
     // it waits for one of a set of file descriptors to become ready to perform I/O.

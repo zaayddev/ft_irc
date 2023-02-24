@@ -1,5 +1,48 @@
 #include "../../Includes/Ircserv.hpp"
 
+void replaceSpecialChars(std::string &str)
+{
+
+    std::string::size_type pos = 0;
+    while ((pos = str.find_first_of(" !\"#$%&'()*+,:;<=>?@[\\]^`{|}~")) != npos)
+    {
+        str.replace(pos, 1, "_");
+    }
+}
+
+std::string rename_if_necessary(int fd, std::string &oldPath, std::string &filename)
+{
+    std::string newPath = oldPath;
+std::cout << "befor rename = " << newPath << std::endl;
+    size_t pos = newPath.find_last_of('/');
+    if (pos != npos)
+    {
+        replaceSpecialChars(newPath);
+        filename = newPath.substr(pos + 1);
+        std::string tmp = ":FILE NOTICE 1 :filename: " + filename + "\r\n";
+        // std::cout << tmp << std::endl;
+        send(fd, tmp.c_str(), tmp.length(), 0);
+    }
+    else
+    {
+        std::string tmp = ":FILE NOTICE 1 :path separator not found in path \r\n";
+        // std::cout << tmp << std::endl;
+        send(fd, tmp.c_str(), tmp.length(), 0);
+        return "";
+    }
+// replaceSpecialChars(filename);
+    if (std::rename(oldPath.c_str(), newPath.c_str()) != 0)
+    {
+        std::string tmp = ":FILE NOTICE 1 :re-naming File Failed, keep with the old one\r\n";
+        std::cout << tmp << std::endl;
+        send(fd, tmp.c_str(), tmp.length(), 0);
+        // if we dont have permissions
+        return (oldPath);
+    }
+std::cout << "after rename = " << newPath << std::endl;
+    return (newPath);
+}
+
 bool is_file(const char *path)
 {
     struct stat path_stat;
@@ -41,101 +84,39 @@ std::string remove_extra_slashes(const std::string &path)
     return result;
 }
 
-void list_dir(std::string &input, std::string &history)
+std::string path_management(int fd, std::string &msg, std::string &filename)
 {
-    if (input[input.length() - 1] == '/' && input[input.length() - 2] == '/')
+    std::string path;
+
+    path = msg;
+
+    if (is_file(path.c_str()))
     {
-        input = remove_extra_slashes(input);
-        history = input + "/";
+        // ret = rename_if_necessary(fd, path, filename);
+        return rename_if_necessary(fd, path, filename);
+        // if (ret.size() == 0)
+        //     return "";
     }
-
-    std::cout << " ==> Contents of directory " << input << ": \n\n";
-    DIR *dir;
-    struct dirent *ent;
-    struct stat st;
-    if ((dir = opendir(input.c_str())) != NULL)
+    // Input is a directory
+    else if (is_directory(path.c_str()))
     {
-        while ((ent = readdir(dir)) != NULL)
-        {
-            if (strcmp(ent->d_name, ".") == 0 || strcmp(ent->d_name, "..") == 0)
-            {
-                continue;
-            }
-
-            std::string name = ent->d_name;
-            std::string path = input + "/" + name;
-            if (stat(path.c_str(), &st) == 0 && S_ISDIR(st.st_mode))
-            {
-                name += "/";
-            }
-            std::cout << name << std::endl;
-        }
-        closedir(dir);
+        std::string tmp = ":FILE NOTICE 1 :" + path + " is a directory not a file" + "\r\n";
+        send(fd, tmp.c_str(), tmp.length(), 0);
+        return "";
     }
     else
     {
-        std::cerr << "Could not open directory " << input << std::endl;
-    }
-}
-
-std::string path_management()
-{
-    std::string input;
-    std::string history;
-    bool valid = false;
-
-    history = "";
-    while (!valid)
-    {
-        std::cout << "\nEnter file path ['clear' to retype]: " << history;
-        std::getline(std::cin, input);
-        if (input == "clear")
-        {
-            history = "";
-            continue;
-        }
-        if (input == "." || input == "..")
-        {
-            if (input == ".")
-            {
-                size_t pos = history.find_last_of('/');
-                input = history.substr(0, pos);
-                history = "";
-            }
-            else
-            {
-                size_t last_pos = history.find_last_of("/");
-                size_t second_last_pos = history.find_last_of("/", last_pos - 1);
-                input = history.substr(0, second_last_pos);
-                history = "";
-            }
-        }
-        input = history + input;
-        (input[input.length() - 1] == '/') ? history = input : history = input + "/";
-        // Input is a file
-        if (is_file(input.c_str()))
-            valid = true;
-        // Input is a directory
-        else if (is_directory(input.c_str()))
-        {
-            list_dir(input, history);
-        }
-        else
-        {
-            // Input is neither a file nor a directory
-            std::cerr << "\n"
-                      << input << " is not a valid file or directory\n\n";
-            input = remove_extra_slashes(input);
-            size_t pos = input.find_last_of('/');
-
-            input = input.substr(0, pos);
-            history = input + "/";
-
-            list_dir(input, history);
-        }
+        std::string tmp = ":FILE NOTICE 1 :" + path + " is not a valid file nor a directory" + "\r\n";
+        send(fd, tmp.c_str(), tmp.length(), 0);
+        return "";
     }
 
-    std::cout << "chosen File: " << input << std::endl;
+    // std::cout << "chosen File: " << path << std::endl;
+    // std::string tmp = "chosen File: " + ret + "\r\n";
+    // send(fd, tmp.c_str(), tmp.length(), 0);
 
-    return input;
+    // return path;
+    // (int fd, std::string &oldPath, std::string &filename)
+
+    return "";
 }

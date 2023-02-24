@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 00:20:06 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/22 18:27:09 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/16 14:13:59 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	user_authentification(client_t &clients, \
 	else
 		std::cout << RED << "[" << clients[i].second.get_ip() << "]" \
 			<< RST << " : Password incorrect" << std::endl;
-	std::cout << "@ PASS " << password << std::endl;
 }
 
 bool	validNick(std::string s)

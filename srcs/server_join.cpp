@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server_join.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 02:34:58 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/22 18:22:15 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/12 16:40:06 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ void	server_join(std::vector<client> &clients, std::string client_msg, int i)
 			if (check_input(nick, clients, i, 1)) {
                 if (!clients[i].second.get_nickname().size()) {
                     clients[i].second.set_nickname(nick);
-					std::cout << "@ NICK " << nick << std::endl;
                     std::string s = ":" + (std::string)SERVER + " NOTICE AUTH :You are registered with a nickname of \"" + nick + "\"\r\n";
                     send(clients[i].second.get_fd(), s.c_str(), s.length(), 0);
                 } else {
@@ -89,7 +88,6 @@ void	server_join(std::vector<client> &clients, std::string client_msg, int i)
 			std::string _user = trim(client_msg, 5);
 			if (check_input(_user, clients, i, 0)) {
 				clients[i].second.set_username(trimFront(_user,0));
-				std::cout << "@ USER " << clients[i].second.get_username() << std::endl;
 				std::string s = ":" + (std::string)SERVER + " NOTICE AUTH :You are registered with a username of \"" \
 					+ clients[i].second.get_username() + "\" and real name \"" \
 					+ clients[i].second.get_realname() + "\"\r\n";

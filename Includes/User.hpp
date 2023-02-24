@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/27 23:35:19 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/24 17:09:02 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/21 11:48:21 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ class User {
         std::set<std::string>	_owned_channels;
         std::set<std::string>	_banded_channels;
 		std::string				msg;
-        int                     _condition;
 		
 		User(void);
+		User(std::string str);
 
 		std::string					get_owned_channels( void ) const;
 		std::string					get_nickname(void) const;

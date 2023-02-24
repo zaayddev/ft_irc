@@ -1,38 +1,47 @@
 #include "../../Includes/Ircserv.hpp"
 
-void list()
+// using cmd_t = std::string;
+// using cmd_func_t = std::function<void(client_t&, size_t, const cmd_t&)>;
+
+void list(int fd, std::string &msg)
 {
-    const std::string filename = "./download/database";
+
+    (void)msg;
+    const std::string filename = "./srcs/bonus/download/database";
     std::ifstream file(filename.c_str());
     if (file.is_open())
     {
         std::string line;
-        std::cout << std::left << std::setw(14) << "\nID"
-                  << "|";
-        std::cout << std::right << std::setw(30) << "TITLE"
-                  << "|\n";
-        std::cout << "---------------------------------------------\n\n";
+        std::string tmp = "\r\n";
+        tmp += ":FILE NOTICE 1 :------------------------------------------\r\n";
+        tmp += ":FILE NOTICE 1 :ID           |                       TITLE\r\n";
+        tmp += ":FILE NOTICE 1 :------------------------------------------\r\n";
+        send(fd, tmp.c_str(), tmp.length(), 0);
         while (std::getline(file, line))
         {
+            tmp = "";
             std::size_t pos = line.find(":");
             if (pos != npos)
             {
                 std::string key = line.substr(0, pos);
                 std::string value = line.substr(pos + 1);
 
-                std::cout << std::left << std::setw(13) << key << "|";
-                std::cout << "  " << value << std::endl;
+                tmp += ":FILE NOTICE 1 : " + key + "       |" + "  " + value + "\r\n";
+                send(fd, tmp.c_str(), tmp.length(), 0);
             }
         }
         file.close();
     }
     else
     {
+
         std::cerr << "Failed to open file for reading: " << filename << std::endl;
+        std::string tmp = ":FILE NOTICE 1 :Failed to open file for reading: " + filename + "\r\n";
+        send(fd, tmp.c_str(), tmp.length(), 0);
     }
 }
 
-void writeToFile(std::string key, std::string value)
+void writeToFile(int fd, std::string key, std::string value)
 {
     const std::string filename = "./srcs/bonus/download/database";
     std::ofstream file(filename.c_str(), std::ios::app);
@@ -46,10 +55,12 @@ void writeToFile(std::string key, std::string value)
     else
     {
         std::cerr << "Failed to open file for writing: " << filename << std::endl;
+        std::string tmp = ":FILE NOTICE 1 :Failed to open file for writing: " + filename + "\r\n";
+        send(fd, tmp.c_str(), tmp.length(), 0);
     }
 }
 
-std::string readFromFile(std::string searched_id)
+std::string readFromFile(int fd, std::string searched_id)
 {
     const std::string filename = "./srcs/bonus/download/database";
     std::ifstream file(filename.c_str());
@@ -65,7 +76,10 @@ std::string readFromFile(std::string searched_id)
                 if (file_id == searched_id)
                 {
                     std::string file_value = line.substr(pos + 1);
-                    std::cout << "Title of the document : " << file_value << std::endl;
+
+                    std::cout << "Title of the document: " << file_value << std::endl;
+                    std::string tmp = ":FILE NOTICE 1 :Title of the document: " + file_value + "\r\n";
+                    send(fd, tmp.c_str(), tmp.length(), 0);
                     return file_value;
                 }
             }
@@ -75,62 +89,44 @@ std::string readFromFile(std::string searched_id)
     else
     {
         std::cerr << "Failed to open file for reading: " << filename << std::endl;
+        std::string tmp = ":FILE NOTICE 1 :Failed to open file for reading: " + filename + "\r\n";
+        send(fd, tmp.c_str(), tmp.length(), 0);
     }
-    return NULL;
+    return "";
 }
 
-void replaceSpecialChars(std::string &str)
+void upload(int fd, std::string &msg)
 {
-    std::string::size_type pos = 0;
-    while ((pos = str.find_first_of(" !\"#$%&'()*+,:;<=>?@[\\]^`{|}~")) != npos)
-    {
-        str.replace(pos, 1, "_");
-    }
-}
-
-void upload(client_t &clients, int i, std::string &msg)
-{
-    std::string oldPath;
+    std::string newPath;
     std::string filename;
+     std::string tmp;
+
     msg.erase(0, 8);
-    // oldPath = path_management();
-    oldPath = msg;
-    std::string newPath = oldPath;
+    newPath = path_management(fd, msg, filename);
+std::cout << " newPath = path_management = " << newPath << std::endl;
+if (newPath.size() == 0) { 
+     std::string tmp = ":FILE NOTICE 1 :Enter a Valid Path \r\n";
+        send(fd, tmp.c_str(), tmp.length(), 0);
+return ;
+}
+    // oldPath = msg;
 
-    size_t pos = newPath.find_last_of('/');
-    if (pos != npos)
-    {
-        filename = newPath.substr(pos + 1);
-        replaceSpecialChars(filename);
-        std::string tmp = "filename: " + filename + "\r\n";
-        std::cout << tmp << std::endl;
-        send(clients[i].second.get_fd(), tmp.c_str(), tmp.length(), 0);
-    }
-    else
-    {
-        std::string tmp = "path separator not found in path \r\n";
-        std::cout << tmp << std::endl;
-        send(clients[i].second.get_fd(), tmp.c_str(), tmp.length(), 0);
-    }
-
-    if (std::rename(oldPath.c_str(), newPath.c_str()) != 0)
-    {
-        std::string tmp = "Error renaming file \r\n";
-        std::cout << tmp << std::endl;
-        send(clients[i].second.get_fd(), tmp.c_str(), tmp.length(), 0);
-        // if we dont have permissions
-    }
+    // newPath = rename_if_necessary(filename);
 
     std::string command = "curl -k --progress-bar --upload-file " + newPath + " https://transfer.sh/" + filename + " 2>&1";
+    
     FILE *pipe = popen(command.c_str(), "r");
     if (!pipe)
     {
-        std::string tmp = "popen() failed! \r\n";
-        std::cout << tmp << std::endl;
-        send(clients[i].second.get_fd(), tmp.c_str(), tmp.length(), 0);
+         tmp = ":FILE NOTICE 1 :popen() failed! \r\n";
+        // std::cout << tmp << std::endl;
+        send(fd, tmp.c_str(), tmp.length(), 0);
         return;
     }
     std::string result;
+
+    
+
     char buffer[128];
     while (!feof(pipe))
     {
@@ -139,86 +135,125 @@ void upload(client_t &clients, int i, std::string &msg)
     }
     pclose(pipe);
 
+//  send(fd, result.c_str(), result.length(), 0);  
+
     // Extract the id
     size_t last_pos = result.find_last_of("/");
     size_t second_last_pos = result.find_last_of("/", last_pos - 1);
     // Extract the id between the two /id/
     std::string id = result.substr(second_last_pos + 1, last_pos - second_last_pos - 1);
 
-    std::string tmp = "ID = " + id + " \r\n";
-    std::cout << tmp << std::endl;
-    tmp += "File Uploaded Successfully...\r\n";
-    send(clients[i].second.get_fd(), tmp.c_str(), tmp.length(), 0);
-    writeToFile(id, filename);
+     tmp = ":FILE NOTICE 1 :ID = " + id + " \r\n";
+    // std::cout << tmp << std::endl;
+    writeToFile(fd, id, filename);
 
+    tmp += ":FILE NOTICE 1 :File Uploaded Successfully...\r\n";
+    send(fd, tmp.c_str(), tmp.length(), 0);
     // std::cout << "ID = " << id << std::endl;
     // std::cout << "File Uploaded Successfully..." << std::endl;
 }
 
-void download()
+void download(int fd, std::string &msg)
 {
     std::string ID;
     std::string filename;
-    std::cout << "Enter the ID of the document -use LIST cammand to get IDs-\n";
-    std::getline(std::cin >> std::ws, ID);
+    std::string tmp;
 
-    filename = readFromFile(ID);
+    // msg.erase(0, 10);
+
+    // FILE DOWN id
+    ID = trimFront(msg, 9);
+    // std::cout << "Enter the ID of the document -use LIST cammand to get IDs-\n";
+    // std::getline(std::cin >> std::ws, ID);
+
+    filename = readFromFile(fd, ID);
+    if (filename.size() == 0)
+    {
+        tmp =   ":FILE NOTICE 1 :ID not Found\r\n";
+        send(fd, tmp.c_str(), tmp.length(), 0);
+        return ;
+    }
 
     // Download the file using id
-    std::string command_download = "curl -k https://transfer.sh/" + ID + "/" + filename + " -o ./download/downloaded_" + filename + " 2>&1";
-    FILE *pipe_download = popen(command_download.c_str(), "r");
-    if (!pipe_download)
-    {
-        std::cerr << "popen() failed!" << std::endl;
-        return;
-    }
-    pclose(pipe_download);
+    // std::string command_download = "curl -k https://transfer.sh/" + ID + "/" + filename + " -o ./srcs/bonus/download/downloaded_" + filename + " 2>&1";
+    
+        std::string cmd ="curl -k https://transfer.sh/" + ID + "/" + filename + " -o ./downloaded_" + filename;
 
-    std::cout << "File Downloaded Successfully.." << std::endl;
+         tmp = ":FILE NOTICE 1 :execute this command on your terminal:\r\n";
+         tmp += ":FILE NOTICE 1 :" + cmd  + "\r\n";
+        send(fd, tmp.c_str(), tmp.length(), 0);
+
+    // FILE *pipe_download = popen(command_download.c_str(), "r");
+    // if (!pipe_download)
+    // {
+
+    //     tmp = "popen() failed! \r\n";
+    //     std::cout << tmp << std::endl;
+    //     send(fd, tmp.c_str(), tmp.length(), 0);
+    //     return;
+    // }
+    // pclose(pipe_download);
+
+    //  tmp = "File Downloaded Successfully..\r\n";
+    // std::cout << tmp << std::endl;
+    // send(fd, tmp.c_str(), tmp.length(), 0);
 }
+
+void exitFunc(int fd, std::string &msg)
+{
+    (void)msg;
+    std::string tmp = ":FILE NOTICE 1 :Thanks For Your Visit...\r\n";
+    std::cout << tmp << std::endl;
+    send(fd, tmp.c_str(), tmp.length(), 0);
+    return;
+}
+
+enum command_t
+{
+    UP = 8,
+    DOWN,
+    LIST,
+    EXIT,
+};
 
 void transfer(client_t &clients, size_t i, int n, std::string &msg)
 {
-    // std::string action;
-    // char buffer[1024];
-    // ssize_t n_read;
+    std::string tmp;
+    int fd = clients[i].second.get_fd();
 
-    // int fd = clients[i].second.get_fd();
+    std::string client_ip = clients[i].second.get_ip();
+    switch (n)
+    {
+    case UP:
+        if (client_ip == "::1" || client_ip == "::ffff:127.0.0.1" || client_ip == "127.0.0.1")
+        {
+            upload(fd, msg);
+        }
+        else
+        {
+            tmp = ":FILE NOTICE 1 :Permission Denied For Remote Clients\r\n";
+            std::cout << tmp << std::endl;
+            send(fd, tmp.c_str(), tmp.length(), 0);
+        }
+        break;
+    case DOWN:
+        download(fd, msg);
+        break;
+    case LIST:
+        list(fd, msg);
+        break;
+    case EXIT:
+        exitFunc(fd, msg);
+        break;
 
-    // while (true)
-    // {
-        // std::cout << "\ninput [UP / DOWN / LIST / EXIT]: \n";
-        // std::getline(std::cin >> std::ws, action);
-
-        
-        // std::memset(buffer, 0, sizeof(buffer));
-        // std::string msg = "\ninput [UP / DOWN / LIST / EXIT]: \n";
-        // send(fd, msg.c_str(), msg.length(), 0);
-
-        // n_read = recv(fd, buffer, sizeof(buffer), 0);
-        // // n_read = read(fd, buffer, sizeof(buffer));
-        // if (n_read == -1 && errno != EWOULDBLOCK)
-        // {
-        //     std::cerr << "Error reading from file descriptor\n";
-        //     return;
-        // }
-
-        // std::string action(buffer, n_read);
-        // if(action.size())
-        //     send(fd, action.c_str(), action.length(), 0);
-
-        if (n == 8)
-            upload(clients, i, msg);
-        // else if (n == 2)
-        //     download(clients, i, msg);
-        // else if (n == 3)
-        //     list(clients, i, msg);
-        // else if (action.compare("EXIT") == 0)
-        // {
-        //     std::cout << "\nThanks For Your Visit..." << std::endl;
-        //     return;
-        // }
-    // }
-
-    // send(clients[i].second.get_fd(), "hello", 5, 0);
+    default:
+        msg = ":FILE NOTICE 1 :Invalid command\r\n";
+        send(fd, msg.c_str(), msg.length(), 0);
+        break;
+    }
 }
+
+// client IP = ::1
+// client IP = ::ffff:127.0.0.1
+
+// client [127.0.0.1

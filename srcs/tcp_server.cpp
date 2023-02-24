@@ -34,6 +34,8 @@ int tcp_server(int port, struct addrinfo **p)
     hints.ai_flags = AI_PASSIVE | AI_ADDRCONFIG;
 
     /*
+     * By using the AI_PASSIVE flag, I’m telling the program to bind to the IP of the host it’s running on.
+     *
      * the AI_ADDRCONFIG flag is set in the hints.ai_flags field.
      * This causes getaddrinfo to only return addresses that are compatible with the system's network interfaces,
      * which should exclude any IPv6 addresses if IPv6 is not currently enabled on the system.

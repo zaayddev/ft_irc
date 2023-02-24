@@ -6,13 +6,13 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:46:20 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/24 17:24:20 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/21 15:50:21 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Includes/Ircserv.hpp"
 
-bool    is_there(User &user, std::string &name) {
+static bool    is_there(User &user, std::string &name) {
     std::set<std::string>::iterator it = user._owned_channels.find(name);
 	if (it != user._owned_channels.end()) {
 			return true;
@@ -28,6 +28,15 @@ static bool if_target(client_t &clients, std::string &target) {
     }
     return false;
 }
+
+// static bool if_banded(User &user, std::string &name)
+// {
+//      std::set<std::string>::iterator it = user._banded_channels.find(name);
+// 	if (it != user._banded_channels.end()) {
+// 			return true;
+// 	}
+//     return false;
+// }
 
 static bool if_target_opr(client_t &clients, std::string &target, std::string &name) {
     client_t::iterator it = clients.begin();
@@ -51,7 +60,6 @@ static bool banded(client_t &clients, channel_t &channels, std::string &name, st
         if (it->second.get_nickname() == target)
         {
             it->second._banded_channels.insert(name);
-            it->second._condition -= 1;
             std::set<std::string>::iterator ite = it->second._owned_channels.find(name);
             if ( ite != it->second._owned_channels.end()) {  
                 (*it).second._owned_channels.erase(ite);
@@ -134,75 +142,61 @@ static int	if_or_not(client_t &clients, channel_t &channels, std::string &name, 
 
 void	omode(client_t &clients, size_t i, channel_t &channels, std::string &msg, std::string &name) 
 {
-	std::string     target = trimFront(msg, 0);
-    std::string		reply;
-    bool b1 = is_there(clients[i].second, name);
-    bool b2 = if_target(clients, target);
+	std::string target = trimFront(msg, 0);
     
-    if (!b2) {
-        senderr(msg.substr(0, msg.find(" ")), i, clients, 401);
-        return ;
-    }
-    if (!b1) {
-        senderr(msg.substr(0, msg.find(" ")), i, clients, 482);
-        return ;
-    }
-	if (b1 && b2) {
+	if (is_there(clients[i].second, name) && if_target(clients, target)) {
 	    int r = if_or_not(clients, channels, name, target);
 		if (r == 3) {
-            // inform the client that the target already has the operater privileges ont the channel;
-            reply = "221 " + msg_format(clients[i].second) + " the target is already +o\r\n";
-            send(clients[i].second.get_fd(), reply.c_str(), reply.length(), 0);
+			// inform the client that the target already has the operater privileges ont the channel;
+			std::cout << "the target is already +o" << std::endl;
 		}
 		if (r == 2) {
 			// inform the client that the target gain operator privileges;
-            reply = "221 " + msg_format(clients[i].second) + " now the target is +o\r\n";
-            send(clients[i].second.get_fd(), reply.c_str(), reply.length(), 0);
+			std::cout << "now the target is +o" << std::endl;
 		}
 		if (r == 1) {
 			// add the target to channel with the operater privileges;
-        	reply = "221 " + msg_format(clients[i].second) + " the target has joined the channel with +o\r\n";
-            send(clients[i].second.get_fd(), reply.c_str(), reply.length(), 0);
-		}	
-    }
+			std::cout << "the target has joined the channel with +o" << std::endl;
+		}
+		
+	} else {
+		// inform the client that he has not the operater privileges on the channel;
+            std::cout << "you are not operator on this channel or the target not valid user or not valid channel" << std::endl;
+	}
 	return;
 }
 
-void	o_mode(client_t &clients, size_t i, std::string &msg, std::string &name) {
+void	o_mode(client_t &clients, size_t i, channel_t &channels, std::string &msg, std::string &name) 
+{
+	(void)channels;
 	std::string target = trimFront(msg, 0);
-    std::string		reply;
     if (is_there(clients[i].second, name))
     {
         if(if_target_opr(clients, target, name)) {
-        	reply = "221 " + msg_format(clients[i].second) + " the target is just a regular user\r\n";
-            send(clients[i].second.get_fd(), reply.c_str(), reply.length(), 0);
+            std::cout << "the target is just a regular user" << std::endl;
         } else {
-        	reply = "221 " + msg_format(clients[i].second) + " the target is not oper or is not on channel\r\n";
-            send(clients[i].second.get_fd(), reply.c_str(), reply.length(), 0);
+            std::cout << "the target is not oper or is not on channel" << std::endl;
         }
     } else {
-        reply = "221 " + msg_format(clients[i].second) + " you are not allowed to change on this channel\r\n";
-        send(clients[i].second.get_fd(), reply.c_str(), reply.length(), 0);
+        std::cout << "You are not allowed to change on this channel" << std::endl;
     }
 	return;
 }
 
 void	b_mode(client_t &clients, size_t i, channel_t &channels, std::string &msg, std::string &name) {
+    (void)channels;
 	std::string target = trimFront(msg, 0);
-    std::string		reply;
     if (is_there(clients[i].second, name))
     {
         if(if_target(clients, target)) {
             if (banded(clients, channels, name, target))
-                reply = "221 " + msg_format(clients[i].second) + " the target is baned from this channel\r\n";
-                send(clients[i].second.get_fd(), reply.c_str(), reply.length(), 0);
+                std::cout << "the target is baned from this channel" << std::endl;
         } else {
-            reply = "221 " + msg_format(clients[i].second) + " the target is not actif user on the server\r\n";
-            send(clients[i].second.get_fd(), reply.c_str(), reply.length(), 0);
+            std::cout << "the target is not actif user on the server" << std::endl;
         }
     } else {
-        reply = "221 " + msg_format(clients[i].second) + " you are not allowed to change on this channel\r\n";
-        send(clients[i].second.get_fd(), reply.c_str(), reply.length(), 0);
+        std::cout << "You are not allowed to change on this channel" << std::endl;
     }
 	return;
 }
+
