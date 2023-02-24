@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/24 15:36:57 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/24 16:15:52 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,12 @@ void    kick(client_t &clients, int &i, channel_t &channels, std::string &msg) {
 void    names(client_t &clients, size_t i, channel_t &channels, std::string &msg) {
     msg.erase(0, 7);
     std::string tmp = channel_response(channels, msg, clients[i].second);
-    send(clients[i].first.fd, tmp.c_str(), tmp.length(), 0);
+    if (tmp.size())
+        send(clients[i].first.fd, tmp.c_str(), tmp.length(), 0);
+}
+
+void    list(client_t &clients, size_t i, channel_t &channels) {
+    std::string 
 }
 
 int32_t check(client_t &clients, std::string msg, int i) {
@@ -295,6 +300,14 @@ int32_t check(client_t &clients, std::string msg, int i) {
 		else 
 			return 13;
     }
+    else if (msg.find("LIST") == 0) {
+		if (msg.length() != 4) {
+			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
+			return 0;
+		}
+		else 
+			return 14;
+    }
 	else
 		senderr(msg.substr(0, msg.find(" ")), i, clients, 421);
 	return 0;
@@ -333,5 +346,7 @@ bool	channel_operations(client_t &clients, channel_t &channels, std::string msg,
 		kick(clients, i, channels, msg);
     else if (n == 13)
 		names(clients, i, channels, msg);
+    else if (n == 13)
+		list(clients, i, channels);
 	return (false);
 }
