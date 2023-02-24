@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/24 16:15:52 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/24 17:42:11 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ static void		leave_channel(client_t &clients, size_t i, channel_t &channels, std
 	}
 	if (is_there)
 	{
+        clients[i].second._condition -= 1;
 		std::set<User>::iterator	ite;
 		for (ite = (*map).second.begin(); ite != (*map).second.end(); ite++)
 		{
@@ -159,19 +160,12 @@ void	mode(client_t &clients, size_t i, channel_t &channels, std::string &msg) {
 	}
 }
 
-// void    quit(client_t &clients, int i, channel_t &channels, std::string &msg)
-// {
-//     return ;
-// }
-
 void    kick(client_t &clients, int &i, channel_t &channels, std::string &msg) {
     
     msg.erase(0, msg.find(' ') + 1);
     std::string channel_name = trimFront(msg, 0);
     msg.erase(0, msg.find(' ') + 1);
-    std::cout << "this is channel name : " << channel_name << std::endl;
     std::string target_name = trimFront(msg,0);
-    std::cout << "this is target name : " << target_name << std::endl;
     if (is_there(clients[i].second, channel_name)) {
         for (size_t r = 0; r < clients.size(); r++) {
             if (clients[r].second.get_nickname() == target_name)
@@ -191,7 +185,27 @@ void    names(client_t &clients, size_t i, channel_t &channels, std::string &msg
 }
 
 void    list(client_t &clients, size_t i, channel_t &channels) {
-    std::string 
+    (void)i;
+    std::string channels_name = "";
+    std::string clients_name = "";
+    channel_t::iterator it = channels.begin();
+    if (channels.size()) {
+        for (size_t r = 0; r < channels.size() - 1; r++) {
+            channels_name += it->first.first + " ";
+            it++;
+        }
+        channels_name += it->first.first;
+    }
+    size_t r;
+    for ( r = 0; r < clients.size() - 1; r++) {
+        if (!clients[r].second._condition)
+            clients_name += clients[r].second.get_nickname() + " ";
+    }
+    if (!clients[r].second._condition)
+        clients_name += clients[r].second.get_nickname();
+    
+    std::cout <<    "clients_name : " << clients_name << std::endl;
+    std::cout << "channels_name : " << channels_name << std::endl;
 }
 
 int32_t check(client_t &clients, std::string msg, int i) {
@@ -276,8 +290,10 @@ int32_t check(client_t &clients, std::string msg, int i) {
 		else 
 			return 10;
 	}
-    else if (msg.find("QUIT ") == 0) {
-		if (msg.length() == 5) {
+    else if (msg.find("QUIT") == 0) {
+		if (msg.length() > 4) {
+            if (msg[4] == ' ')
+                return 11;
 			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
 			return 0;
 		}
@@ -340,13 +356,11 @@ bool	channel_operations(client_t &clients, channel_t &channels, std::string msg,
 		transfer(clients, i, n, msg);
     else if (n == 10)
 		transfer(clients, i, n, msg);
-    // else if (n == 11)
-	// 	quit(clients, i, channels, msg);
     else if (n == 12)
 		kick(clients, i, channels, msg);
     else if (n == 13)
 		names(clients, i, channels, msg);
-    else if (n == 13)
+    else if (n == 14)
 		list(clients, i, channels);
 	return (false);
 }

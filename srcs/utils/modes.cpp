@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:46:20 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/23 23:52:56 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/24 17:24:20 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ static bool banded(client_t &clients, channel_t &channels, std::string &name, st
         if (it->second.get_nickname() == target)
         {
             it->second._banded_channels.insert(name);
+            it->second._condition -= 1;
             std::set<std::string>::iterator ite = it->second._owned_channels.find(name);
             if ( ite != it->second._owned_channels.end()) {  
                 (*it).second._owned_channels.erase(ite);

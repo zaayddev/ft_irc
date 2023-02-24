@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 02:50:24 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/07 10:17:51 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/24 17:27:59 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	loop_connections(int socket_fd, std::string password, struct addrinfo *p)
 	std::vector<client>	clients;
 	channel_t			channels;
 	pollfd				socket;
-	User				server(" ");
+	User				server;
 	
 	socket.fd = socket_fd;
 	

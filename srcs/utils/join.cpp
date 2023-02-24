@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 08:19:53 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/22 18:42:32 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/24 17:15:46 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ void	join_channel(client_t &clients, size_t i, channel_t &channels, s_list &user
                     std::set<User> channel_users;
                     std::pair<std::string, std::string>	chaine;
                     clients[i].second._owned_channels.insert(channel_name);
+                    clients[i].second._condition += 1;
                     channel_users.insert(clients[i].second);
                     chaine.first = channel_name;
                     chaine.second = channel_key;
@@ -131,6 +132,7 @@ void	join_channel(client_t &clients, size_t i, channel_t &channels, s_list &user
                     std::set<User>::iterator	ite;
                     if(map->first.second == channel_key)
                     {
+                        clients[i].second._condition += 1;   
                         (*map).second.insert(clients[i].second);
                 
                         std::set<User>	users = (*map).second;
