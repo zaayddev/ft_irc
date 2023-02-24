@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   operations.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/24 15:36:57 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/24 16:04:20 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,10 +159,30 @@ void	mode(client_t &clients, size_t i, channel_t &channels, std::string &msg) {
 	}
 }
 
-// void    quit(client_t &clients, int i, channel_t &channels, std::string &msg)
-// {
-//     return ;
-// }
+void quit(client_t& clients, int i, channel_t& channels, std::string& msg)
+{
+    std::string quit_msg = "has quit";
+    // If a quit message is provided, use it instead of the default message
+    if (!msg.empty()) {
+        quit_msg = msg;
+    }
+    // Notify all channels the client is in that the client has quit
+    for (channel_t::iterator it = channels.begin(); it != channels.end(); ++it) {
+        if (it->second.find(clients[i].second.get_nickname()) != it->second.end()) {
+            std::string reply = ":" + clients[i].second.get_nickname() + " QUIT :" + quit_msg + "\r\n";
+            send(clients[i].first.fd, reply.c_str(), reply.length(), 0);
+            it->second.erase(clients[i].second.get_nickname());
+        }
+    }
+    // Notify all clients that the client has quit
+    std::string reply = ":" + clients[i].second.get_nickname() + " QUIT :" + quit_msg + "\r\n";
+    send(clients[i].first.fd, reply.c_str(), reply.length(), 0);
+    // Remove the client from the list of active clients
+    clients.erase(clients.begin() + i);
+    // Close the client's socket connection
+    close(clients[i].first.fd);
+}
+
 
 void    kick(client_t &clients, int &i, channel_t &channels, std::string &msg) {
     
@@ -327,8 +347,8 @@ bool	channel_operations(client_t &clients, channel_t &channels, std::string msg,
 		transfer(clients, i, n, msg);
     else if (n == 10)
 		transfer(clients, i, n, msg);
-    // else if (n == 11)
-	// 	quit(clients, i, channels, msg);
+    else if (n == 11)
+		quit(clients, i, channels, msg);
     else if (n == 12)
 		kick(clients, i, channels, msg);
     else if (n == 13)
