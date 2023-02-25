@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 23:46:49 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/21 19:19:35 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/23 15:04:30 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ std::string	reject_msg(std::string cmd, int ern, client_t &clients, int i)
 		ss << ern <<" "<< clients[i].second.get_fd() <<": " << cmd << " No such nick/channel\r\n";
 	else if (ern == 421)
 		ss << ern <<" "<< clients[i].second.get_fd() <<": " << cmd << " Unknown command\r\n";
+	else if (ern == 482)
+		ss << ern <<" "<< clients[i].second.get_fd() << " :You're not channel operator\r\n";
 	return (ss.str());
 }
 

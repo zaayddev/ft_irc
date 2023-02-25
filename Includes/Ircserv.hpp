@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Ircserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:25:01 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/22 11:48:17 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/24 21:46:49 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ std::string		kill_done(std::string nick, std::string reason);
 std::string		kill_failed(std::string nick);
 std::string		no_privileges(std::string nick);
 std::string		rcv_msg(int client_fd, std::vector<client> &clients, size_t i, channel_t &channels);
+std::string     channel_response(channel_t &channels, std::string channel_name, User &user);
 std::string		reject_msg(std::string cmd, int ern, client_t &clients, int i);
 std::string		take_nickname_from_msg(std::string msg);
 std::string		trimFront(std::string s, int i);
@@ -117,21 +118,19 @@ std::string		ip_itostr(struct addrinfo  *addr_info);
 std::string		msg_format(User &user);
 
 /*<---> SET Mode channel (+/-o) Functions <--->*/
+bool            is_there(User &user, std::string &name);
 void			omode(client_t &clients, size_t i, channel_t &channels, std::string &msg, std::string &name);
-void			o_mode(client_t &clients, size_t i, channel_t &channels, std::string &msg, std::string &name);
+void			o_mode(client_t &clients, size_t i, std::string &msg, std::string &name);
 void	        b_mode(client_t &clients, size_t i, channel_t &channels, std::string &msg, std::string &name);
 
 /*<---> BONUS <--->*/
-void writeToFile(int fd, std::string key, std::string value);
-std::string readFromFile(int fd, std::string searched_id);
-void list(int fd, std::string &msg);
-void upload(int fd, std::string &msg);
-void download(int fd, std::string &msg);
 void writeToFile(std::string key, std::string value);
+void list();
+void upload();
+void download();
+void writeToFile(std::string key, std::string value);
+void readFromFile();
 void transfer(client_t &clients, size_t i, int n, std::string &msg);
-// std::string path_management(int fd, std::string &msg);
 std::string path_management(int fd, std::string &msg, std::string &filename);
-
-
 
 #endif

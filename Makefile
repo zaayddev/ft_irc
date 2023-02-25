@@ -35,6 +35,7 @@ SRC =	main.cpp \
 				srcs/utils/parsing.cpp \
 				srcs/utils/response.cpp \
 				srcs/utils/tools.cpp
+# transfer.cpp
 
 OFILES = $(SRC:.cpp=.o)
 
@@ -42,8 +43,6 @@ all : $(NAME)
 
 $(NAME) : $(OFILES) 
 	@${CC} $^ -o $@
-		@${CC} $^ -o $@
-		@${CC} $^ -o $@
 
 %.o: %.cpp $(LIB)
 	@$(CC) $(FLAGS) -c $< -o $@

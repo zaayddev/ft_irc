@@ -6,7 +6,7 @@
 /*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 22:34:23 by zchbani           #+#    #+#             */
-/*   Updated: 2023/02/21 22:52:08 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/24 21:48:55 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ int tcp_server(int port, struct addrinfo **p)
     hints.ai_flags = AI_PASSIVE | AI_ADDRCONFIG;
 
     /*
-     * By using the AI_PASSIVE flag, I’m telling the program to bind to the IP of the host it’s running on.
-     *
      * the AI_ADDRCONFIG flag is set in the hints.ai_flags field.
      * This causes getaddrinfo to only return addresses that are compatible with the system's network interfaces,
      * which should exclude any IPv6 addresses if IPv6 is not currently enabled on the system.
@@ -81,7 +79,7 @@ int tcp_server(int port, struct addrinfo **p)
 
             // Set timeout on socket
             struct timeval timeout;
-            timeout.tv_sec = 5; // 5 seconds
+            timeout.tv_sec = TIMEOUT; // 5 seconds
             timeout.tv_usec = 0;
 
             reuse = bind(socket_fd, (*p)->ai_addr, (*p)->ai_addrlen);

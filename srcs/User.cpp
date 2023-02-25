@@ -6,14 +6,13 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 00:00:18 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/21 09:47:36 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/24 17:09:51 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Includes/User.hpp"
 
-User::User(void) 			: _is_complete(false), _authentification(false) { }
-User::User(std::string str) : _nickname(str), _is_complete(false) { }
+User::User(void) 			: _is_complete(false), _authentification(false), _condition (0) { }
 
 std::string	User::get_nickname(void)								const { return (_nickname); }
 std::string User::get_username(void)								const { return (_username); }

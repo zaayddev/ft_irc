@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   operations.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/22 17:44:32 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/24 23:12:27 by zchbani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Includes/Ircserv.hpp"
 
-void ping_message(client_t &clients, size_t i)
+void    ping_message(client_t &clients, size_t i)
 {
 	std::string reply = "PONG :" + (std::string)SERVER + "\r\n";
 	send(clients[i].second.get_fd(), reply.c_str(), reply.length(), 0);
 }
 
-void priv_msg(client_t &clients, size_t i, std::string &msg)
+void	priv_msg(client_t &clients, size_t i, std::string &msg)
 {
 	std::string reply;
 
@@ -28,7 +28,7 @@ void priv_msg(client_t &clients, size_t i, std::string &msg)
 		{
 			reply = msg_format(clients[i].second) + " " + msg + "\r\n";
 			send((*it).first.fd, reply.c_str(), reply.length(), 0);
-			return;
+			return ;
 		}
 	}
 	std::cout << "sending private message failed" << std::endl;
@@ -36,11 +36,11 @@ void priv_msg(client_t &clients, size_t i, std::string &msg)
 	send(clients[i].first.fd, reply.c_str(), reply.length(), 0);
 }
 
-static void leave_channel(client_t &clients, size_t i, channel_t &channels, std::string &msg, std::string part_msg)
+static void		leave_channel(client_t &clients, size_t i, channel_t &channels, std::string &msg, std::string part_msg)
 {
-	std::string reply;
-	std::string channel_name;
-	bool is_there = false;
+	std::string		reply;
+	std::string		channel_name;
+	bool			is_there = false;
 
 	msg.erase(0, 1);
 	if (msg.find(",", 0) != npos)
@@ -54,20 +54,19 @@ static void leave_channel(client_t &clients, size_t i, channel_t &channels, std:
 		msg.erase(0, msg.find(",", 0));
 	}
 	if (channel_name.size() == 0)
-		return;
-	channel_t::iterator map;
-	for (channel_t::iterator iter = channels.begin(); iter != channels.end(); ++iter)
-	{
+		return ;
+    channel_t::iterator map;
+	for (channel_t::iterator iter = channels.begin(); iter != channels.end(); ++iter) {
 		std::pair<std::string, std::string> key = iter->first;
-		if (key.first == channel_name)
-		{
+		if (key.first == channel_name) {
 			map = iter;
 			is_there = true;
 		}
 	}
 	if (is_there)
 	{
-		std::set<User>::iterator ite;
+        clients[i].second._condition -= 1;
+		std::set<User>::iterator	ite;
 		for (ite = (*map).second.begin(); ite != (*map).second.end(); ite++)
 		{
 			reply = msg_format(clients[i].second) + " PART #" + channel_name + " " + part_msg + "\r\n";
@@ -78,7 +77,7 @@ static void leave_channel(client_t &clients, size_t i, channel_t &channels, std:
 			if (clients[i].second.get_nickname() == (*ite).get_nickname())
 			{
 				(*map).second.erase(ite);
-				break;
+				break ;
 			}
 		}
 		if ((*map).second.size() == 0)
@@ -94,9 +93,9 @@ static void leave_channel(client_t &clients, size_t i, channel_t &channels, std:
 	}
 }
 
-void leave_channels(client_t &clients, size_t i, channel_t &channels, std::string &msg)
+void		leave_channels(client_t &clients, size_t i, channel_t &channels, std::string &msg)
 {
-	std::string part_msg;
+	std::string		part_msg;
 
 	if (msg.find(":", 0) != npos)
 	{
@@ -113,21 +112,21 @@ void leave_channels(client_t &clients, size_t i, channel_t &channels, std::strin
 	}
 }
 
-bool channel_msg(client_t &clients, size_t i, channel_t &channels, std::string &msg)
+bool	channel_msg(client_t &clients, size_t i, channel_t &channels, std::string &msg)
 {
-	std::string reply;
-	std::string channel_name = msg.substr(9, (msg.find(" ", 9) - 9));
+	std::string 						reply;
+	std::string							channel_name = msg.substr(9, (msg.find(" ", 9) - 9));
 	std::pair<std::string, std::string> key = std::make_pair(channel_name, "");
-	channel_t::iterator it = channels.find(key);
+	channel_t::iterator					it = channels.find(key);
 
 	if (it != channels.end() && check_user_exist((*it).second, clients[i].second.get_nickname()))
 	{
-		std::set<User> users = (*it).second;
-		std::set<User>::iterator ite = users.begin();
+		std::set<User>			users = (*it).second;
+		std::set<User>::iterator	ite = users.begin();
 		for (; ite != users.end(); ite++)
 		{
 			if (clients[i].second.get_nickname() == (*ite).get_nickname())
-				continue;
+				continue ;
 			reply = msg_format(clients[i].second) + " " + msg + "\r\n";
 			send((*ite).get_fd(), reply.c_str(), reply.length(), 0);
 		}
@@ -140,157 +139,222 @@ bool channel_msg(client_t &clients, size_t i, channel_t &channels, std::string &
 	}
 	return (false);
 }
-// 0 1 2 3
-// M O D E #mychannel (+/-)o someuser
 
-void mode(client_t &clients, size_t i, channel_t &channels, std::string &msg)
-{
-	msg.erase(0, 5);
-	if (msg[0] == '#')
-	{
+void	mode(client_t &clients, size_t i, channel_t &channels, std::string &msg) {
+	msg.erase(0,5);
+	if (msg[0] == '#') {
 		std::string channel = msg.substr(1, msg.find(' ') - 1);
-		msg.erase(0, msg.find(' ') + 1);
-		if (msg[0] == '+' && msg[1] == 'o' && msg[2] == ' ')
-		{
-			msg.erase(0, 3);
-			omode(clients, i, channels, msg, channel);
-		}
-		else if (msg[0] == '-' && msg[1] == 'o' && msg[2] == ' ')
-		{
-			msg.erase(0, 3);
-			o_mode(clients, i, channels, msg, channel);
-		}
-		else if (msg[0] == 'b' && msg[1] == ' ')
-		{
-			msg.erase(0, 2);
+		msg.erase(0,  msg.find(' ') + 1);
+		if (msg[0] == '+' && msg[1] == 'o' && msg[2] == ' ') {
+			msg.erase(0,  3);
+            omode(clients, i, channels, msg, channel);
+		} else if (msg[0] == '-' && msg[1] == 'o' && msg[2] == ' ') {
+            msg.erase(0,  3);
+			o_mode(clients, i, msg, channel);
+		}  else if (msg[0] == 'b' && msg[1] == ' ') {
+            msg.erase(0, 2);
 			b_mode(clients, i, channels, msg, channel);
 		}
 	}
 }
 
-int32_t check(client_t &clients, std::string msg, int i)
-{
+void    kick(client_t &clients, int &i, channel_t &channels, std::string &msg) {
+    
+    msg.erase(0, msg.find(' ') + 1);
+    std::string channel_name = trimFront(msg, 0);
+    msg.erase(0, msg.find(' ') + 1);
+    std::string target_name = trimFront(msg,0);
+    if (is_there(clients[i].second, channel_name)) {
+        for (size_t r = 0; r < clients.size(); r++) {
+            if (clients[r].second.get_nickname() == target_name)
+                leave_channel(clients, r, channels, channel_name += " ", "kicked");
+        }
+    } else {
+        //you are not allowed to kick no one a l3zaaaawiiiiii
+        senderr(msg.substr(0, msg.find(" ")), i, clients, 482);
+    }
+}
 
-	if (msg.find("JOIN #") == 0)
-	{
-		if (msg.length() == 6)
-		{
+// void    names(client_t &clients, size_t i, channel_t &channels, std::string &msg) {
+//     msg.erase(0, 7);
+//     std::string tmp = channel_response(channels, msg, clients[i].second);
+//     if (tmp.size())
+//         send(clients[i].first.fd, tmp.c_str(), tmp.length(), 0);
+// }
+
+void names(client_t& clients, size_t i, channel_t& channels, std::string& msg) {
+    msg.erase(0, 7);
+    std::string channel_name = msg;
+    channel_t::iterator iter = channels.find(std::make_pair(channel_name, ""));
+    if (iter == channels.end()) {
+        // Channel does not exist
+        std::string tmp = ": 403 " + clients[i].second.get_nickname() + " " + channel_name + " :No such channel\r\n";
+        send(clients[i].first.fd, tmp.c_str(), tmp.length(), 0);
+        return;
+    }
+    std::string tmp = channel_response(channels, channel_name, clients[i].second);
+    if (tmp.size()) {
+        send(clients[i].first.fd, tmp.c_str(), tmp.length(), 0);
+    } else {
+        // Channel exists but has no users
+        tmp = ":  353 " + clients[i].second.get_nickname() + " = " + channel_name + " :\r\n";
+        tmp += channel_name + " :No such channel\r\n";
+        send(clients[i].first.fd, tmp.c_str(), tmp.length(), 0);
+    }
+}
+
+
+
+void    list(client_t &clients, size_t i, channel_t &channels) {
+    std::string channels_name = "";
+    std::string clients_name = "";
+    channel_t::iterator it = channels.begin();
+    if (channels.size()) {
+        for (size_t r = 0; r < channels.size() - 1; r++) {
+            channels_name += it->first.first + " ";
+            it++;
+        }
+        channels_name += it->first.first;
+    }
+    size_t r;
+    for ( r = 0; r < clients.size() - 1; r++) {
+        if (!clients[r].second._condition)
+            clients_name += clients[r].second.get_nickname() + " ";
+    }
+    if (!clients[r].second._condition)
+        clients_name += clients[r].second.get_nickname();
+    
+    std::string reply = ":LIST NOTICE 1 :" + clients_name + "\r\n";
+    reply += ":LIST NOTICE 1 :" + channels_name + "\r\n";
+	send(clients[i].first.fd, reply.c_str(), reply.length(), 0);
+}
+
+int32_t check(client_t &clients, std::string msg, int i) {
+	if (msg.find("JOIN #") == 0) {
+		if (msg.length() == 6) {
 			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
 			return 0;
 		}
-		else
+		else 
 			return 1;
 	}
-	else if (msg.find("ARTIST ") == 0)
-	{
-		if (msg.length() == 7)
-		{
+	else if (msg.find("ARTIST ") == 0) {
+		if (msg.length() == 7) {
 			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
 			return 0;
 		}
-		else
+		else 
 			return 2;
 	}
-	else if (msg.find("PART :") == 0)
-	{
-		if (msg.length() == 6)
-		{
+	else if (msg.find("PART :") == 0 || msg.find("PART ") == 0) {
+		if (msg.length() <= 6) {
 			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
-			std::cout << msg << std::endl;
+            std::cout << msg << std::endl;
 			return 0;
 		}
-		else
+		else 
 			return 3;
 	}
-	else if (msg.find("PRIVMSG #") == 0)
-	{
-		if (msg.length() == 9)
-		{
+	else if (msg.find("PRIVMSG #") == 0) {
+		if (msg.length() == 9) {
 			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
 			return 0;
 		}
-		else
+		else 
 			return 4;
 	}
-	else if (msg.find("PRIVMSG ") == 0)
-	{
-		if (msg.length() == 8)
-		{
+	else if (msg.find("PRIVMSG ") == 0) {
+		if (msg.length() == 8) {
 			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
 			return 0;
 		}
-		else
+		else 
 			return 5;
 	}
-	else if (msg.find("MODE") == 0)
-	{
-		if (msg.length() == 4)
-		{
+	else if (msg.find("MODE") == 0) {
+		if (msg.length() == 4) {
 			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
 			return 0;
 		}
-		else
+		else 
 			return 6;
 	}
-	else if (msg.find("PING ") == 0 || msg.find("PONG ") == 0)
-	{
-		if (msg.length() == 5)
-		{
+	else if (msg.find("PING ") == 0 || msg.find("PONG ") == 0) {
+		if (msg.length() == 5) {
 			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
 			return 0;
 		}
-		else
+		else 
 			return 7;
 	}
-	else if (msg.find("FILE UP") == 0)
-	{
-		if (msg.length() == 7)
-		{
+    else if (msg.find("FILE UP") == 0) {
+		if (msg.length() == 7) {
 			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
 			return 0;
 		}
-		else
+		else 
 			return 8;
 	}
-	else if (msg.find("FILE DOWN") == 0)
-	{
-		if (msg.length() == 9)
-		{
+    else if (msg.find("FILE DOWN") == 0) {
+		if (msg.length() == 9) {
 			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
 			return 0;
 		}
-		else
+		else 
 			return 9;
 	}
-	else if (msg.find("FILE LIST") == 0)
-	{
-		if (msg.length() != 9)
-		{
+    else if (msg.find("FILE LIST") == 0) {
+		if (msg.length() != 9) {
 			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
 			return 0;
 		}
-		else
+		else 
 			return 10;
 	}
-	else if (msg.find("FILE EXIT") == 0)
-	{
-		if (msg.length() != 9)
-		{
+    else if (msg.find("QUIT") == 0) {
+		if (msg.length() > 4) {
+            if (msg[4] == ' ')
+                return 11;
 			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
 			return 0;
 		}
-		else
+		else 
 			return 11;
-	}
+    }
+    else if (msg.find("KICK ") == 0) {
+		if (msg.length() == 5) {
+			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
+			return 0;
+		}
+		else 
+			return 12;
+    }
+    else if (msg.find("NAMES ") == 0) {
+		if (msg.length() == 6) {
+			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
+			return 0;
+		}
+		else 
+			return 13;
+    }
+    else if (msg.find("LIST ") == 0) {
+		if (msg.length() != 5) {
+			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
+			return 0;
+		}
+		else 
+			return 14;
+    }
 	else
 		senderr(msg.substr(0, msg.find(" ")), i, clients, 421);
 	return 0;
 }
 
-bool channel_operations(client_t &clients, channel_t &channels, std::string msg, int i)
+
+bool	channel_operations(client_t &clients, channel_t &channels, std::string msg, int i)
 {
-	// std::cout << msg << std::endl;
-	std::string reply;
+    std::cout << msg << std::endl;
+	std::string	reply;
 	int n = check(clients, msg, i);
 
 	if (n == 1)
@@ -303,21 +367,21 @@ bool channel_operations(client_t &clients, channel_t &channels, std::string msg,
 		channel_msg(clients, i, channels, msg);
 	else if (n == 5)
 		priv_msg(clients, i, msg);
-	else if (n == 6)
-		mode(clients, i, channels, msg);
+    else if (n == 6)
+	    mode(clients, i, channels ,msg);
 	else if (n == 7)
 		ping_message(clients, i);
-	else if (n == 8)
+    else if (n == 8)
 		transfer(clients, i, n, msg);
-	else if (n == 9)
+    else if (n == 9)
 		transfer(clients, i, n, msg);
-	else if (n == 10)
+    else if (n == 10)
 		transfer(clients, i, n, msg);
-	else if (n == 11)
-		transfer(clients, i, n, msg);
-	// else if (n == 12)
-	// 	transfer(clients, i, n, msg);
-	// else if (n == 13)
-	// 	transfer(clients, i, n, msg);
+    else if (n == 12)
+		kick(clients, i, channels, msg);
+    else if (n == 13)
+		names(clients, i, channels, msg);
+    else if (n == 14)
+		list(clients, i, channels);
 	return (false);
 }
