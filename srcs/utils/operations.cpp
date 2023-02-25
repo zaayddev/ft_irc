@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   operations.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 03:02:50 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/24 23:12:27 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/25 15:58:56 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	priv_msg(client_t &clients, size_t i, std::string &msg)
 		}
 	}
 	std::cout << "sending private message failed" << std::endl;
-	reply = reject_msg(take_nickname_from_msg(msg), i, clients, 401);
+	reply = reject_msg(take_nickname_from_msg(msg), 401, clients, i);
 	send(clients[i].first.fd, reply.c_str(), reply.length(), 0);
 }
 
@@ -88,8 +88,8 @@ static void		leave_channel(client_t &clients, size_t i, channel_t &channels, std
 	}
 	else
 	{
-		reply = reject_msg("", i, clients, 401);
-		send(clients[i].first.fd, reply.c_str(), reply.length(), 0);
+		reply = reject_msg("PART", 401, clients, i);
+		send(clients[i].second.get_fd(), reply.c_str(), reply.length(), 0);
 	}
 }
 
@@ -112,7 +112,7 @@ void		leave_channels(client_t &clients, size_t i, channel_t &channels, std::stri
 	}
 }
 
-bool	channel_msg(client_t &clients, size_t i, channel_t &channels, std::string &msg)
+void	channel_msg(client_t &clients, size_t i, channel_t &channels, std::string &msg)
 {
 	std::string 						reply;
 	std::string							channel_name = msg.substr(9, (msg.find(" ", 9) - 9));
@@ -130,14 +130,15 @@ bool	channel_msg(client_t &clients, size_t i, channel_t &channels, std::string &
 			reply = msg_format(clients[i].second) + " " + msg + "\r\n";
 			send((*ite).get_fd(), reply.c_str(), reply.length(), 0);
 		}
+        return ;
 	}
 	else
 	{
-		std::cout << "channel message failed" << std::endl;
-		reply = reject_msg("", i, clients, 401);
-		send(clients[i].first.fd, reply.c_str(), reply.length(), 0);
+		std::cout << "channel message failed 11" << std::endl;
+		reply = reject_msg("PRIVMSG #", 401, clients, i);
+		send(clients[i].second.get_fd(), reply.c_str(), reply.length(), 0);
 	}
-	return (false);
+	return ;
 }
 
 void	mode(client_t &clients, size_t i, channel_t &channels, std::string &msg) {
@@ -175,13 +176,6 @@ void    kick(client_t &clients, int &i, channel_t &channels, std::string &msg) {
     }
 }
 
-// void    names(client_t &clients, size_t i, channel_t &channels, std::string &msg) {
-//     msg.erase(0, 7);
-//     std::string tmp = channel_response(channels, msg, clients[i].second);
-//     if (tmp.size())
-//         send(clients[i].first.fd, tmp.c_str(), tmp.length(), 0);
-// }
-
 void names(client_t& clients, size_t i, channel_t& channels, std::string& msg) {
     msg.erase(0, 7);
     std::string channel_name = msg;
@@ -202,8 +196,6 @@ void names(client_t& clients, size_t i, channel_t& channels, std::string& msg) {
         send(clients[i].first.fd, tmp.c_str(), tmp.length(), 0);
     }
 }
-
-
 
 void    list(client_t &clients, size_t i, channel_t &channels) {
     std::string channels_name = "";
@@ -287,6 +279,14 @@ int32_t check(client_t &clients, std::string msg, int i) {
 		else 
 			return 7;
 	}
+    else if (msg.find("LIST") == 0) {
+		if (msg.length() != 4) {
+			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
+			return 0;
+		}
+		else 
+			return 14;
+    }
     else if (msg.find("FILE UP") == 0) {
 		if (msg.length() == 7) {
 			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
@@ -336,14 +336,6 @@ int32_t check(client_t &clients, std::string msg, int i) {
 		}
 		else 
 			return 13;
-    }
-    else if (msg.find("LIST ") == 0) {
-		if (msg.length() != 5) {
-			senderr(msg.substr(0, msg.find(" ")), i, clients, 461);
-			return 0;
-		}
-		else 
-			return 14;
     }
 	else
 		senderr(msg.substr(0, msg.find(" ")), i, clients, 421);

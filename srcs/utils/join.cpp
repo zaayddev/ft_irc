@@ -6,7 +6,7 @@
 /*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 08:19:53 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/24 17:15:46 by yelgharo         ###   ########.fr       */
+/*   Updated: 2023/02/25 15:31:11 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,11 @@ std::string	channel_response(channel_t &channels, std::string channel_name, User
 {
 	std::stringstream	ss;
 
-	ss	<< ":" << SERVER << " 353 " << user.get_nickname()
+	ss	<< ":" << SERVER << " NOTICE " << user.get_nickname()
 		<< " = #" << channel_name << " :" << get_names(channels, channel_name) << "\r\n";
+
 	return (ss.str());
+    
 }
 
 bool	check_name(std::string input)

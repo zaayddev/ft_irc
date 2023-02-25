@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zchbani <zchbani@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yelgharo <yelgharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 23:46:49 by yelgharo          #+#    #+#             */
-/*   Updated: 2023/02/23 15:04:30 by zchbani          ###   ########.fr       */
+/*   Updated: 2023/02/25 15:05:46 by yelgharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ std::string	reject_msg(std::string cmd, int ern, client_t &clients, int i)
 	else if (ern == 433)
 		ss << ern <<" "<< clients[i].second.get_fd() <<": " << cmd << " Nickname is already in use\r\n";
 	else if (ern == 436)
-		ss << ern <<" "<< clients[i].second.get_fd() <<": " << cmd << " Nickname collision KILL\r\n";
+		ss << ern <<" "<< clients[i].second.get_fd() <<": " << cmd << " Nickname is already in use\r\n";
 	else if ( ern == 461 )
 		ss << ern <<" "<< clients[i].second.get_fd() <<": " << cmd << " Not enough parameters\r\n";
 	else if (ern == 462)
