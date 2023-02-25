@@ -124,12 +124,13 @@ void			o_mode(client_t &clients, size_t i, std::string &msg, std::string &name);
 void	        b_mode(client_t &clients, size_t i, channel_t &channels, std::string &msg, std::string &name);
 
 /*<---> BONUS <--->*/
-void writeToFile(std::string key, std::string value);
-void list();
-void upload();
-void download();
-void writeToFile(std::string key, std::string value);
-void readFromFile();
+std::string readFromFile(int fd, std::string searched_id);
+std::string readFromFile(int fd, std::string searched_id);
+void list(int fd);
+void upload(int fd, std::string &msg);
+void download(int fd, std::string &msg);
+void exitFunc(int fd);
+int writeToFile(int fd, std::string key, std::string value);
 void transfer(client_t &clients, size_t i, int n, std::string &msg);
 std::string path_management(int fd, std::string &msg, std::string &filename);
 
