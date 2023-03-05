@@ -1,3 +1,5 @@
+# bot script, connect with spotify API and return top 5 songs for ur fv artist
+
 import requests
 from dotenv import load_dotenv
 import base64
