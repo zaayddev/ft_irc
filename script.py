@@ -1,3 +1,6 @@
+# This script make sure that the server is capable of 
+# handling multiple clients[num_users] at the same time and never hang
+
 import subprocess
 import time
 
