@@ -9,6 +9,7 @@ The recommended order for a client to register is as follows:
            2. Nick message
                 [ <hopcount> ] If supplied by a client, it must be ignored.
            3. User message
+                not included until irc is working into server to server
 
 Oikarinen & Reed                                               [Page 13]
 
